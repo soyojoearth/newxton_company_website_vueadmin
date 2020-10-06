@@ -10,6 +10,7 @@ import './styles/element-variables.scss'
 import '@/styles/index.scss' // global css
 
 import App from './App'
+import Ie from './Ie'
 import store from './store'
 import router from './router'
 
@@ -19,6 +20,7 @@ import './utils/error-log' // error log
 
 import * as filters from './filters' // global filters
 import VueDND from 'awe-dnd'
+import { IEVersion } from '@/utils'
 
 Vue.use(VueDND)
 /**
@@ -44,10 +46,19 @@ Object.keys(filters).forEach(key => {
 })
 
 Vue.config.productionTip = false
+console.log(IEVersion())
 
-new Vue({
-  el: '#app',
-  router,
-  store,
-  render: h => h(App)
-})
+// 判断是否为ie11;
+if (IEVersion()) {
+  new Vue({
+    el: '#app',
+    router,
+    store,
+    render: h => h(App)
+  })
+} else {
+  new Vue({
+    el: '#app',
+    render: h => h(Ie)
+  })
+}

@@ -40,7 +40,7 @@ module.exports = {
     after: require('./mock/mock-server.js'),
     proxy: {
       '/api/admin': {
-        target: 'https://newxton-companywebsite-test.new-x-ton.com',
+        target: 'https://test1024.nxtframework.com',
         changeOrigin: true
       }
     }

@@ -1,7 +1,7 @@
 import request from '@/utils/request'
 import requestForm from '@/utils/requestPic'
 // 获取产品列表
-export function getProductList(data) {
+export function getProductList (data) {
   return request({
     url: '/api/admin/product/list',
     method: 'post',
@@ -9,7 +9,7 @@ export function getProductList(data) {
   })
 }
 // 产品添加
-export function createProduct(data) {
+export function createProduct (data) {
   return requestForm({
     url: '/api/admin/product/create',
     method: 'post',
@@ -17,7 +17,7 @@ export function createProduct(data) {
   })
 }
 // 图片上传
-export function uploadPic(data) {
+export function uploadPic (data) {
   return requestForm({
     url: '/api/admin/upload/public_pic',
     method: 'post',
@@ -25,7 +25,7 @@ export function uploadPic(data) {
   })
 }
 // 产品修改
-export function updateProduct(data) {
+export function updateProduct (data) {
   return requestForm({
     url: '/api/admin/product/update',
     method: 'post',
@@ -33,7 +33,7 @@ export function updateProduct(data) {
   })
 }
 // 产品删除
-export function deleteProduct(data) {
+export function deleteProduct (data) {
   return request({
     url: '/api/admin/product/delete',
     method: 'post',
@@ -41,7 +41,7 @@ export function deleteProduct(data) {
   })
 }
 // 产品推荐/取消推荐
-export function changeRecommend(data) {
+export function changeRecommend (data) {
   return request({
     url: '/api/admin/product/recommend',
     method: 'post',
@@ -49,7 +49,7 @@ export function changeRecommend(data) {
   })
 }
 // 交换两个产品的顺序
-export function swapProduct(data) {
+export function swapProduct (data) {
   return request({
     url: '/api/admin/product/order_swap',
     method: 'post',
@@ -57,7 +57,7 @@ export function swapProduct(data) {
   })
 }
 // 获取产品详情【编辑用】
-export function getProductDetail(data) {
+export function getProductDetail (data) {
   return request({
     url: '/api/admin/product/detail',
     method: 'post',
@@ -65,7 +65,7 @@ export function getProductDetail(data) {
   })
 }
 // 获取产品关联的图片列表
-export function getProductPictureList(data) {
+export function getProductPictureList (data) {
   return request({
     url: '/api/admin/product/picture_list',
     method: 'post',
@@ -73,7 +73,7 @@ export function getProductPictureList(data) {
   })
 }
 // 新建产品类别
-export function createProductCategory(data) {
+export function createProductCategory (data) {
   return request({
     url: '/api/admin/product_category/create',
     method: 'post',
@@ -81,7 +81,7 @@ export function createProductCategory(data) {
   })
 }
 // 获取产品分类列表
-export function getProductCategoryList(data) {
+export function getProductCategoryList (data) {
   return request({
     url: '/api/admin/product_category/list',
     method: 'post',
@@ -89,7 +89,7 @@ export function getProductCategoryList(data) {
   })
 }
 // 修改产品分类category
-export function updateProductCategory(data) {
+export function updateProductCategory (data) {
   return request({
     url: '/api/admin/product_category/update',
     method: 'post',
@@ -97,7 +97,7 @@ export function updateProductCategory(data) {
   })
 }
 // 删除产品类别
-export function deleteProductCategory(data) {
+export function deleteProductCategory (data) {
   return request({
     url: '/api/admin/product_category/delete',
     method: 'post',

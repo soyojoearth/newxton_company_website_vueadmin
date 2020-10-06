@@ -353,3 +353,36 @@ export function removeClass(ele, cls) {
     ele.className = ele.className.replace(reg, ' ')
   }
 }
+
+export function IEVersion() {
+  // 取得浏览器的userAgent字符串
+  var userAgent = navigator.userAgent
+  // 判断是否为小于IE11的浏览器
+  var isLessIE11 = userAgent.indexOf('compatible') > -1 && userAgent.indexOf('MSIE') > -1
+  // 判断是否为IE的Edge浏览器
+  var isEdge = userAgent.indexOf('Edge') > -1 && !isLessIE11
+  // 判断是否为IE11浏览器
+  var isIE11 = userAgent.indexOf('Trident') > -1 && userAgent.indexOf('rv:11.0') > -1
+  if (isLessIE11) {
+    var IEReg = new RegExp('MSIE (\\d+\\.\\d+);')
+    IEReg.test(userAgent)
+    var IEVersionNum = parseFloat(RegExp['$1'])
+    if (IEVersionNum === 7) {
+      return false
+    } else if (IEVersionNum === 8) {
+      return false
+    } else if (IEVersionNum === 9) {
+      return false
+    } else if (IEVersionNum === 10) {
+      return false
+    } else {
+      return false
+    }
+  } else if (isEdge) {
+    return true
+  } else if (isIE11) {
+    return true
+  } else {
+    return true
+  }
+}

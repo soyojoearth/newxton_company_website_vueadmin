@@ -25,6 +25,88 @@
             <el-button>类别管理</el-button>
           </router-link>
         </el-form-item>
+        <el-form-item label="副标题（营销性文字）">
+          <el-input v-model="formLabelAlign.product_subtitle" />
+        </el-form-item>
+        <el-card
+          shadow="never"
+          style="margin-bottom:10px"
+        >
+          <el-form-item>
+            价格
+            <el-input
+              v-model="formLabelAlign.price"
+              style="width:220px"
+            />
+            <el-checkbox v-model="price_negotiation">是否面议</el-checkbox>
+          </el-form-item>
+          <el-form-item>
+            价格说明
+            <el-input
+              v-model="formLabelAlign.price_remark"
+              style="width:500px"
+            />
+          </el-form-item>
+        </el-card>
+        <el-form-item label="产品属性">
+          <el-card shadow="never">
+            <el-form-item
+              :key="index"
+              v-for="(item,index) in formLabelAlign.product_sku"
+              :label="item.name"
+            >
+              <el-tag
+                :key="index"
+                v-for="(tag,index) in item.sku"
+                closable
+                :disable-transitions="false"
+                @close="handleColorClose(item.name,tag)"
+              >
+                {{tag}}
+              </el-tag>
+              <el-input
+                class="input-new-tag"
+                ref="saveColorTagInput"
+                v-model="item[index]"
+                size="small"
+              >
+              </el-input>
+              <el-button
+                class="button-new-tag"
+                size="small"
+                @click="handleConfirm(item.name,item[index])"
+              >增加</el-button>
+
+            </el-form-item>
+            <el-card shadow="never">
+              <el-form-item label="属性名称">
+                <el-tag
+                  :key="index"
+                  v-for="(tag,index) in attributeNameTags"
+                  closable
+                  :disable-transitions="false"
+                  @close="handleAttributeNameClose(tag)"
+                >
+                  {{tag}}
+                </el-tag>
+                <el-input
+                  class="input-new-tag"
+                  v-model="AttributeNameinputValue"
+                  ref="saveAttributeNameTagInput"
+                  size="small"
+                  @keyup.enter.native="handleInputConfirm"
+                  @blur="handleInputConfirm"
+                >
+                </el-input>
+                <el-button
+                  class="button-new-tag"
+                  size="small"
+                  @click="showAttributeNameInput"
+                >添加属性</el-button>
+              </el-form-item>
+            </el-card>
+          </el-card>
+        </el-form-item>
         <el-form-item label="产品图片">
           <div class="box">
 
@@ -113,18 +195,25 @@ import { uploadPic } from '@/api/product'
 import { mapState } from 'vuex'
 import { getToken, getUserId } from '@/utils/auth'
 import draggable from 'vuedraggable'
+
 export default {
   components: { Tinymce, draggable },
-  data() {
+  data () {
     return {
-      radio2: '1',
       checked: false,
       formLabelAlign: {
         product_name: '',
         product_description: '',
         category_id: '',
         is_recommend: false,
-        product_picture_list: []
+        product_picture_list: [],
+        product_subtitle: '',//副
+        price: '',
+        price_negotiation: '0',
+        price_remark: '',
+        product_sku: [],
+
+
       },
       headers: {
         'token': getToken(),
@@ -138,7 +227,20 @@ export default {
         loadingapp: false,
         drag: false,
         productObj: []
-      }
+      },
+      colorTags: [],
+
+      attributeNameTags: [],
+      price_negotiation: false,
+
+
+
+      ColorinputVisible: false,
+      AttributeNameinputVisible: false,
+
+      ColorinputValue: '',
+      AttributeNameinputValue: '',
+      inputValue: ''
 
     }
   },
@@ -146,35 +248,77 @@ export default {
     ...mapState({
       category_list: state => state.product.CategoryListData
     }),
-    dragOptions() {
+    dragOptions () {
       return {
         animation: 200,
         group: 'description',
         disabled: false,
-        ghostClass: 'ghost'
+        ghostClass: 'ghost',
+
       }
     }
   },
-  created() {
+  created () {
     this.$store.dispatch('product/getCategory')
   },
   methods: {
-    handleAvatarSuccess(res, file) {
+    handleAvatarSuccess (res, file) {
       this.imageUrl = URL.createObjectURL(file.raw)
     },
-    beforeAvatarUpload(file) {
-      const isJPG = file.type === 'image/jpeg'
-      const isLt2M = file.size / 1024 / 1024 < 2
-
-      if (!isJPG) {
-        this.$message.error('上传头像图片只能是 JPG 格式!')
+    beforeAvatarUpload (file) {
+      const isImg = file.type === 'image/jpeg' || file.type === 'image/png' || file.type === 'image/gif'
+      const isLt20M = file.size / 1024 / 1024 < 20
+      if (!isImg) {
+        this.$message.error('上传图片只能是 JPG、PNG、GIF 格式之一!')
       }
-      if (!isLt2M) {
-        this.$message.error('上传头像图片大小不能超过 2MB!')
+      if (!isLt20M) {
+        this.$message.error('上传图片大小不能超过 20MB!')
       }
-      return isJPG && isLt2M
+      return isImg && isLt20M
     },
-    handleCreate() {
+    //
+    handleColorClose (name, tag) {
+      this.formLabelAlign.product_sku.forEach(element => {
+        if (element.name === name) {
+          element.sku.splice(element.sku.indexOf(tag), 1);
+          return
+        }
+      });
+
+    },
+
+    handleAttributeNameClose (tag) {
+      this.attributeNameTags.splice(this.attributeNameTags.indexOf(tag), 1);
+    },
+    showAttributeNameInput () {
+      this.AttributeNameinputVisible = true;
+      this.$nextTick(_ => {
+        this.$refs.saveAttributeNameTagInput.$refs.input.focus();
+      });
+    },
+
+    handleConfirm (name, value) {
+      console.log(name);
+      if (value) {
+        this.formLabelAlign.product_sku.forEach(element => {
+          if (element.name === name) {
+            element.sku.push(value)
+            return
+          }
+        });
+      }
+    },
+
+    handleInputConfirm () {
+      let inputValue = this.AttributeNameinputValue;
+      if (inputValue) {
+        this.formLabelAlign.product_sku.push({ 'name': inputValue, 'sku': [] })
+      }
+      this.AttributeNameinputVisible = false;
+      this.AttributeNameinputValue = '';
+    },
+    //
+    handleCreate () {
       this.formLabelAlign.is_recommend = this.formLabelAlign.is_recommend ? 1 : 0
       // product_picture_list
       this.formLabelAlign.product_picture_list = []
@@ -194,6 +338,26 @@ export default {
       fd.append('is_recommend', this.formLabelAlign.is_recommend)
       var re = '[' + this.formLabelAlign.product_picture_list.toString() + ']'
       fd.append('product_picture_list', re)
+      // this.formLabelAlign.product_sku.splice(0, 1)
+      var str = ''
+
+      for (let index = 0; index < this.formLabelAlign.product_sku.length; index++) {
+        const element = this.formLabelAlign.product_sku[index];
+        if (index !== this.formLabelAlign.product_sku.length - 1) {
+          str = str + '{"name":"' + element.name + '",sku:["' + element.sku.join('","') + '"]},'
+
+        } else {
+          str = str + '{"name":"' + element.name + '",sku:["' + element.sku.join('","') + '"]}'
+
+        }
+      }
+      console.log(this.formLabelAlign.product_sku);
+      console.log('[' + str + ']');
+      fd.append('product_sku', '[' + str + ']')
+      fd.append('price', this.formLabelAlign.price)
+      fd.append('price_negotiation', this.price_negotiation ? '1' : '0')
+      fd.append('price_remark', this.formLabelAlign.price_remark)
+      fd.append('product_subtitle', this.formLabelAlign.product_subtitle)
 
       this.$store.dispatch('product/createProduct', fd).then(res => {
         this.$message({
@@ -203,7 +367,7 @@ export default {
         _this.$router.back()
       })
     },
-    async handleUploadHttpRequest(param) {
+    async handleUploadHttpRequest (param) {
       const fileObj = param.file
       var fd = new FormData()
       fd.append('file', fileObj)
@@ -226,7 +390,7 @@ export default {
         })
       }
     },
-    UploadOnSuccess(res, file, fileList) {
+    UploadOnSuccess (res, file, fileList) {
       this.$refs.editor.imageSuccessCBK([{ url: res.url }])
       // this.formLabelAlign.product_description = this.formLabelAlign.product_description + `<img src="${res.url}"/>`
       // console.log(this.formLabelAlign.product_description)
@@ -234,23 +398,23 @@ export default {
       this.$forceUpdate()
     },
     // 显示删除图片的图标
-    showDelBtn(index) {
+    showDelBtn (index) {
       // console.log(index)
       this.productForm.currentDelBtn = index
     },
     // 隐藏删除图片的图标
-    hiddenDelBtn() {
+    hiddenDelBtn () {
       this.productForm.currentDelBtn = -1
     },
     // 删除图片
-    deleImg(data, index) {
+    deleImg (data, index) {
       this.productForm.productPicList.splice(index, 1)
     },
     // 图片上传成功之后的校验：
     // 最多只能上传5张、必须是1：1的 ；不能超过100k
     // 这里为什么没有用el-upload自带图片上传之前的验证before-upload 呢 因为 一但上传了失败的图片以前上传的所有图片都不显示了 （目前不太清楚原因）
     // 以下函数 里为什么一直用的 是file 而不是fileList  因为涉及到了编辑回显，如果没有编辑回显可以直接用fileList这个参数来处理代码逻辑；
-    handlePictureSuccess(response, file, fileList) {
+    handlePictureSuccess (response, file, fileList) {
       // console.log(file)
       const isJPG = file.raw.type === 'image/jpeg'
       const isJPG2 = file.raw.type === 'image/jpg'
@@ -274,7 +438,7 @@ export default {
       // 以下代码是验证是否符合比例，如果不需要验证比例可以直接把图片push到数组里
       // _this.productForm.productPicList.push(file.response.data)
       const _this = this
-      new Promise(function(resolve, reject) {
+      new Promise(function (resolve, reject) {
         const url = window.URL || window.webkitURL
         const img = new Image()
         // img.onload = function() {
@@ -300,6 +464,21 @@ export default {
 </script>
 <style lang="scss" scoped>
 .app-container {
+  >>> .el-tag + .el-tag {
+    margin-left: 10px;
+  }
+  >>> .button-new-tag {
+    margin-left: 10px;
+    height: 32px;
+    line-height: 30px;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+  >>> .input-new-tag {
+    width: 90px;
+    margin-left: 10px;
+    vertical-align: bottom;
+  }
   .box {
     border: 1px solid #eee;
     height: 200px;
@@ -308,6 +487,7 @@ export default {
     >>> .el-upload--picture-card {
       position: relative;
     }
+
     .divBox {
       float: left;
       position: relative;

@@ -10,7 +10,8 @@ const state = {
   ListData: [],
   CategoryListData: [],
   ListNumber: 1,
-  Detail: {}
+  Detail: {},
+  pageCount: 0
 }
 
 const mutations = {
@@ -27,6 +28,9 @@ const mutations = {
   SET_CATEGORY_LIST: (state, data) => {
     state.CategoryListData = data
   },
+  SET_PAGE_COUNT: (state, data) => {
+    state.pageCount = data
+  },
   SWAP_LIST_DATA: (state, data) => {
     let temps = {}
     const { actionIndex, index } = data
@@ -37,19 +41,20 @@ const mutations = {
 }
 
 const actions = {
-  getList({ commit, state }) {
+  getList ({ commit, state }, params) {
+    params['page_number'] = state.ListNumber
     return new Promise((resolve, rejust) => {
-      getNewList({
-        page_number: state.ListNumber
-      }).then(res => {
+      getNewList(params).then(res => {
         commit('SET_LIST_DATA', res.list)
+        commit('SET_PAGE_COUNT', res.page_count)
+
         resolve()
       }).catch(err => {
         rejust(err)
       })
     })
   },
-  deleteNew({ state }, id) {
+  deleteNew ({ state }, id) {
     return new Promise((resolve, rejust) => {
       deleteNew({
         id: id
@@ -61,7 +66,7 @@ const actions = {
       })
     })
   },
-  createNew({ state }, data) {
+  createNew ({ state }, data) {
     return new Promise((resolve, rejust) => {
       createNew({
         category_id: data.category_id,
@@ -75,7 +80,7 @@ const actions = {
       })
     })
   },
-  updateNew({ state }, data) {
+  updateNew ({ state }, data) {
     return new Promise((resolve, rejust) => {
       updateNew({
         id: data.id,
@@ -90,7 +95,7 @@ const actions = {
       })
     })
   },
-  getDetail({ commit, state }, data) {
+  getDetail ({ commit, state }, data) {
     return new Promise((resolve, rejust) => {
       getDetail({
         id: data
@@ -102,7 +107,7 @@ const actions = {
       })
     })
   },
-  getCategory({ commit }) {
+  getCategory ({ commit }) {
     return new Promise((resolve, rejust) => {
       getCategoryList()
         .then(res => {
@@ -114,7 +119,7 @@ const actions = {
         })
     })
   },
-  updateCategory({ commit }, data) {
+  updateCategory ({ commit }, data) {
     return new Promise((resolve, rejust) => {
       updateCategory({
         id: data.SelectId,
@@ -129,7 +134,7 @@ const actions = {
         })
     })
   },
-  deleteCategory({ commit }, data) {
+  deleteCategory ({ commit }, data) {
     return new Promise((resolve, rejust) => {
       deleteCategory({
         id: data
@@ -142,7 +147,7 @@ const actions = {
         })
     })
   },
-  changeRecommend({ commit }, data) {
+  changeRecommend ({ commit }, data) {
     return new Promise((resolve, rejust) => {
       changeRecommend({
         id: data.id,
@@ -156,7 +161,7 @@ const actions = {
         })
     })
   },
-  swapData({ state }, data) {
+  swapData ({ state }, data) {
     return new Promise((resolve, rejust) => {
       swapData({
         news_id_a: data.a_id,
@@ -170,7 +175,7 @@ const actions = {
         })
     })
   },
-  createCategoryList({ state }, data) {
+  createCategoryList ({ state }, data) {
     return new Promise((resolve, rejust) => {
       createCategoryList({
         category_name: data.name,

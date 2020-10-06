@@ -9,7 +9,7 @@
       <div class="box-items">
         <el-row>
           <el-col :span="24">
-            <p>版本：Newxton Company Website v0.1.0</p>
+            <p>版本：NxtFramework v0.1.0</p>
           </el-col>
         </el-row>
         <el-row>
@@ -21,7 +21,7 @@
           <el-col :span="12">
             <p>授权协议：Apache (可商用）</p>
           </el-col>
-          <el-col :span="12" style="text-align: right;"><el-button type="primary" round size="medium">查看Github最新版本</el-button></el-col>
+          <el-col :span="12" style="text-align: right;"><el-button type="primary" round size="medium"><a href="https://github.com/soyojoearth/nxtframework">查看Github最新版本</a></el-button></el-col>
         </el-row>
       </div>
     </el-card>

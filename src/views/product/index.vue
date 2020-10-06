@@ -5,7 +5,51 @@
         type="primary"
         @click="handleCreate"
       >创建</el-button>
+      <div style="float:right">
+        是否推荐
+        <el-select
+          v-model="params.is_recommend"
+          placeholder="请选择"
+          style="width:150px"
+        >
+          <el-option
+            v-for="item in options"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          >
+          </el-option>
+        </el-select>
+        类别
+        <el-select
+          v-model="params.category_id"
+          placeholder="请选择"
+        >
+          <el-option
+            value=""
+            label="全部"
+          ></el-option>
+          <el-option
+            v-for="item in category_list"
+            :key="item.category_id"
+            :label="item.category_name_display"
+            :value="item.category_id"
+          >
+          </el-option>
+        </el-select>
+        <el-input
+          v-model="params.search_keyword"
+          style="width:150px"
+          placeholder="搜索关键词"
+        ></el-input>
+        <el-button
+          type="primary"
+          @click="change"
+        >筛选</el-button>
+      </div>
+
     </el-row>
+
     <el-card style="margin-top:10px">
       <el-table
         ref="multipleTable"
@@ -17,7 +61,7 @@
         <el-table-column type="selection" />
         <el-table-column
           prop="productName"
-          label="标题"
+          label="产品名称"
         />
         <el-table-column
           prop="categoryName"
@@ -94,7 +138,7 @@
           icon="el-icon-arrow-left"
           @click="handlePage(-1)"
         >上一页</el-button>
-        <el-button>{{ listNumber }}</el-button>
+        <el-button>{{ listNumber }}/{{pageCount}}</el-button>
         <el-button
           type="primary"
           icon="el-icon-arrow-right"
@@ -107,28 +151,62 @@
 
 <script>
 import { Message } from 'element-ui'
+import { mapState } from 'vuex'
+
 export default {
-  data() {
+  data () {
     return {
-      multipleSelection: []
+      multipleSelection: [],
+      options: [{
+        value: '',
+        label: '全部'
+      }, {
+        value: '1',
+        label: '仅含推荐'
+      }, {
+        value: '0',
+        label: '仅不推荐'
+      }],
+      params: {
+        category_id: '',
+        is_recommend: '',
+        search_keyword: ''
+      },
+      newParams: {
+
+      }
     }
   },
   computed: {
-    listData() {
+    listData () {
       return this.$store.state.product.ListData
     },
-    listNumber() {
+    listNumber () {
       return this.$store.state.product.ListNumber
-    }
+    },
+    ...mapState({
+      category_list: state => state.product.CategoryListData,
+      pageCount: state => state.product.pageCount
+    }),
   },
-  created() {
+  created () {
+
     this.load()
+    this.$store.dispatch('product/getCategory')
+
   },
   methods: {
-    load() {
-      this.$store.dispatch('product/getList')
+    load () {
+      this.$store.commit('product/SET_LIST_NUMBER', 1)
+      this.$store.dispatch('product/getList', this.newParams)
     },
-    toggleSelection(rows) {
+    change () {
+      this.newParams = Object.assign({}, this.params)
+      this.$store.commit('product/SET_LIST_NUMBER', 1)
+      this.$store.dispatch('product/getList', this.newParams)
+    },
+
+    toggleSelection (rows) {
       if (rows) {
         rows.forEach((row) => {
           this.$refs.multipleTable.toggleRowSelection(row)
@@ -137,14 +215,16 @@ export default {
         this.$refs.multipleTable.clearSelection()
       }
     },
-    handlePage(page) {
-      if (this.listNumber + page < 1) {
+    handlePage (page) {
+      if (this.listNumber + page < 1 || this.listNumber + page > this.pageCount) {
         return false
       }
       this.$store.commit('product/SET_LIST_NUMBER', this.listNumber + page)
-      this.$store.dispatch('product/getList')
+      console.log(this.newParams);
+      this.$store.dispatch('product/getList', this.newParams)
+
     },
-    handleSort(index, row, pos) {
+    handleSort (index, row, pos) {
       // eslint-disable-next-line no-unused-vars
       let actionIndex = 0
       if (pos === 'top') {
@@ -159,10 +239,10 @@ export default {
       this.$store.dispatch('product/swapData', { a_id: this.listData[actionIndex].id, b_id: this.listData[index].id })
       // this.$forceUpdate()
     },
-    handleSelectionChange(val) {
+    handleSelectionChange (val) {
       this.multipleSelection = val
     },
-    async handleDelete() {
+    async handleDelete () {
       console.log(this.multipleSelection)
       const items = this.multipleSelection
       for (let i = 0; i < items.length; i++) {
@@ -176,13 +256,13 @@ export default {
       this.load()
       // this.$store.dispatch('new/deleteNew', row.id)
     },
-    handleEdit(index, row) {
-      this.$router.push({ name: 'UpdateProduct', params: { id: row.id }})
+    handleEdit (index, row) {
+      this.$router.push({ name: 'UpdateProduct', params: { id: row.id } })
     },
-    handleCreate() {
+    handleCreate () {
       this.$router.push({ name: 'CreateProduct' })
     },
-    changeRecommend(index, row) {
+    changeRecommend (index, row) {
       this.$store.dispatch('product/changeRecommend', { id: row.id, recommend: row.isRecommend })
     }
   }

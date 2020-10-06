@@ -78,8 +78,8 @@ export default {
     }
     return {
       loginForm: {
-        username: 'admin',
-        password: '12345678'
+        username: '',
+        password: ''
       },
       loginRules: {
         username: [{ required: true, trigger: 'blur', validator: validateUsername }],
@@ -230,6 +230,7 @@ $light_gray:#000;
 .login-container {
   min-height: 100%;
   width: 100%;
+  height: 100%;
   background-color: $bg;
   overflow: hidden;
   display: flex;

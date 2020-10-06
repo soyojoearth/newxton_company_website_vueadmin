@@ -171,7 +171,13 @@ export const constantRoutes = [
         component: () => import('@/views/set/page_edit'),
         name: 'PageEdit',
         meta: { title: '编辑页面', affix: false }
-      }
+      },
+      {
+        path: 'banner',
+        component: () => import('@/views/set/banner'),
+        name: 'banner',
+        meta: { title: '滚动轮播横幅', affix: false }
+      },
     ]
   }
 ]
@@ -184,7 +190,7 @@ const createRouter = () => new Router({
 
 const router = createRouter()
 
-export function resetRouter() {
+export function resetRouter () {
   const newRouter = createRouter()
   router.matcher = newRouter.matcher // reset router
 }

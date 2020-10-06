@@ -106,16 +106,15 @@ export default {
       console.log(this.imageUrl)
     },
     beforeAvatarUpload(file) {
-      const isJPG = file.type === 'image/jpeg'
-      const isLt2M = file.size / 1024 / 1024 < 2
-
-      if (!isJPG) {
-        this.$message.error('上传图片只能是 JPG 格式!')
+      const isImg = file.type === 'image/jpeg' || file.type === 'image/png' || file.type === 'image/gif'
+      const isLt20M = file.size / 1024 / 1024 < 20
+      if (!isImg) {
+        this.$message.error('上传图片只能是 JPG、PNG、GIF 格式之一!')
       }
-      if (!isLt2M) {
-        this.$message.error('上传图片大小不能超过 2MB!')
+      if (!isLt20M) {
+        this.$message.error('上传图片大小不能超过 20MB!')
       }
-      return isJPG && isLt2M
+      return isImg && isLt20M
     },
     UploadOnSuccess(res, file, fileList) {
       this.$refs.editor.imageSuccessCBK([{ url: res.url }])

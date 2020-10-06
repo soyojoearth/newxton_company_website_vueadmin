@@ -7,7 +7,9 @@ const state = {
   CategoryListData: [],
   ListNumber: 1,
   Detail: '',
-  PicList: []
+  PicList: [],
+  allDetail: [],
+  pageCount: 0
 }
 
 const mutations = {
@@ -20,11 +22,17 @@ const mutations = {
   SET_DETAIL: (state, detail) => {
     state.Detail = detail
   },
+  SET_ALLDETAIL: (state, detail) => {
+    state.allDetail = detail
+  },
   SET_PICLIST: (state, picList) => {
     state.PicList = picList
   },
   SET_CATEGORY_LIST: (state, data) => {
     state.CategoryListData = data
+  },
+  SET_PAGE_COUNT: (state, data) => {
+    state.pageCount = data
   },
   SWAP_LIST_DATA: (state, data) => {
     let temps = {}
@@ -36,19 +44,20 @@ const mutations = {
 }
 
 const actions = {
-  getList({ commit, state }) {
+  getList ({ commit, state }, params) {
+    params['page_number'] = state.ListNumber
+    // console.log(params);
     return new Promise((resolve, reject) => {
-      getProductList({
-        page_number: state.ListNumber
-      }).then(res => {
+      getProductList(params).then(res => {
         commit('SET_LIST_DATA', res.list)
+        commit('SET_PAGE_COUNT', res.page_count)
         resolve()
       }).catch(err => {
         reject(err)
       })
     })
   },
-  deleteProduct({ state }, id) {
+  deleteProduct ({ state }, id) {
     return new Promise((resolve, reject) => {
       deleteProduct({
         id: id
@@ -60,7 +69,7 @@ const actions = {
       })
     })
   },
-  createProduct({ state }, data) {
+  createProduct ({ state }, data) {
     return new Promise((resolve, reject) => {
       createProduct(data).then(res => {
         resolve()
@@ -69,7 +78,7 @@ const actions = {
       })
     })
   },
-  swapData({ state }, data) {
+  swapData ({ state }, data) {
     return new Promise((resolve, rejust) => {
       swapProduct({
         product_id_a: data.a_id,
@@ -83,7 +92,7 @@ const actions = {
         })
     })
   },
-  updateProduct({ state }, data) {
+  updateProduct ({ state }, data) {
     return new Promise((resolve, reject) => {
       updateProduct(data).then(res => {
         resolve()
@@ -92,12 +101,13 @@ const actions = {
       })
     })
   },
-  getDetail({ commit, state }, data) {
+  getDetail ({ commit, state }, data) {
     return new Promise((resolve, reject) => {
       getProductDetail({
         id: data
       }).then(res => {
         commit('SET_DETAIL', res.detail.productDescription)
+        commit('SET_ALLDETAIL', res.detail)
 
         resolve()
       }).catch(err => {
@@ -105,7 +115,7 @@ const actions = {
       })
     })
   },
-  getProductPictureList({ commit, state }, data) {
+  getProductPictureList ({ commit, state }, data) {
     return new Promise((resolve, reject) => {
       getProductPictureList({
         product_id: data
@@ -117,7 +127,7 @@ const actions = {
       })
     })
   },
-  getCategory({ commit }) {
+  getCategory ({ commit }) {
     return new Promise((resolve, reject) => {
       getProductCategoryList()
         .then(res => {
@@ -129,7 +139,7 @@ const actions = {
         })
     })
   },
-  createCategory({ state }, data) {
+  createCategory ({ state }, data) {
     return new Promise((resolve, reject) => {
       createProductCategory({
         category_name: data.name,
@@ -143,7 +153,7 @@ const actions = {
         })
     })
   },
-  updateCategory({ commit }, data) {
+  updateCategory ({ commit }, data) {
     return new Promise((resolve, reject) => {
       updateProductCategory({
         id: data.SelectId,
@@ -158,7 +168,7 @@ const actions = {
         })
     })
   },
-  deleteCategory({ commit }, data) {
+  deleteCategory ({ commit }, data) {
     return new Promise((resolve, reject) => {
       deleteProductCategory({
         id: data
@@ -171,7 +181,7 @@ const actions = {
         })
     })
   },
-  changeRecommend({ commit }, data) {
+  changeRecommend ({ commit }, data) {
     return new Promise((resolve, reject) => {
       changeRecommend({
         id: data.id,
