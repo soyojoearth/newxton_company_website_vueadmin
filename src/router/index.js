@@ -104,30 +104,30 @@ export const constantRoutes = [
       }
     ]
   },
-  {
-    path: '/cases',
-    component: Layout,
-    children: [
-      {
-        path: 'index',
-        component: () => import('@/views/cases/index'),
-        name: 'cases',
-        meta: { title: '案例管理', icon: 'cases', affix: false }
-      }
-    ]
-  },
-  {
-    path: '/file',
-    component: Layout,
-    children: [
-      {
-        path: 'file',
-        component: () => import('@/views/file/index'),
-        name: 'file',
-        meta: { title: '文件管理', icon: 'file', affix: false }
-      }
-    ]
-  },
+  // {
+  //   path: '/cases',
+  //   component: Layout,
+  //   children: [
+  //     {
+  //       path: 'index',
+  //       component: () => import('@/views/cases/index'),
+  //       name: 'cases',
+  //       meta: { title: '案例管理', icon: 'cases', affix: false }
+  //     }
+  //   ]
+  // },
+  // {
+  //   path: '/file',
+  //   component: Layout,
+  //   children: [
+  //     {
+  //       path: 'file',
+  //       component: () => import('@/views/file/index'),
+  //       name: 'file',
+  //       meta: { title: '文件管理', icon: 'file', affix: false }
+  //     }
+  //   ]
+  // },
   {
     path: '/message',
     component: Layout,

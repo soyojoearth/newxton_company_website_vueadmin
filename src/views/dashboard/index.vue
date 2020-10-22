@@ -21,7 +21,7 @@
           <el-col :span="12">
             <p>授权协议：Apache (可商用）</p>
           </el-col>
-          <el-col :span="12" style="text-align: right;"><el-button type="primary" round size="medium"><a href="https://github.com/soyojoearth/nxtframework">查看Github最新版本</a></el-button></el-col>
+          <el-col :span="12" style="text-align: right;"><el-button type="primary" round size="medium"><a href="https://www.nxtframework.com">查看最新版本</a></el-button></el-col>
         </el-row>
       </div>
     </el-card>
