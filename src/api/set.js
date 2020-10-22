@@ -62,3 +62,11 @@ export function resetUserPwd(data) {
     data
   })
 }
+
+export function resetUserRole(data) {
+  return request({
+    url: '/api/admin/reset_user_role',
+    method: 'post',
+    data
+  })
+}

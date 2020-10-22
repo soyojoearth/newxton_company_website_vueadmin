@@ -14,7 +14,7 @@
         <el-table-column label="用户名">
           <template slot-scope="scope">{{ scope.row.username }}</template>
         </el-table-column>
-        <el-table-column prop="type_description" label="类型" />
+        <el-table-column prop="roleName" label="角色" />
         <el-table-column prop="status_description" label="状态" show-overflow-tooltip />
         <el-table-column align="right">
           <template slot-scope="scope">
@@ -37,12 +37,19 @@
         <el-form-item label="用户名">
           <el-input v-model="form.name" :disabled="!isCreate" />
         </el-form-item>
-        <el-form-item label="类型">
-          <template>
-            <el-radio v-model="form.type" :label="1">超级管理员</el-radio>
-            <el-radio v-model="form.type" :label="2">小编</el-radio>
-            <el-radio v-model="form.type" :label="0">只读用户</el-radio>
-          </template>
+        <el-form-item label="角色">
+          <el-select
+            v-model="form.roleId"
+            placeholder="请选择"
+          >
+            <el-option
+              v-for="item in roleList"
+              :key="item.id"
+              :label="item.roleName"
+              :value="item.id"
+            >
+            </el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="状态">
           <template>
@@ -80,7 +87,7 @@ export default {
       isCreate: false,
       form: {
         name: 'Linda',
-        type: 1,
+        roleId: 1,
         state: 1,
         content: '测试测试测试测试测试测试',
         date: '',
@@ -100,6 +107,9 @@ export default {
     },
     listNumber() {
       return this.$store.state.set.userPageNumber
+    },
+    roleList() {
+      return this.$store.state.set.roleList
     }
   },
   created() {
@@ -109,6 +119,7 @@ export default {
     load() {
       this.$store.commit('set/SET_USER_PAGE', 1)
       this.$store.dispatch('set/getUserArr')
+      this.$store.dispatch('set/getRoleList')
     },
     handlePage(page) {
       if (this.listNumber + page < 1) {
@@ -148,7 +159,7 @@ export default {
         this.dialogVisible = true
         this.isCreate = false
         this.form.name = row.username
-        this.form.type = row.type
+        this.form.roleId = row.roleId
         this.form.state = row.status
         this.form.id = row.id
         this.form.newPwd = ''
@@ -158,7 +169,7 @@ export default {
       this.dialogVisible = true
       this.isCreate = true
       this.form.name = ''
-      this.form.type = 0
+      this.form.roleId = null
       this.form.state = 0
     },
     postData() {
@@ -168,7 +179,7 @@ export default {
           createUser({
             new_user_name: then.form.name,
             new_user_pwd: then.form.newPwd,
-            new_user_type: then.form.type })
+            new_user_role: then.form.roleId })
             .then(res => {
               Message({
                 message: '新建成功！',
@@ -183,7 +194,7 @@ export default {
             })
         })
       } else {
-        this.$store.dispatch('set/resetUserType', { id: this.form.id, type: this.form.type })
+        this.$store.dispatch('set/resetUserRole', { id: this.form.id, roleId: this.form.roleId })
         this.$store.dispatch('set/blockUser', { id: this.form.id, is_block: this.form.state === -1 ? 1 : 0 })
         if (this.form.newPwd !== '') {
           this.$store.dispatch('set/resetUserPwd', { id: this.form.id, pwd: this.form.newPwd })

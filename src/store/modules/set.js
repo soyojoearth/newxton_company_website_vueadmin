@@ -2,12 +2,17 @@ import {
   userList, getPageList,
   getPageDetail, editPageDetail,
   resetUserPwd, blockUser,
-  resetUserType
+  resetUserType,resetUserRole
 } from '@/api/set'
+
+import {
+  roleList
+} from '@/api/acl'
 
 const state = {
   userPageNumber: 1,
   userArr: [],
+  roleList: [],
   pageData: [],
   pageDetail: {
     detail: '',
@@ -34,10 +39,24 @@ const mutations = {
     state.pageDetail.title = data.contentTitle
     state.pageDetail.time = data.datelineUpdateReadable
     state.pageDetail.webTitle = data.webTitle
-  }
+  },
+  GET_ROLE_LIST: (state, arr) => {
+    state.roleList = arr
+  },
 }
 
 const actions = {
+  getRoleList({ commit, state }) {
+    return new Promise((resolve, reject) => {
+      roleList({ page_number: state.userPageNumber })
+        .then(response => {
+        commit('GET_ROLE_LIST', response.list)
+        resolve()
+      }).catch(error => {
+        reject(error)
+      })
+    })
+  },
   getUserArr({ commit, state }) {
     return new Promise((resolve, reject) => {
       userList({ page_number: state.userPageNumber }).then(response => {
@@ -124,6 +143,20 @@ const actions = {
       resetUserType({
         reset_user_id: data.id,
         reset_user_type: data.type
+      })
+        .then(res => {
+          resolve()
+        })
+        .catch(err => {
+          rejust(err)
+        })
+    })
+  },
+  resetUserRole({ state }, data) {
+    return new Promise((resolve, rejust) => {
+      resetUserRole({
+        reset_user_id: data.id,
+        reset_user_role: data.roleId
       })
         .then(res => {
           resolve()
