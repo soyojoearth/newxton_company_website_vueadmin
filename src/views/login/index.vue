@@ -48,7 +48,7 @@
 
         <div style="position:relative">
           <div class="tips">
-            <span>深圳市牛小顿科技有限公司</span>
+            <span>NxtFramework v0.1.0</span>
           </div>
         </div>
       </el-form>

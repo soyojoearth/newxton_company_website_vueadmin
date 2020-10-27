@@ -1,10 +1,10 @@
 <template>
   <div class="app-container">
     <el-card style="margin-top:10px">
-      <el-form ref="form" label-width="80px">
+      <el-form ref="form" label-width="160px">
         <template v-for="item in list">
           <el-form-item :key="item.id" :label="item.settingName">
-            <el-input v-model="item.settingValue" :type="item.displayType" rows="6" />
+            <el-input v-model="item.settingValue" :type="item.displayType" :placeholder="item.placeholder" rows="6" />
 
           </el-form-item>
         </template>

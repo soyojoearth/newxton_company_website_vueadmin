@@ -35,15 +35,34 @@ export const constantRoutes = [
     ]
   },
   {
-    path: '/content',
+    path: '/set',
     component: Layout,
-    meta: { title: '资讯管理', icon: 'content', affix: false },
+    meta: { title: '基本设置', icon: 'set', affix: false },
     children: [
       {
-        path: 'content',
-        component: () => import('@/views/content/index'),
-        name: 'content',
-        meta: { title: '资讯管理', affix: false }
+        path: 'sys',
+        component: () => import('@/views/set/sys'),
+        name: 'WebSet',
+        meta: { title: '系统设置', affix: false }
+      },
+      {
+        path: 'oss',
+        component: () => import('@/views/set/oss'),
+        name: 'WebSet',
+        meta: { title: '图片存储配置', affix: false }
+      },
+    ]
+  },
+  {
+    path: '/content',
+    component: Layout,
+    meta: { title: '内容管理', icon: 'content', affix: false },
+    children: [
+      {
+        path: 'list',
+        component: () => import('@/views/content/list'),
+        name: 'list',
+        meta: { title: '资讯列表', affix: false }
       },
       {
         path: 'create',
@@ -64,9 +83,29 @@ export const constantRoutes = [
         path: 'kind',
         component: () => import('@/views/content/kind'),
         name: 'KindContent',
+        hidden: false,
+        meta: { title: '资讯分类', affix: false }
+      },
+      {
+        path: 'pages',
+        component: () => import('@/views/page/list'),
+        name: 'PageSet',
+        meta: { title: '页面管理', affix: false }
+      },
+      {
+        path: 'edit/:id',
+        props: true,
         hidden: true,
-        meta: { title: '类型管理', affix: false }
-      }
+        component: () => import('@/views/page/page_edit'),
+        name: 'PageEdit',
+        meta: { title: '编辑页面', affix: false }
+      },
+      {
+        path: 'banner',
+        component: () => import('@/views/market/banner'),
+        name: 'banner',
+        meta: { title: '轮播横幅', affix: false }
+      },
     ]
   },
   {
@@ -78,7 +117,7 @@ export const constantRoutes = [
         path: 'product',
         component: () => import('@/views/product/index'),
         name: 'product',
-        meta: { title: '产品管理', affix: false }
+        meta: { title: '产品列表', affix: false }
       },
       {
         path: 'create',
@@ -99,35 +138,11 @@ export const constantRoutes = [
         path: 'kind',
         component: () => import('@/views/product/kind'),
         name: 'KindProduct',
-        hidden: true,
-        meta: { title: '类型管理', affix: false }
+        hidden: false,
+        meta: { title: '产品分类', affix: false }
       }
     ]
   },
-  // {
-  //   path: '/cases',
-  //   component: Layout,
-  //   children: [
-  //     {
-  //       path: 'index',
-  //       component: () => import('@/views/cases/index'),
-  //       name: 'cases',
-  //       meta: { title: '案例管理', icon: 'cases', affix: false }
-  //     }
-  //   ]
-  // },
-  // {
-  //   path: '/file',
-  //   component: Layout,
-  //   children: [
-  //     {
-  //       path: 'file',
-  //       component: () => import('@/views/file/index'),
-  //       name: 'file',
-  //       meta: { title: '文件管理', icon: 'file', affix: false }
-  //     }
-  //   ]
-  // },
   {
     path: '/message',
     component: Layout,
@@ -142,41 +157,21 @@ export const constantRoutes = [
     ]
   },
   {
-    path: '/set',
+    path: '/acl',
     component: Layout,
-    meta: { title: '设置', icon: 'set', affix: false },
+    meta: { title: '权限管理', icon: 'peoples', affix: false },
     children: [
       {
-        path: 'web',
-        component: () => import('@/views/set/web'),
-        name: 'WebSet',
-        meta: { title: '网站基本设置', affix: false }
-      },
-      {
-        path: 'page',
-        component: () => import('@/views/set/page'),
-        name: 'PageSet',
-        meta: { title: '页面管理', affix: false }
-      },
-      {
         path: 'user',
-        component: () => import('@/views/set/user'),
+        component: () => import('@/views/acl/user'),
         name: 'UserSet',
         meta: { title: '用户管理', affix: false }
       },
       {
-        path: 'edit/:id',
-        props: true,
-        hidden: true,
-        component: () => import('@/views/set/page_edit'),
-        name: 'PageEdit',
-        meta: { title: '编辑页面', affix: false }
-      },
-      {
-        path: 'banner',
-        component: () => import('@/views/set/banner'),
-        name: 'banner',
-        meta: { title: '滚动轮播横幅', affix: false }
+        path: 'role',
+        component: () => import('@/views/acl/role'),
+        name: 'UserSet',
+        meta: { title: '角色管理', affix: false }
       },
     ]
   }

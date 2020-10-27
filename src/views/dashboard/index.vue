@@ -9,19 +9,19 @@
       <div class="box-items">
         <el-row>
           <el-col :span="24">
-            <p>版本：NxtFramework v0.1.0</p>
+            <p>名称：NxtFramework </p>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="24">
-            <p>版权所有人：深圳牛小顿科技有限公司</p>
+            <p>版本：v0.1.0</p>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="12">
             <p>授权协议：Apache (可商用）</p>
           </el-col>
-          <el-col :span="12" style="text-align: right;"><el-button type="primary" round size="medium"><a href="https://www.nxtframework.com">查看最新版本</a></el-button></el-col>
+          <el-col :span="12" style="text-align: right;"><el-button type="primary" round size="medium"><a target="_blank" href="https://github.com/soyojoearth/nxtframework">查看最新版本</a></el-button></el-col>
         </el-row>
       </div>
     </el-card>
