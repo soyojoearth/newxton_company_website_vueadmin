@@ -48,8 +48,8 @@ export const constantRoutes = [
       {
         path: 'oss',
         component: () => import('@/views/set/oss'),
-        name: 'WebSet',
-        meta: { title: '图片存储配置', affix: false }
+        name: 'OssSet',
+        meta: { title: '图片搬家', affix: false }
       },
     ]
   },
@@ -170,9 +170,15 @@ export const constantRoutes = [
       {
         path: 'role',
         component: () => import('@/views/acl/role'),
-        name: 'UserSet',
+        name: 'AclRole',
         meta: { title: '角色管理', affix: false }
       },
+      {
+        path: 'group',
+        component: () => import('@/views/acl/group'),
+        name: 'AclGroup',
+        meta: { title: '权限分组', affix: false }
+      }
     ]
   }
 ]

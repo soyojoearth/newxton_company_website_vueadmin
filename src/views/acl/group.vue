@@ -5,14 +5,14 @@
               操作提示：
           </el-row>
           <el-row>
-              1、系统管理员角色设置。
+              1、这里可以创建一个个权限分组，每个权限分组包含若干个操作权限。
           </el-row>
           <el-row>
-              2、可添加各种角色、给指定角色赋予某些功能权限。
+              2、然后，在“角色管理”中给角色增加某个“权限组”，这个角色就有了这部分权限。
           </el-row>
       </el-card>
       <el-row>
-      <el-button type="primary" @click="handleCreateRole">创建</el-button>
+      <el-button type="primary" @click="handleCreate">创建</el-button>
     </el-row>
     <el-card style="margin-top:10px">
       <el-table
@@ -21,10 +21,10 @@
         tooltip-effect="dark"
         style="width: 100%;min-height:300px;margin-bottom:20px;"
       >
-        <el-table-column label="角色名">
-          <template slot-scope="scope">{{ scope.row.roleName }}</template>
+        <el-table-column label="权限组名称">
+          <template slot-scope="scope">{{ scope.row.groupName }}</template>
         </el-table-column>
-        <el-table-column prop="roleRemark" label="备注" />
+        <el-table-column prop="groupRemark" label="备注" />
         <el-table-column align="right">
           <template slot-scope="scope">
             <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
@@ -40,18 +40,18 @@
       width="50%"
     >
       <el-form ref="form" label-position="top" :model="form" label-width="80px" status-icon>
-        <el-form-item label="角色名">
-          <el-input v-model="form.roleName"/>
+        <el-form-item label="权限组名称">
+          <el-input v-model="form.groupName"/>
         </el-form-item>
-        <el-form-item label="角色备注">
-          <el-input v-model="form.roleRemark"/>
+        <el-form-item label="备注">
+          <el-input v-model="form.groupRemark"/>
         </el-form-item>
-        <el-form-item label="角色权限">
+        <el-form-item label="操作权限">
             <template>
                 <el-transfer 
                 v-model="aclActionValue" 
                 :data="aclActionData" 
-                :titles="['全部权限组', '拥有权限组']"
+                :titles="['全部操作权限', '拥有操作权限']"
                 ></el-transfer>
             </template>
         </el-form-item>
@@ -64,17 +64,17 @@
 
     <el-dialog
       title=""
-      :visible.sync="dialogVisibleCreateRole"
+      :visible.sync="dialogVisibleCreate"
       width="50%"
     >
       <el-form ref="form" label-position="top" :model="form" label-width="80px" status-icon>
-        <el-form-item label="角色名">
-          <el-input v-model="form.roleName"/>
+        <el-form-item label="权限组名称">
+          <el-input v-model="form.groupName"/>
         </el-form-item>
-        <el-form-item label="角色备注">
-          <el-input v-model="form.roleRemark"/>
+        <el-form-item label="备注">
+          <el-input v-model="form.groupRemark"/>
         </el-form-item>
-        <el-form-item label="角色权限">
+        <el-form-item label="操作权限">
             <template>
                 <el-transfer 
                 v-model="aclActionValue" 
@@ -85,8 +85,8 @@
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogVisibleCreateRole = false">取 消</el-button>
-        <el-button type="primary" @click="handPostDataCreateRole()">确 定</el-button>
+        <el-button @click="dialogVisibleCreate = false">取 消</el-button>
+        <el-button type="primary" @click="handPostDataCreate()">确 定</el-button>
       </div>
     </el-dialog>
 
@@ -94,10 +94,10 @@
         title="提示"
         :visible.sync="dialogVisibleConfirmDelete"
         width="30%">
-        <span>确定删除该角色：{{prepareDeleteRoleName}}</span>
+        <span>确定删除该权限组：{{prepareDeleteGroupName}}</span>
         <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisibleConfirmDelete = false">取 消</el-button>
-        <el-button type="primary" @click="handPostDataDeleteRole()">确 定</el-button>
+        <el-button type="primary" @click="handPostDataDelete()">确 定</el-button>
         </span>
     </el-dialog>
 
@@ -110,23 +110,23 @@ export default {
   data() {
     return {
       dialogVisibleConfirmDelete: false,
-      dialogVisibleCreateRole: false,
+      dialogVisibleCreate: false,
       dialogVisible: false,
       isCreate: false,
       form: {
-        roleId: 1,
-        roleName: '',
-        roleRemark: '',
+        groupId: 1,
+        groupName: '',
+        groupRemark: '',
       },
       aclActionData: [],
       aclActionValue: [],
-      prepareDeleteRoleId: null,
-      prepareDeleteRoleName: null
+      prepareDeleteGroupId: null,
+      prepareDeleteGroupName: null
     }
   },
   computed: {
     tableData() {
-      return this.$store.state.acl.roleList
+      return this.$store.state.acl.groupList
     },
   },
   created() {
@@ -135,25 +135,25 @@ export default {
   methods: {
 
     load() {
-      this.$store.dispatch('acl/getRoleList')
       this.$store.dispatch('acl/getGroupList')
+      this.$store.dispatch('acl/getActionList')
     },
 
-    handleCreateRole() {
+    handleCreate() {
         var then = this
-      this.dialogVisibleCreateRole = true
-      this.form.roleId = null
-      this.form.roleName = ''
-      this.form.roleRemark = ''
-      var groupList = this.$store.state.acl.groupList;
+      this.dialogVisibleCreate = true
+      this.form.groupId = null
+      this.form.groupName = ''
+      this.form.groupRemark = ''
+      var actionList = this.$store.state.acl.actionList;
       const data = [];
       const value = [];
-        for (let i = 0; i < groupList.length; i++) {
-            var groupDetail = groupList[i]
-            var groupId = groupDetail.id
+        for (let i = 0; i < actionList.length; i++) {
+            var actionDetail = actionList[i]
+            var actionId = actionDetail.id
             data.push({
-                key: groupId,
-                label: groupDetail.groupName,
+                key: actionId,
+                label: actionDetail.actionName,
                 disabled: false
             });
         }
@@ -161,32 +161,32 @@ export default {
         then.aclActionValue = value;
     },
     handleDelete(index, row) {
-        this.prepareDeleteRoleId = row.id
-        this.prepareDeleteRoleName = row.roleName
+        this.prepareDeleteGroupId = row.id
+        this.prepareDeleteGroupName = row.groupName
         this.dialogVisibleConfirmDelete = true
     },
     handleEdit(index, row) {
         var then = this
-        this.form.roleName = row.roleName
-        this.form.roleRemark = row.roleRemark
-        this.form.roleId = row.id
-        this.$store.dispatch('acl/roleDetail', {
-           role_id: this.form.roleId
+        this.form.groupName = row.groupName
+        this.form.groupRemark = row.groupRemark
+        this.form.groupId = row.id
+        this.$store.dispatch('acl/groupDetail', {
+           group_id: this.form.groupId
            }).then(res => {
-                var roleDetail = this.$store.state.acl.roleDetail;
+                var groupDetail = this.$store.state.acl.groupDetail;
                 const data = [];
                 const value = [];
-                var listRoleGroupDetail = roleDetail.listRoleGroupDetail;
-                for (let i = 0; i < listRoleGroupDetail.length; i++) {
-                    var groupDetail = listRoleGroupDetail[i]
-                    var groupId = groupDetail.groupId
+                var listGroupActionDetail = groupDetail.listGroupActionDetail;
+                for (let i = 0; i < listGroupActionDetail.length; i++) {
+                    var actionDetail = listGroupActionDetail[i]
+                    var actionId = actionDetail.actionId
                     data.push({
-                        key: groupId,
-                        label: groupDetail.groupName,
+                        key: actionId,
+                        label: actionDetail.actionName,
                         disabled: false
                     });
-                    if(groupDetail.selected){
-                        value.push(groupId)
+                    if(actionDetail.selected){
+                        value.push(actionId)
                     }
                 }
                 then.aclActionData = data;
@@ -197,11 +197,11 @@ export default {
 
     handPostData() {
       var then = this
-      this.$store.dispatch('acl/roleDetailUpdate', {
-           role_id: this.form.roleId, 
-           role_name: this.form.roleName,
-           role_remark: this.form.roleRemark,
-           role_group_list: JSON.stringify(this.aclActionValue)
+      this.$store.dispatch('acl/groupDetailUpdate', {
+           group_id: this.form.groupId, 
+           group_name: this.form.groupName,
+           group_remark: this.form.groupRemark,
+           group_action_list: JSON.stringify(this.aclActionValue)
            }).then(res => {
               then.dialogVisible = false
               Message({
@@ -213,12 +213,12 @@ export default {
             })
     },
 
-    handPostDataCreateRole() {
+    handPostDataCreate() {
       var then = this
-      this.$store.dispatch('acl/roleAdd', {
-           role_name: this.form.roleName,
-           role_remark: this.form.roleRemark,
-           role_group_list: JSON.stringify(this.aclActionValue)
+      this.$store.dispatch('acl/groupAdd', {
+           group_name: this.form.groupName,
+           group_remark: this.form.groupRemark,
+           group_action_list: JSON.stringify(this.aclActionValue)
            }).then(res => {
               then.dialogVisible = false
               Message({
@@ -226,14 +226,14 @@ export default {
                 type: 'success',
                 duration: 5 * 1000
               })
-              then.dialogVisibleCreateRole = false
+              then.dialogVisibleCreate = false
               then.load()
             })
     },
-    handPostDataDeleteRole() {
+    handPostDataDelete() {
         var then = this
-        this.$store.dispatch('acl/roleDelete', {
-            role_id: this.prepareDeleteRoleId
+        this.$store.dispatch('acl/groupDelete', {
+            group_id: this.prepareDeleteGroupId
             }).then(res => {
                 then.dialogVisible = false
                 Message({

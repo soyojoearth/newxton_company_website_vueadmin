@@ -1,5 +1,16 @@
 <template>
   <div class="app-container">
+    <el-card style="margin-top:10px;font-size:14px;line-height:30px;margin-bottom:15px;">
+          <el-row style="font-weight:800;">
+              操作提示：
+          </el-row>
+          <el-row>
+              1、可添加新管理员。
+          </el-row>
+          <el-row>
+              2、可修改管理员的密码、资料、权限；也可拉黑管理员。
+          </el-row>
+      </el-card>
     <el-row>
       <el-button type="primary" @click="handleCreate">创建</el-button>
     </el-row>
@@ -109,7 +120,7 @@ export default {
       return this.$store.state.set.userPageNumber
     },
     roleList() {
-      return this.$store.state.set.roleList
+      return this.$store.state.acl.roleList
     }
   },
   created() {
@@ -119,7 +130,7 @@ export default {
     load() {
       this.$store.commit('set/SET_USER_PAGE', 1)
       this.$store.dispatch('set/getUserArr')
-      this.$store.dispatch('set/getRoleList')
+      this.$store.dispatch('acl/getRoleList')
     },
     handlePage(page) {
       if (this.listNumber + page < 1) {

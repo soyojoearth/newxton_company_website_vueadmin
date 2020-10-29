@@ -40,7 +40,7 @@ module.exports = {
     after: require('./mock/mock-server.js'),
     proxy: {
       '/api/admin': {
-        target: 'http://127.0.0.1:8080',
+        target: 'http://127.0.0.1:8686',
         changeOrigin: true
       }
     }
