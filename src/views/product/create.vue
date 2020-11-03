@@ -38,14 +38,6 @@
               v-model="formLabelAlign.price"
               style="width:220px"
             />
-            <el-checkbox v-model="price_negotiation">是否面议</el-checkbox>
-          </el-form-item>
-          <el-form-item>
-            价格说明
-            <el-input
-              v-model="formLabelAlign.price_remark"
-              style="width:500px"
-            />
           </el-form-item>
         </el-card>
         <el-form-item label="产品属性">
@@ -209,8 +201,6 @@ export default {
         product_picture_list: [],
         product_subtitle: '',//副
         price: '',
-        price_negotiation: '0',
-        price_remark: '',
         product_sku: [],
 
 
@@ -231,8 +221,6 @@ export default {
       colorTags: [],
 
       attributeNameTags: [],
-      price_negotiation: false,
-
 
 
       ColorinputVisible: false,
@@ -355,8 +343,6 @@ export default {
       console.log('[' + str + ']');
       fd.append('product_sku', '[' + str + ']')
       fd.append('price', this.formLabelAlign.price)
-      fd.append('price_negotiation', this.price_negotiation ? '1' : '0')
-      fd.append('price_remark', this.formLabelAlign.price_remark)
       fd.append('product_subtitle', this.formLabelAlign.product_subtitle)
 
       this.$store.dispatch('product/createProduct', fd).then(res => {

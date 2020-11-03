@@ -1,5 +1,6 @@
 import {
-  getProductList, updateProduct, swapProduct, deleteProduct, getProductDetail, getProductPictureList, createProduct, createProductCategory, deleteProductCategory, updateProductCategory, getProductCategoryList, changeRecommend
+  getProductList, updateProduct, swapProduct, deleteProduct, getProductDetail, getProductPictureList, createProduct, createProductCategory, deleteProductCategory, updateProductCategory, getProductCategoryList,
+  changeRecommend, changeIsHot, changeIsNew, changeIsSelling
 } from '@/api/product'
 import Vue from 'vue'
 const state = {
@@ -186,6 +187,48 @@ const actions = {
       changeRecommend({
         id: data.id,
         recommend: data.recommend ? 1 : 0
+      })
+        .then(res => {
+          resolve()
+        })
+        .catch(err => {
+          reject(err)
+        })
+    })
+  },
+  changeIsHot ({ commit }, data) {
+    return new Promise((resolve, reject) => {
+      changeIsHot({
+        id: data.id,
+        set_hot: data.isHot ? 1 : 0
+      })
+        .then(res => {
+          resolve()
+        })
+        .catch(err => {
+          reject(err)
+        })
+    })
+  },
+  changeIsNew ({ commit }, data) {
+    return new Promise((resolve, reject) => {
+      changeIsNew({
+        id: data.id,
+        set_new: data.isNew ? 1 : 0
+      })
+        .then(res => {
+          resolve()
+        })
+        .catch(err => {
+          reject(err)
+        })
+    })
+  },
+  changeIsSelling ({ commit }, data) {
+    return new Promise((resolve, reject) => {
+      changeIsSelling({
+        id: data.id,
+        set_selling: data.isSelling ? 1 : 0
       })
         .then(res => {
           resolve()

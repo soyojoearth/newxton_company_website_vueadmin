@@ -2,16 +2,28 @@
   <div class="app-container">
     <el-card style="margin-top:10px">
       <el-form
-        label-position="top"
-        label-width="80px"
-        :model="formLabelAlign"
+        label-position="left"
+        label-width="120px"
       >
-        <el-form-item label="标题">
-          <el-input v-model="formLabelAlign.product_name" />
+      <el-row>
+        <el-col :span="24">
+        <el-form-item label="标题" >
+          <el-input v-model="allDetail.productName" />
         </el-form-item>
-        <el-form-item>
+        </el-col>
+      </el-row>
+      <el-row>
+        <el-col :span="24">
+        <el-form-item label="促销语">
+          <el-input v-model="allDetail.productSubtitle" />
+        </el-form-item>
+        </el-col>
+      </el-row>
+      <el-row>
+        <el-col :span="24">
+        <el-form-item label="产品类别">
           <el-select
-            v-model="formLabelAlign.category_id"
+            v-model="allDetail.categoryId"
             placeholder="请选择"
           >
             <el-option
@@ -25,61 +37,116 @@
             <el-button>类别管理</el-button>
           </router-link>
         </el-form-item>
-        <el-form-item label="副标题（营销性文字）">
-          <el-input v-model="formLabelAlign.product_subtitle" />
-        </el-form-item>
-        <el-card
-          shadow="never"
-          style="margin-bottom:10px"
-        >
-          <el-form-item>
-            价格
-            <el-input
-              v-model="formLabelAlign.price"
-              style="width:220px"
-            />
-            <el-checkbox v-model="price_negotiation">是否面议</el-checkbox>
-          </el-form-item>
-          <el-form-item>
-            价格说明
-            <el-input
-              v-model="formLabelAlign.price_remark"
-              style="width:500px"
-            />
-          </el-form-item>
-        </el-card>
-        <el-form-item label="产品属性">
-          <el-card shadow="never">
-            <el-form-item
-              :key="index"
-              v-for="(item,index) in formLabelAlign.product_sku"
-              :label="item.name"
-            >
-              <el-tag
-                :key="index"
-                v-for="(tag,index) in item.sku"
-                closable
-                :disable-transitions="false"
-                @close="handleColorClose(item.name,tag)"
-              >
-                {{tag}}
-              </el-tag>
-              <el-input
-                class="input-new-tag"
-                ref="saveColorTagInput"
-                v-model="item[index]"
-                size="small"
-              >
-              </el-input>
-              <el-button
-                class="button-new-tag"
-                size="small"
-                @click="handleConfirm(item.name,item[index])"
-              >增加</el-button>
+        </el-col>
+      </el-row>
+        <el-row>
+            <el-col :span="12">
+                <el-form-item label="货号">
+                  <el-input class="input_small" v-model="allDetail.itemNo" />
+                </el-form-item>
+            </el-col>
+            <el-col :span="12">
+                <el-form-item label="品牌">
+                  <el-select
+                    v-model="allDetail.brandId"
+                    placeholder="请选择"
+                  >
+                    <el-option
+                      v-for="item in category_list"
+                      :key="item.category_id"
+                      :label="item.category_name_display"
+                      :value="item.category_id"
+                    />
+                  </el-select>
+                  <router-link to="/product/kind">
+                    <el-button>品牌管理</el-button>
+                  </router-link>
+                </el-form-item>
+            </el-col>
+        </el-row>
+        
+        <el-row>
+          <el-col :span="12">
 
+            <el-form-item label="最低起购">
+              <el-input class="input_small" v-model="allDetail.dealQuantityMin" />
             </el-form-item>
-            <el-card shadow="never">
-              <el-form-item label="属性名称">
+
+          </el-col>
+
+          <el-col :span="12">
+            <el-form-item label="单次最多购买">
+              <el-input class="input_small" v-model="allDetail.dealQuantityMax" />
+            </el-form-item>
+          </el-col>
+        </el-row>
+
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="运费模版">
+              <el-select
+                v-model="allDetail.deliveryConfigId"
+                placeholder="请选择"
+              >
+                <el-option
+                  v-for="item in category_list"
+                  :key="item.category_id"
+                  :label="item.category_name_display"
+                  :value="item.category_id"
+                />
+              </el-select>
+              <router-link to="/product/kind">
+                <el-button>模版管理</el-button>
+              </router-link>
+            </el-form-item>
+          </el-col>
+        </el-row>
+
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="产品规格">
+              <el-radio-group v-model="allDetail.withSku">
+                <el-radio class="radio" :label="false">单一规格</el-radio>
+                <el-radio class="radio" :label="true">多规格</el-radio>
+              </el-radio-group>
+            </el-form-item>
+          </el-col>
+        </el-row>
+
+        <el-row>
+          <el-col :span="12">
+
+            <el-form-item label="价格">
+              <el-input v-model="allDetail.price" class="input_small" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="折扣" >
+              <el-input
+                class="input_small" v-model="allDetail.priceDiscount"
+              />
+            </el-form-item>
+        </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="总库存">
+              <el-input class="input_small" v-model="allDetail.inventoryQuantity" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            
+          </el-col>
+        </el-row>
+
+        <el-row>
+          <el-col :span="24">
+
+        <el-form-item label="产品规格">
+          <el-card shadow="never">
+
+            <el-card shadow="never" >
+              <el-form-item label="规格名称">
                 <el-tag
                   :key="index"
                   v-for="(tag,index) in attributeNameTags"
@@ -87,7 +154,7 @@
                   :disable-transitions="false"
                   @close="handleAttributeNameClose(tag)"
                 >
-                  {{tag}}
+                  {{tag.valueName}}
                 </el-tag>
                 <el-input
                   class="input-new-tag"
@@ -102,11 +169,88 @@
                   class="button-new-tag"
                   size="small"
                   @click="showAttributeNameInput"
-                >添加属性</el-button>
+                >添加规格</el-button>
+                <span class="tips"> &nbsp;&nbsp;请填写规格名，如：颜色、容量、尺码等………（最多可以添加2种）</span>
               </el-form-item>
             </el-card>
+            <el-row>&nbsp;</el-row>
+            <el-card shadow="never" >
+            <el-form-item
+              
+              :key="index"
+              v-for="(item,index) in allDetail.skuList"
+              :label="item.skuKeyName"
+            >
+              <el-tag
+                :key="index"
+                v-for="(skuValue,index) in item.skuValueList"
+                closable
+                :disable-transitions="false"
+                @close="handleColorClose(item.skuKeyName,skuValue)"
+              >
+                {{skuValue.skuValueName}}
+              </el-tag>
+              <el-input
+                class="input-new-tag"
+                ref="saveColorTagInput"
+                v-model="item.skuValueNameNew"
+                size="small"
+              >
+              </el-input>
+              <el-button
+                class="button-new-tag"
+                size="small"
+                @click="handleConfirm(item.skuKeyName,item)"
+              >增加</el-button>
+
+            </el-form-item>
+            </el-card>
+
+            
           </el-card>
         </el-form-item>
+
+        </el-col>
+        </el-row>
+
+        <el-form-item>
+          <el-card shadow="never">
+
+            <el-table
+              ref="multipleTable"
+              :data="allDetail.skuValuePriceEtcList"
+              tooltip-effect="dark"
+              style="width: 100%;"
+            >
+              <el-table-column label="规格名称">
+                <template slot-scope="scope">{{ scope.row.skuValueName1 }},{{ scope.row.skuValueName2 }}</template>
+              </el-table-column>
+              <el-table-column label="库存">
+                <template slot-scope="scope">
+                  <el-input v-model="scope.row.skuValueInventoryQuantity" />
+                </template>
+              </el-table-column>
+              <el-table-column label="价格">
+                <template slot-scope="scope">
+                  <el-input v-model="scope.row.skuValuePrice" />
+                </template>
+              </el-table-column>
+              <el-table-column label="折扣">
+                <template slot-scope="scope">
+                  <el-input v-model="scope.row.skuValuePriceDiscount" />
+                </template>
+              </el-table-column>
+              <el-table-column>
+                <span class="tips">&nbsp;&nbsp;1表示不打折，0.95是95折，以此类推。</span>
+              </el-table-column>
+              <el-table-column>
+              </el-table-column>
+            </el-table>
+
+          </el-card>
+        </el-form-item>
+
+
         <el-form-item label="产品图片">
           <div class="box">
 
@@ -155,10 +299,11 @@
 
           </div>
         </el-form-item>
+        
         <el-form-item style="margin-bottom: 30px;">
           <Tinymce
             ref="editor"
-            v-model="formLabelAlign.product_description"
+            v-model="allDetail.productDescription"
             :height="400"
           />
         </el-form-item>
@@ -176,13 +321,30 @@
           </el-upload>
         </el-form-item>
         <el-form-item>
-          <el-checkbox v-model="formLabelAlign.is_recommend">推荐</el-checkbox>
+          
+          推荐
+          <el-switch
+              v-model="allDetail.isRecommend"
+            />
+          热卖
+          <el-switch
+              v-model="allDetail.isHot"
+            />
+          新品
+          <el-switch
+              v-model="allDetail.isNew"
+            />
         </el-form-item>
         <el-form-item>
           <el-button
             type="primary"
             @click="handleUpdate"
           >发布</el-button>
+          &nbsp;&nbsp;&nbsp;&nbsp;
+          立即上架
+          <el-switch
+              v-model="allDetail.isSelling"
+            />
         </el-form-item>
       </el-form>
     </el-card>
@@ -207,19 +369,6 @@ export default {
     return {
       radio2: '1',
       checked: false,
-      formLabelAlign: {
-        id: 0,
-        product_name: '',
-        product_description: '',
-        category_id: '',
-        is_recommend: false,
-        product_picture_list: [],
-        product_subtitle: '',//副
-        price: '',
-        price_negotiation: '0',
-        price_remark: '',
-        product_sku: [],
-      },
       headers: {
         'token': getToken(),
         'user_id': getUserId()
@@ -236,7 +385,6 @@ export default {
       colorTags: [],
       sizeTags: [],
       attributeNameTags: [],
-      price_negotiation: false,
 
       dynamicTags: ['标签一', '标签二', '标签三'],
 
@@ -253,7 +401,8 @@ export default {
   computed: {
     ...mapState({
       category_list: state => state.product.CategoryListData,
-      'productForm.productPicList': state => state.product.picList
+      'productForm.productPicList': state => state.product.allDetail.skuList,
+      allDetail: state => state.product.allDetail,
     }),
     dragOptions () {
       return {
@@ -269,83 +418,27 @@ export default {
   },
   methods: {
     async load () {
-      const ListData = this.$store.state.product.ListData
-      console.log(ListData);
       const then = this
-      ListData.map(item => {
-        // eslint-disable-next-line eqeqeq
-        if (item.id == then.id) {
-          then.formLabelAlign.id = item.id
-          then.formLabelAlign.product_name = item.productName
-          then.formLabelAlign.product_description = '测试'
-          then.formLabelAlign.category_id = item.categoryId === 0 ? '' : item.categoryId
-          then.formLabelAlign.is_recommend = !!item.isRecommend
 
-        }
-      })
       this.productForm.productObj = {}
       this.productForm.productPicList = []
       await this.$store.dispatch('product/getDetail', this.id)
       await this.$store.dispatch('product/getCategory')
-      await this.$store.dispatch('product/getProductPictureList', this.id)
-      this.formLabelAlign.product_description = this.$store.state.product.Detail
-      this.productForm.productObj = this.$store.state.product.PicList
+
+      const allDetail = this.$store.state.product.allDetail
+      
+      this.productForm.productObj = this.$store.state.product.allDetail.pictureList
+
       for (const key in this.productForm.productObj) {
         this.productForm.productPicList.push(this.productForm.productObj[key].url)
       }
-      const item = this.$store.state.product.allDetail
-      then.price_negotiation = item.priceNegotiation === 1 ? true : false
-      then.formLabelAlign.product_subtitle = item.productSubtitle
-      then.formLabelAlign.price = item.price
-      then.formLabelAlign.price_remark = item.priceRemark
-      then.formLabelAlign.product_sku = item.product_sku
 
-
-
-      // console.log(this.$store.state.product.PicList)
-      // console.log(this.productForm)
     },
     handleUpdate () {
-      this.formLabelAlign.is_recommend = this.formLabelAlign.is_recommend ? 1 : 0
-      // product_picture_list
-      this.formLabelAlign.product_picture_list = []
-      this.productForm.productPicList.forEach((item) => {
-        this.productForm.productObj.forEach((ele) => {
-          if (item === ele.url) {
-            this.formLabelAlign.product_picture_list.push(ele.id)
-          }
-        })
-      })
-      var fd = new FormData()
-      fd.append('id', this.id)
-      fd.append('category_id', this.formLabelAlign.category_id)
-      fd.append('product_name', this.formLabelAlign.product_name)
-      fd.append('product_description', this.formLabelAlign.product_description)
-      fd.append('is_recommend', this.formLabelAlign.is_recommend)
-      var re = '[' + this.formLabelAlign.product_picture_list.toString() + ']'
-      fd.append('product_picture_list', re)
 
-      var str = ''
+      this.$store.dispatch('product/updateProduct', this.allDetail)
+      //this.$router.replace({ path: '/product/product' })
 
-      for (let index = 0; index < this.formLabelAlign.product_sku.length; index++) {
-        const element = this.formLabelAlign.product_sku[index];
-        if (index !== this.formLabelAlign.product_sku.length - 1) {
-          str = str + '{"name":"' + element.name + '",sku:["' + element.sku.join('","') + '"]},'
-
-        } else {
-          str = str + '{"name":"' + element.name + '",sku:["' + element.sku.join('","') + '"]}'
-
-        }
-      }
-      fd.append('product_sku', '[' + str + ']')
-      fd.append('price', this.formLabelAlign.price)
-      fd.append('price_negotiation', this.price_negotiation ? '1' : '0')
-      fd.append('price_remark', this.formLabelAlign.price_remark)
-      fd.append('product_subtitle', this.formLabelAlign.product_subtitle)
-
-
-      this.$store.dispatch('product/updateProduct', fd)
-      this.$router.replace({ path: '/product/product' })
     },
     handleAvatarSuccess (res, file) {
       this.imageUrl = URL.createObjectURL(file.raw)
@@ -361,10 +454,24 @@ export default {
       }
       return isImg && isLt20M
     },
-    handleColorClose (name, tag) {
-      this.formLabelAlign.product_sku.forEach(element => {
-        if (element.name === name) {
-          element.sku.splice(element.sku.indexOf(tag), 1);
+
+    handleColorClose (skuKeyName, skuValueItem) {
+
+      var than = this;
+
+      for(var i=than.allDetail.skuValuePriceEtcList.length-1;i>=0;i--){
+          var itemPriceEtc = than.allDetail.skuValuePriceEtcList[i];
+          if(itemPriceEtc.skuValueName1 == skuValueItem.skuValueName || itemPriceEtc.skuValueName2 == skuValueItem.skuValueName){
+            than.allDetail.skuValuePriceEtcList.splice(i, 1) 
+          }
+      }
+
+      this.allDetail.skuList.forEach(element => {
+        if (element.skuKeyName === skuKeyName) {
+          element.skuValueList.splice(element.skuValueList.indexOf(skuValueItem), 1);
+          if(element.skuValueList.length == 0){
+            this.allDetail.skuList.splice(this.allDetail.skuList.indexOf(element), 1) 
+          }
           return
         }
       });
@@ -387,14 +494,54 @@ export default {
       });
     },
 
-    handleConfirm (name, value) {
-      if (value) {
-        this.formLabelAlign.product_sku.forEach(element => {
-          if (element.name === name) {
-            element.sku.push(value)
+    handleConfirm (skuKeyName, skuItem) {
+      var than = this;
+      if (skuItem.skuValueNameNew) {
+        var num = 0;
+        than.allDetail.skuList.forEach(element => {
+          num++;
+          if (element.skuKeyName === skuKeyName) {
+      
+            element.skuValueList.push({ 'skuValueName': skuItem.skuValueNameNew})
+
+            if(than.allDetail.skuList.length == 1){
+              var itemSkuValuePriceEtc = {
+                "skuValueName1":skuItem.skuValueNameNew,
+                "skuValueName2":null,
+                "skuValueInventoryQuantity":100,
+                "skuValuePrice":100,
+                "skuValuePriceDiscount":1
+              }
+              than.allDetail.skuValuePriceEtcList.push(itemSkuValuePriceEtc)
+            }
+            element.skuValueName = null
             return
           }
+          else{
+              element.skuValueList.forEach(skuValue => {
+                  var skuValueName1 = skuItem.skuValueNameNew;
+                  var skuValueName2 = skuValue.skuValueName;
+                  if(num == 1){
+                    [skuValueName1,skuValueName2] = [skuValueName2,skuValueName1];
+                  }
+                  var itemSkuValuePriceEtc = {
+                    "skuValueName1":skuValueName1,
+                    "skuValueName2":skuValueName2,
+                    "skuValueInventoryQuantity":100,
+                    "skuValuePrice":100,
+                    "skuValuePriceDiscount":1
+                  }
+                  than.allDetail.skuValuePriceEtcList.push(itemSkuValuePriceEtc)
+              });
+              for(var i=than.allDetail.skuValuePriceEtcList.length-1;i>=0;i--){
+                  var itemPriceEtc = than.allDetail.skuValuePriceEtcList[i];
+                  if(itemPriceEtc.skuValueName1 == null || itemPriceEtc.skuValueName2 == null){
+                    than.allDetail.skuValuePriceEtcList.splice(i, 1) 
+                  }
+              }
+          }
         });
+        
       }
     },
     handleSizeInputConfirm () {
@@ -406,26 +553,15 @@ export default {
       this.SizeinputValue = '';
     },
     handleInputConfirm () {
-      let inputValue = this.AttributeNameinputValue;
-      if (inputValue) {
-        this.formLabelAlign.product_sku.push({ 'name': inputValue, 'sku': [] })
+      let skuKeyName = this.AttributeNameinputValue;
+      if(this.allDetail.skuList.length >= 2){
+        return
+      }
+      if (skuKeyName) {
+        this.allDetail.skuList.push({ 'skuKeyName': skuKeyName, 'skuValueList': [] })
       }
       this.AttributeNameinputVisible = false;
       this.AttributeNameinputValue = '';
-    },
-    handleCreate () {
-      this.formLabelAlign.is_recommend = this.formLabelAlign.is_recommend ? 1 : 0
-      // product_picture_list
-      this.formLabelAlign.product_picture_list = []
-      this.productForm.productPicList.forEach((item) => {
-        this.productForm.productObj.forEach((ele) => {
-          if (item === ele.url) {
-            this.formLabelAlign.product_picture_list.push(ele.id)
-          }
-        })
-      })
-      console.log(this.formLabelAlign)
-      this.$store.dispatch('product/createProduct', this.formLabelAlign)
     },
     async handleUploadHttpRequest (param) {
       const fileObj = param.file
@@ -596,6 +732,13 @@ export default {
       height: 0px;
       line-height: normal;
     }
+  }
+  .input_small {
+    width: 80%;
+  }
+  .tips {
+    font-size:14px;
+    color: #8c939d;
   }
 }
 </style>

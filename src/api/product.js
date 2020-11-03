@@ -29,6 +29,7 @@ export function updateProduct (data) {
   return requestForm({
     url: '/api/admin/product/update',
     method: 'post',
+    headers: { 'content-type': 'application/json' },
     data
   })
 }
@@ -44,6 +45,30 @@ export function deleteProduct (data) {
 export function changeRecommend (data) {
   return request({
     url: '/api/admin/product/recommend',
+    method: 'post',
+    data
+  })
+}
+// 产品热卖/取消热卖
+export function changeIsHot (data) {
+  return request({
+    url: '/api/admin/product/set_hot',
+    method: 'post',
+    data
+  })
+}
+// 产品设置新品/取消新品
+export function changeIsNew (data) {
+  return request({
+    url: '/api/admin/product/set_new',
+    method: 'post',
+    data
+  })
+}
+// 产品上架/下架
+export function changeIsSelling (data) {
+  return request({
+    url: '/api/admin/product/set_selling',
     method: 'post',
     data
   })

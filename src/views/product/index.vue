@@ -88,18 +88,7 @@
             </el-col>
           </template>
         </el-table-column>
-        <el-table-column
-          label=""
-          align="right"
-          width="80"
-        >
-          <template slot-scope="scope">
-            <el-button
-              size="mini"
-              @click="handleEdit(scope.$index, scope.row)"
-            >编辑</el-button>
-          </template>
-        </el-table-column>
+
         <el-table-column
           label="推荐"
           align="right"
@@ -114,6 +103,62 @@
             />
           </template>
         </el-table-column>
+        <el-table-column
+          label="热卖"
+          align="right"
+          width="70"
+        >
+          <template slot-scope="scope">
+            <el-switch
+              v-model="scope.row.isHot"
+              :active-value="1"
+              :inactive-value="0"
+              @change="changeIsHot(scope.$index, scope.row)"
+            />
+          </template>
+        </el-table-column>
+        <el-table-column
+          label="新品"
+          align="right"
+          width="70"
+        >
+          <template slot-scope="scope">
+            <el-switch
+              v-model="scope.row.isNew"
+              :active-value="1"
+              :inactive-value="0"
+              @change="changeIsNew(scope.$index, scope.row)"
+            />
+          </template>
+        </el-table-column>
+        <el-table-column
+          label="上架"
+          align="right"
+          width="70"
+        >
+          <template slot-scope="scope">
+            <el-switch
+              v-model="scope.row.isSelling"
+              :active-value="1"
+              :inactive-value="0"
+              @change="changeIsSelling(scope.$index, scope.row)"
+            />
+          </template>
+        </el-table-column>
+
+        <el-table-column
+          label=""
+          align="right"
+          width="80"
+        >
+          <template slot-scope="scope">
+            <el-button
+              size="mini"
+              @click="handleEdit(scope.$index, scope.row)"
+            >编辑</el-button>
+          </template>
+        </el-table-column>
+
       </el-table>
     </el-card>
     <el-row
@@ -264,6 +309,15 @@ export default {
     },
     changeRecommend (index, row) {
       this.$store.dispatch('product/changeRecommend', { id: row.id, recommend: row.isRecommend })
+    },
+    changeIsHot (index, row) {
+      this.$store.dispatch('product/changeIsHot', { id: row.id, isHot: row.isHot })
+    },
+    changeIsNew (index, row) {
+      this.$store.dispatch('product/changeIsNew', { id: row.id, isNew: row.isNew })
+    },
+    changeIsSelling (index, row) {
+      this.$store.dispatch('product/changeIsSelling', { id: row.id, isSelling: row.isSelling })
     }
   }
 }
