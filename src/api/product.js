@@ -13,6 +13,7 @@ export function createProduct (data) {
   return requestForm({
     url: '/api/admin/product/create',
     method: 'post',
+    headers: { 'content-type': 'application/json' },
     data
   })
 }

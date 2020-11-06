@@ -437,7 +437,7 @@ export default {
     handleUpdate () {
 
       this.$store.dispatch('product/updateProduct', this.allDetail)
-      //this.$router.replace({ path: '/product/product' })
+      this.$router.replace({ path: '/product/product' })
 
     },
     handleAvatarSuccess (res, file) {
