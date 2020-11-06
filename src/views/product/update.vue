@@ -33,9 +33,6 @@
               :value="item.category_id"
             />
           </el-select>
-          <router-link to="/product/kind">
-            <el-button>类别管理</el-button>
-          </router-link>
         </el-form-item>
         </el-col>
       </el-row>
@@ -52,15 +49,12 @@
                     placeholder="请选择"
                   >
                     <el-option
-                      v-for="item in category_list"
-                      :key="item.category_id"
-                      :label="item.category_name_display"
-                      :value="item.category_id"
+                      v-for="item in brand_list"
+                      :key="item.id"
+                      :label="item.brandName"
+                      :value="item.id"
                     />
                   </el-select>
-                  <router-link to="/product/kind">
-                    <el-button>品牌管理</el-button>
-                  </router-link>
                 </el-form-item>
             </el-col>
         </el-row>
@@ -89,15 +83,12 @@
                 placeholder="请选择"
               >
                 <el-option
-                  v-for="item in category_list"
-                  :key="item.category_id"
-                  :label="item.category_name_display"
-                  :value="item.category_id"
+                  v-for="item in delivery_config_list"
+                  :key="item.id"
+                  :label="item.name"
+                  :value="item.id"
                 />
               </el-select>
-              <router-link to="/product/kind">
-                <el-button>模版管理</el-button>
-              </router-link>
             </el-form-item>
           </el-col>
         </el-row>
@@ -112,8 +103,8 @@
             </el-form-item>
           </el-col>
         </el-row>
-
-        <el-row>
+        
+        <el-row v-if="allDetail.withSku==false">
           <el-col :span="12">
 
             <el-form-item label="价格">
@@ -128,7 +119,7 @@
             </el-form-item>
         </el-col>
         </el-row>
-        <el-row>
+        <el-row v-if="allDetail.withSku==false">
           <el-col :span="12">
             <el-form-item label="总库存">
               <el-input class="input_small" v-model="allDetail.inventoryQuantity" />
@@ -139,7 +130,7 @@
           </el-col>
         </el-row>
 
-        <el-row>
+        <el-row  v-if="allDetail.withSku==true">
           <el-col :span="24">
 
         <el-form-item label="产品规格">
@@ -180,6 +171,7 @@
               :key="index"
               v-for="(item,index) in allDetail.skuList"
               :label="item.skuKeyName"
+              
             >
               <el-tag
                 :key="index"
@@ -213,7 +205,7 @@
         </el-col>
         </el-row>
 
-        <el-form-item>
+        <el-form-item  v-if="allDetail.withSku==true">
           <el-card shadow="never">
 
             <el-table
@@ -400,9 +392,10 @@ export default {
   },
   computed: {
     ...mapState({
-      category_list: state => state.product.CategoryListData,
-      'productForm.productPicList': state => state.product.allDetail.skuList,
       allDetail: state => state.product.allDetail,
+      category_list: state => state.product.CategoryListData,
+      delivery_config_list: state => state.delivery.deliveryConfigList,
+      brand_list: state => state.brand.brandList,
     }),
     dragOptions () {
       return {
@@ -424,6 +417,8 @@ export default {
       this.productForm.productPicList = []
       await this.$store.dispatch('product/getDetail', this.id)
       await this.$store.dispatch('product/getCategory')
+      await this.$store.dispatch('brand/getBrandList')
+      await this.$store.dispatch('delivery/getDeliveryConfigList')
 
       const allDetail = this.$store.state.product.allDetail
       

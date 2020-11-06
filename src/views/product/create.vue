@@ -54,10 +54,10 @@
                     placeholder="请选择"
                   >
                     <el-option
-                      v-for="item in category_list"
-                      :key="item.category_id"
-                      :label="item.category_name_display"
-                      :value="item.category_id"
+                      v-for="item in brand_list"
+                      :key="item.id"
+                      :label="item.brandName"
+                      :value="item.id"
                     />
                   </el-select>
                   <router-link to="/product/kind">
@@ -91,10 +91,10 @@
                 placeholder="请选择"
               >
                 <el-option
-                  v-for="item in category_list"
-                  :key="item.category_id"
-                  :label="item.category_name_display"
-                  :value="item.category_id"
+                  v-for="item in delivery_config_list"
+                  :key="item.id"
+                  :label="item.name"
+                  :value="item.id"
                 />
               </el-select>
               <router-link to="/product/kind">
@@ -115,7 +115,7 @@
           </el-col>
         </el-row>
 
-        <el-row>
+        <el-row v-if="NxtStructProduct.withSku==false">
           <el-col :span="12">
 
             <el-form-item label="价格">
@@ -130,7 +130,7 @@
             </el-form-item>
         </el-col>
         </el-row>
-        <el-row>
+        <el-row v-if="NxtStructProduct.withSku==false">
           <el-col :span="12">
             <el-form-item label="总库存">
               <el-input class="input_small" v-model="NxtStructProduct.inventoryQuantity" />
@@ -141,7 +141,7 @@
           </el-col>
         </el-row>
 
-        <el-row>
+        <el-row v-if="NxtStructProduct.withSku==true">
           <el-col :span="24">
 
         <el-form-item label="产品规格">
@@ -215,7 +215,7 @@
         </el-col>
         </el-row>
 
-        <el-form-item>
+        <el-form-item v-if="NxtStructProduct.withSku==true">
           <el-card shadow="never">
 
             <el-table
@@ -303,7 +303,7 @@
         <el-form-item style="margin-bottom: 30px;">
           <Tinymce
             ref="editor"
-            v-model="formLabelAlign.product_description"
+            v-model="NxtStructProduct.productDescription"
             :height="400"
           />
         </el-form-item>
@@ -366,16 +366,16 @@ export default {
     return {
       NxtStructProduct : {
         id:null,
-        categoryId:0,
-        brandId:0,
+        categoryId:null,
+        brandId:null,
         productName:'',
         productSubtitle:'',
         dealQuantityMin:1,
         dealQuantityMax:10,
         freeShipping:false,
-        deliveryConfigId:0,
+        deliveryConfigId:null,
         itemNo:'',
-        withSku:true,
+        withSku:false,
         price:0,
         priceDiscount:1,
         inventoryQuantity:100,
@@ -453,7 +453,9 @@ export default {
   },
   computed: {
     ...mapState({
-      category_list: state => state.product.CategoryListData
+      category_list: state => state.product.CategoryListData,
+      delivery_config_list: state => state.delivery.deliveryConfigList,
+      brand_list: state => state.brand.brandList,
     }),
     dragOptions () {
       return {
@@ -467,6 +469,8 @@ export default {
   },
   created () {
     this.$store.dispatch('product/getCategory')
+    this.$store.dispatch('brand/getBrandList')
+    this.$store.dispatch('delivery/getDeliveryConfigList')
   },
   methods: {
     handleAvatarSuccess (res, file) {
@@ -756,6 +760,14 @@ export default {
       height: 0px;
       line-height: normal;
     }
+  }
+
+  .input_small {
+    width: 80%;
+  }
+  .tips {
+    font-size:14px;
+    color: #8c939d;
   }
 }
 </style>
