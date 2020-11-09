@@ -1,5 +1,5 @@
 import {
-    getBrandList
+    getBrandList,saveBrand,deleteBrand
   } from '@/api/brand'
   import Vue from 'vue'
   const state = {
@@ -18,6 +18,28 @@ import {
         getBrandList()
           .then(res => {
             commit('SET_BRAND_LIST', res.list)
+            resolve()
+          })
+          .catch(err => {
+            reject(err)
+          })
+      })
+    },
+    saveBrand ({ commit },data) {
+      return new Promise((resolve, reject) => {
+        saveBrand(data)
+          .then(res => {
+            resolve()
+          })
+          .catch(err => {
+            reject(err)
+          })
+      })
+    },
+    deleteBrand ({ commit },data) {
+      return new Promise((resolve, reject) => {
+        deleteBrand(data)
+          .then(res => {
             resolve()
           })
           .catch(err => {

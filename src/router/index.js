@@ -46,10 +46,53 @@ export const constantRoutes = [
         meta: { title: '系统设置', affix: false }
       },
       {
+        path: 'pic',
+        component: () => import('@/views/set/pic'),
+        name: 'pic',
+        meta: { title: '图片存储配置', affix: false }
+      },
+      {
         path: 'oss',
         component: () => import('@/views/set/oss'),
         name: 'OssSet',
         meta: { title: '图片搬家', affix: false }
+      },
+      {
+        path: 'deal',
+        component: () => import('@/views/set/deal'),
+        name: 'deal',
+        meta: { title: '交易设置', affix: false }
+      },
+      {
+        path: 'pay',
+        component: () => import('@/views/set/pay'),
+        name: 'pay',
+        meta: { title: '支付方式管理', affix: false }
+      },
+    ]
+  },
+  {
+    path: '/delivery',
+    component: Layout,
+    meta: { title: '物流设置', icon: 'tree', affix: false },
+    children: [
+      {
+        path: 'region',
+        component: () => import('@/views/delivery/region'),
+        name: 'region',
+        meta: { title: '地区管理', affix: false }
+      },
+      {
+        path: 'company',
+        component: () => import('@/views/delivery/company'),
+        name: 'company',
+        meta: { title: '快递管理', affix: false }
+      },
+      {
+        path: 'config',
+        component: () => import('@/views/delivery/config'),
+        name: 'config',
+        meta: { title: '运费模版管理', affix: false }
       },
     ]
   },
@@ -120,6 +163,12 @@ export const constantRoutes = [
         meta: { title: '产品列表', affix: false }
       },
       {
+        path: 'trash',
+        component: () => import('@/views/product/trash'),
+        name: 'trash',
+        meta: { title: '回收站', affix: false }
+      },
+      {
         path: 'create',
         component: () => import('@/views/product/create'),
         name: 'CreateProduct',
@@ -140,6 +189,13 @@ export const constantRoutes = [
         name: 'KindProduct',
         hidden: false,
         meta: { title: '产品分类', affix: false }
+      },
+      {
+        path: 'brand',
+        component: () => import('@/views/product/brand'),
+        name: 'brand',
+        hidden: false,
+        meta: { title: '品牌管理', affix: false }
       }
     ]
   },
