@@ -42,6 +42,10 @@ module.exports = {
       '/api/admin': {
         target: 'https://dev.nxtframework.com',
         changeOrigin: true
+      },
+      '/public_pic': {
+        target: 'https://dev.nxtframework.com',
+        changeOrigin: true
       }
     }
   },
