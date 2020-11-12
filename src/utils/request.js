@@ -16,10 +16,11 @@ service.interceptors.request.use(
     if (store.getters.token) {
       config.headers['token'] = getToken()
       config.headers['user_id'] = getUserId()
-      if (config.jsonType == null || !config.jsonType) {
-        config.data = Qs.stringify(config.data)
-      }
+      // if (config.jsonType == null || !config.jsonType) {
+      //   config.data = Qs.stringify(config.data)
+      // }
     }
+    config.data = Qs.stringify(config.data)
     return config
   },
   error => {
