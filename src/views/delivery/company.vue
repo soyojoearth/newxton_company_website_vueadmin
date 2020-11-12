@@ -18,8 +18,14 @@
           sortable
         />
         <el-table-column
-          prop="category_name_display"
+          prop="code100"
           label="快递公司编码"
+          sortable
+        />
+        <el-table-column
+          prop="activity"
+          label="状态"
+          :formatter="fmtBoolean"
           sortable
         />
         <el-table-column align="right">
@@ -58,6 +64,14 @@
         <el-form-item label="快递公司编码">
           <el-input v-model="formLabelAlign.code100" />
         </el-form-item>
+
+        <el-form-item label="设置禁用启用" prop="formLabelAlign.activity">
+          <el-radio-group v-model="formLabelAlign.activity">
+            <el-radio :label="true">启用</el-radio>
+            <el-radio :label="false">禁用</el-radio>
+          </el-radio-group>
+        </el-form-item>
+
       </el-form>
       <span
         slot="footer"
@@ -66,7 +80,7 @@
         <el-button @click="dialogVisible = false">取 消</el-button>
         <el-button
           type="primary"
-          @click="UpdateDeliveryCompany"
+          @click="updateDeliveryCompany"
         >确 定</el-button>
       </span>
     </el-dialog>
@@ -101,6 +115,16 @@ export default {
     this.load()
   },
   methods: {
+    fmtBoolean(row, column, cellValue) {
+        let ret = ''
+        if (cellValue) {
+            ret = "启用"
+        } else {
+            ret = "禁用"
+        }
+        return ret;
+    },
+
     load() {
       this.$store.dispatch('delivery/getDeliveryCompanyList')
     },
@@ -141,15 +165,15 @@ export default {
         })
         .catch(_ => { })
     },
-    async UpdateDeliveryCompany() {
+    async updateDeliveryCompany() {
       if (this.isCreate) {
-        await this.$store.dispatch('product/saveDeliveryCompany', this.formLabelAlign)
+        await this.$store.dispatch('delivery/saveDeliveryCompany', this.formLabelAlign)
         this.$message({
           type: 'success',
           message: '创建成功!'
         })
       } else {
-        await this.$store.dispatch('product/saveDeliveryCompany', this.formLabelAlign)
+        await this.$store.dispatch('delivery/saveDeliveryCompany', this.formLabelAlign)
         this.$message({
           type: 'success',
           message: '修改成功!'
