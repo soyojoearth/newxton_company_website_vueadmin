@@ -20,27 +20,31 @@
       </el-table>
     </el-card>
 
-    <el-dialog title="品牌管理" :visible.sync="saveDialog" :close-on-click-modal="false" width="500px">
+    <el-dialog title="品牌管理" :visible.sync="saveDialog" :close-on-click-modal="false" :show-close="false" :close-on-press-escape="false" width="500px" center>
       <el-form ref="brandParamRef" :model="brandParam" :rules="brandParamRules">
         <el-form-item label="商品名称" prop="brandName" :label-width="formLabelWidth">
-          <el-input v-model="brandParam.brandName" autocomplete="off" maxlength="50" style="float: left;width: 200px" />
+          <el-input v-model="brandParam.brandName" autocomplete="off" maxlength="50" style="float: left;width: 335px" />
         </el-form-item>
         <el-form-item label="品牌图片" prop="uploadfileId" :label-width="formLabelWidth">
-          <el-input v-model="brandParam.uploadfileId" autocomplete="off" :disabled="true" style="float: left;width: 200px" />
+          <el-input v-show="false" v-model="brandParam.uploadfileId" />
           <el-upload
             class="upload-demo"
             action="/api/admin/upload/public_pic"
             :headers="headers"
-            :show-file-list="false"
             :on-success="UploadOnSuccess"
             :before-upload="beforeAvatarUpload"
+            :on-preview="handlePreview"
+            :on-remove="handleRemove"
+            :file-list="fileList"
+            list-type="picture"
+            :limit="1"
           >
-            <el-button type="primary" style="margin-left: 10px">选 择</el-button>
+            <el-button type="primary">选 择</el-button>
           </el-upload>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="saveDialog = false">取 消</el-button>
+        <el-button @click="closeDialog">取 消</el-button>
         <el-button type="primary" @click="saveConfirm">确 定</el-button>
       </div>
     </el-dialog>
@@ -79,7 +83,8 @@ export default {
       brandParamRules: {
         brandName: [{ required: true, trigger: 'blur', validator: validateBrandName }],
         uploadfileId: [{ required: true, trigger: 'change', validator: validateUploadfileId }]
-      }
+      },
+      fileList: []
 
     }
   },
@@ -95,7 +100,6 @@ export default {
       this.$store.dispatch('brand/getBrandList').then(() => {
         this.listData = []
         this.listData = this.$store.state.brand.brandList
-        console.log(this.listData)
       })
     },
     handleSelectionChange(val) {
@@ -106,8 +110,15 @@ export default {
       this.resetForm('brandParamRef')
       this.saveDialog = true
     },
+    // 删除上传图片触发
+    handleRemove(file, fileList) {
+      this.brandParam.uploadfileId = null
+    },
+    // 点击上传图片触发
+    handlePreview(file) {
+    },
     UploadOnSuccess(res, file, fileList) {
-      this.brandParam.uploadfileId = res.id
+      this.$set(this.brandParam, 'uploadfileId', res.id)
       this.$forceUpdate()
     },
     beforeAvatarUpload(file) {
@@ -120,6 +131,10 @@ export default {
         this.$message.error('上传图片大小不能超过 20MB!')
       }
       return isImg && isLt20M
+    },
+    closeDialog: function() {
+      this.saveDialog = false
+      this.fileList = []
     },
     // 确认添加或修改
     saveConfirm: function() {
@@ -139,7 +154,7 @@ export default {
             type: 'success',
             message: '保存成功'
           })
-          this.saveDialog = false
+          this.closeDialog()
           this.load()
         } else {
           this.$message({
@@ -152,7 +167,10 @@ export default {
     editorClick: function(data) {
       this.resetForm('brandParamRef')
       this.saveDialog = true
-      console.log(data)
+      this.fileList = [{
+        name: data.brandName,
+        url: data.picUrlPathWithDomain
+      }]
       this.brandParam = {
         id: data.id,
         brandName: data.brandName,
