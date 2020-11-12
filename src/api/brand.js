@@ -1,4 +1,5 @@
 import request from '@/utils/request'
+import requestForm from '@/utils/requestPic'
 
 // 获取产品品牌列表
 export function getBrandList() {
@@ -10,8 +11,7 @@ export function getBrandList() {
 
 // 品牌新增修改
 export function saveBrand(data) {
-  return request({
-    jsonType: true,
+  return requestForm({
     headers: { 'content-type': 'application/json' },
     url: '/api/admin/product_brand/save',
     method: 'post',
