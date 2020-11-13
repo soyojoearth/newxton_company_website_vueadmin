@@ -171,7 +171,7 @@ export default {
         this.form.roleRemark = row.roleRemark
         this.form.roleId = row.id
         this.$store.dispatch('acl/roleDetail', {
-           role_id: this.form.roleId
+           id: this.form.roleId
            }).then(res => {
                 var roleDetail = this.$store.state.acl.roleDetail;
                 const data = [];
@@ -198,10 +198,10 @@ export default {
     handPostData() {
       var then = this
       this.$store.dispatch('acl/roleDetailUpdate', {
-           role_id: this.form.roleId, 
-           role_name: this.form.roleName,
-           role_remark: this.form.roleRemark,
-           role_group_list: JSON.stringify(this.aclActionValue)
+           id: this.form.roleId, 
+           roleName: this.form.roleName,
+           roleRemark: this.form.roleRemark,
+           roleGroupList: this.aclActionValue
            }).then(res => {
               then.dialogVisible = false
               Message({
@@ -216,9 +216,9 @@ export default {
     handPostDataCreateRole() {
       var then = this
       this.$store.dispatch('acl/roleAdd', {
-           role_name: this.form.roleName,
-           role_remark: this.form.roleRemark,
-           role_group_list: JSON.stringify(this.aclActionValue)
+           roleName: this.form.roleName,
+           roleRemark: this.form.roleRemark,
+           roleGroupList: this.aclActionValue
            }).then(res => {
               then.dialogVisible = false
               Message({
@@ -233,7 +233,7 @@ export default {
     handPostDataDeleteRole() {
         var then = this
         this.$store.dispatch('acl/roleDelete', {
-            role_id: this.prepareDeleteRoleId
+            id: this.prepareDeleteRoleId
             }).then(res => {
                 then.dialogVisible = false
                 Message({

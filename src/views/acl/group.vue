@@ -171,7 +171,7 @@ export default {
         this.form.groupRemark = row.groupRemark
         this.form.groupId = row.id
         this.$store.dispatch('acl/groupDetail', {
-           group_id: this.form.groupId
+           id: this.form.groupId
            }).then(res => {
                 var groupDetail = this.$store.state.acl.groupDetail;
                 const data = [];
@@ -198,10 +198,10 @@ export default {
     handPostData() {
       var then = this
       this.$store.dispatch('acl/groupDetailUpdate', {
-           group_id: this.form.groupId, 
-           group_name: this.form.groupName,
-           group_remark: this.form.groupRemark,
-           group_action_list: JSON.stringify(this.aclActionValue)
+           id: this.form.groupId, 
+           groupName: this.form.groupName,
+           groupRemark: this.form.groupRemark,
+           groupActionList: this.aclActionValue
            }).then(res => {
               then.dialogVisible = false
               Message({
@@ -216,9 +216,9 @@ export default {
     handPostDataCreate() {
       var then = this
       this.$store.dispatch('acl/groupAdd', {
-           group_name: this.form.groupName,
-           group_remark: this.form.groupRemark,
-           group_action_list: JSON.stringify(this.aclActionValue)
+           groupName: this.form.groupName,
+           groupRemark: this.form.groupRemark,
+           groupActionList: this.aclActionValue
            }).then(res => {
               then.dialogVisible = false
               Message({
@@ -233,7 +233,7 @@ export default {
     handPostDataDelete() {
         var then = this
         this.$store.dispatch('acl/groupDelete', {
-            group_id: this.prepareDeleteGroupId
+            id: this.prepareDeleteGroupId
             }).then(res => {
                 then.dialogVisible = false
                 Message({
