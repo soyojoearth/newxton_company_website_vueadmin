@@ -181,7 +181,6 @@
       </el-form>
     </el-card>
     <el-dialog
-      title="提示"
       width="50%"
       :visible.sync="dialogVisible"
     >
