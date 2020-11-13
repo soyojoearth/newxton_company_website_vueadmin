@@ -62,7 +62,7 @@ export const constantRoutes = [
   {
     path: '/shop',
     component: Layout,
-    meta: { title: '商城设置', icon: 'tree', affix: true },
+    meta: { title: '商城设置', icon: 'shopping', affix: true },
     children: [
       {
         path: 'set',
