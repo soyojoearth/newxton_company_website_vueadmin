@@ -26,3 +26,12 @@ export function deleteRegion(data) {
     data
   })
 }
+
+// 交换两个region的顺序
+export function swapRegionOrder(data) {
+  return request({
+    url: '/api/admin/delivery_region/order_swap',
+    method: 'post',
+    data
+  })
+}

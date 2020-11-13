@@ -72,6 +72,25 @@ export const constantRoutes = [
     ]
   },
   {
+    path: '/shop',
+    component: Layout,
+    meta: { title: '商城设置', icon: 'tree', affix: true },
+    children: [
+      {
+        path: 'set',
+        component: () => import('@/views/shop/set'),
+        name: 'set',
+        meta: { title: '基本部分', affix: false }
+      },
+      {
+        path: 'pay',
+        component: () => import('@/views/set/pay'),
+        name: 'pay',
+        meta: { title: '支付方式管理', affix: false }
+      }
+    ]
+  },
+  {
     path: '/delivery',
     component: Layout,
     meta: { title: '物流设置', icon: 'tree', affix: false },

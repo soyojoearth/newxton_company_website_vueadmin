@@ -38,7 +38,7 @@
 </template>
 
 <script>
-import { getPayInfo, getPaySave } from '@/api/shop'
+import { getShopInfo, getShopSave } from '@/api/shop'
 export default {
   data() {
     return {
@@ -55,13 +55,13 @@ export default {
     }
   },
   created() {
-    this.load()
+    // this.load()
   },
   methods: {
     load() {
       var then = this
       new Promise((resolve, rejust) => {
-        getPayInfo()
+        getShopInfo()
           .then(res => {
             then.wxpayAPPID = res.detail.wxpayAPPID
             then.wxpayClinetID = res.detail.wxpayClinetID
@@ -81,13 +81,12 @@ export default {
     },
     onSubmit() {
       var postData = {}
-      postData['wxpayAPPID'] = this.wxpayAPPID
-      postData['wxpayClinetID'] = this.wxpayClinetID
-      postData['wxpaySecretKey'] = this.wxpaySecretKey
-      postData['alipayAPPID'] = this.alipayAPPID
-      postData['alipaySecretKey'] = this.alipaySecretKey
-      postData['alipayPublicKey'] = this.alipayPublicKey
-      getPaySave(postData)
+      postData['ossLocation'] = this.ossLocation
+      postData['ossQiniuAccessKey'] = this.ossQiniuAccessKey
+      postData['ossQiniuSecretKey'] = this.ossQiniuSecretKey
+      postData['ossQiniuBucket'] = this.ossQiniuBucket
+      postData['ossQiniuDomain'] = this.ossQiniuDomain
+      getShopSave(postData)
     },
     handleClick(tab, event) {
       // console.log(tab, event)

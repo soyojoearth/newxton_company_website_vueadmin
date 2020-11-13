@@ -2,7 +2,7 @@ import axios from 'axios'
 import { MessageBox, Message } from 'element-ui'
 import store from '@/store'
 import { getToken, getUserId } from '@/utils/auth'
-import Qs from 'qs'
+// import Qs from 'qs'
 // create an axios instance
 const service = axios.create({
   baseURL: process.env.VUE_APP_BASE_API,
@@ -17,6 +17,7 @@ service.interceptors.request.use(
       config.headers['token'] = getToken()
       config.headers['user_id'] = getUserId()
     }
+    console.log(config)
     return config
   },
   error => {
