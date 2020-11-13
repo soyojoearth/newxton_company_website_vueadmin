@@ -1,5 +1,16 @@
 <template>
   <div class="app-container">
+    <el-card style="margin-top:10px;font-size:14px;line-height:30px;">
+      <el-row style="font-weight:800;">
+        操作提示：
+      </el-row>
+      <el-row>
+        1、此处配置默认空白，但不影响网站正常运行。
+      </el-row>
+      <el-row>
+        2、如需个性化，请在下面对应配置相关内容。
+      </el-row>
+    </el-card>
     <el-card style="margin-top:10px">
       <el-form ref="form" class="data-from" label-width="160px">
         <el-form-item label="搜索推荐关键词">
@@ -103,7 +114,6 @@ export default {
       console.log('sss')
     },
     onSubmit() {
-      var sum = 0
       var postDatas = {}
       postDatas['afterSalesServiceTimeLimit'] = this.afterSalesServiceTimeLimit
       postDatas['automaticConfirmationOfReceiptTime'] = this.automaticConfirmationOfReceiptTime
@@ -114,14 +124,18 @@ export default {
       // postDatas['freeShippingAmount'] = 1
       // postDatas['inventoryUpdateType'] = 1
       postDatas['keywords'] = this.keywords
-      getShopSave(postDatas)
-      if (sum > 0) {
-        Message({
+      getShopSave(postDatas).then(value => {
+        console.log(value)
+        this.$message({
           message: '修改成功',
-          type: 'success',
-          duration: 5 * 1000
+          type: 'success'
         })
-      }
+      }).catch(() => {
+        this.$message({
+          message: '修改失败',
+          type: 'error'
+        })
+      })
     }
   }
 }

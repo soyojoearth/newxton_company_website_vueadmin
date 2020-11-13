@@ -1,5 +1,19 @@
 <template>
   <div class="app-container">
+    <el-card style="margin-top:10px;font-size:14px;line-height:30px;">
+      <el-row style="font-weight:800;">
+        操作提示：
+      </el-row>
+      <el-row>
+        1、此处配置默认空白，但不影响网站正常运行。
+      </el-row>
+      <el-row>
+        2、如需个性化，请在下面对应配置相关内容。
+      </el-row>
+      <el-row>
+        3、如果服务器放置在大陆以外的地区，不需要ICP备案；但是如果想要放在大陆机房，或做大陆cdn，或者申请竞价广告、公众号等，则必须备案。
+      </el-row>
+    </el-card>
     <el-card style="margin-top:10px">
       <el-form ref="form" label-width="160px">
         <el-form-item label="统计代码">
@@ -54,20 +68,23 @@ export default {
     },
     onSubmit() {
       var list = this.list
-      var sum = 0
       var postDatas = {}
       postDatas['statCode'] = list.statCode
       postDatas['contactCode'] = list.contactCode
       postDatas['contactLink'] = list.contactLink
       postDatas['beianCode'] = list.beianCode
-      getWebSave(postDatas)
-      if (sum > 0) {
-        Message({
+      getWebSave(postDatas).then(value => {
+        console.log(value)
+        this.$message({
           message: '修改成功',
-          type: 'success',
-          duration: 5 * 1000
+          type: 'success'
         })
-      }
+      }).catch(() => {
+        this.$message({
+          message: '修改失败',
+          type: 'error'
+        })
+      })
     }
   }
 }

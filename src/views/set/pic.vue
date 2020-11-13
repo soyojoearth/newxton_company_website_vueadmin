@@ -1,5 +1,19 @@
 <template>
   <div class="app-container">
+    <el-card style="margin-top:10px;font-size:14px;line-height:30px;">
+      <el-row style="font-weight:800;">
+        操作提示：
+      </el-row>
+      <el-row>
+        1、本系统默认当前服务器存储所有图片。
+      </el-row>
+      <el-row>
+        2、你可以在此选择存储在第三方图片云，就可以享受第三方图片云更优质的图片加载体验。
+      </el-row>
+      <el-row>
+        3、如果要启用第三方图片云，请在对应第三方图片云申请该服务器，并配置下面对应的参数。
+      </el-row>
+    </el-card>
     <el-card style="margin-top:10px">
       <el-form ref="form" label-width="160px">
         <el-tabs v-model="activeName" @tab-click="handleClick">
@@ -81,7 +95,18 @@ export default {
       postData['ossQiniuSecretKey'] = this.ossQiniuSecretKey
       postData['ossQiniuBucket'] = this.ossQiniuBucket
       postData['ossQiniuDomain'] = this.ossQiniuDomain
-      getImageSave(postData)
+      getImageSave(postData).then(value => {
+        console.log(value)
+        this.$message({
+          message: '修改成功',
+          type: 'success'
+        })
+      }).catch(() => {
+        this.$message({
+          message: '修改失败',
+          type: 'error'
+        })
+      })
     },
     handleClick(tab, event) {
       // console.log(tab, event)
@@ -90,3 +115,9 @@ export default {
 }
 </script>
 
+<style>
+.el-card__header{
+  /* padding-bottom: 0px; */
+  /* padding:10px 20px; */
+}
+</style>
