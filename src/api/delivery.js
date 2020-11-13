@@ -1,12 +1,15 @@
 import request from '@/utils/request'
+import requestForm from '@/utils/requestPic'
 
 // 获取运费模版分类列表
+/*
 export function apiGetDeliveryConfigList() {
   return request({
     url: '/api/admin/delivery_config/list',
     method: 'post'
   })
 }
+*/
 
 // 物流设置 - 获取快递公司列表
 export function getDeliveryCompanyList(data) {
@@ -29,9 +32,10 @@ export function saveDeliveryCompany(data) {
 
 // 物流设置 - 删除快递公司
 export function deleteDeliveryCompany(data) {
-  return request({
+  return requestForm({
     url: '/api/admin/delivery_company/delete',
     method: 'post',
+    headers: { 'content-type': 'application/json' },
     data
   })
 }

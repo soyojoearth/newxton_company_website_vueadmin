@@ -1,6 +1,5 @@
 import {
-  apiGetDeliveryConfigList,
-  getDeliveryCompanyList
+  apiGetDeliveryConfigList,getDeliveryCompanyList,saveDeliveryCompany,deleteDeliveryCompany
 } from '@/api/delivery'
 import Vue from 'vue'
 const state = {
@@ -68,13 +67,11 @@ const actions = {
     })
   },
 
-  deleteDeliveryCompany({
-    commit
-  }, data) {
+  deleteDeliveryCompany ({ commit }, data) {
     return new Promise((resolve, reject) => {
       deleteDeliveryCompany({
-          id: data
-        })
+        id: data
+      })
         .then(res => {
           resolve()
         })
