@@ -113,6 +113,21 @@ export const constantRoutes = [
         name: 'config',
         meta: { title: '运费模版管理', affix: false }
       },
+      {
+        path: 'create',
+        component: () => import('@/views/freight/create'),
+        name: 'CreateFreight',
+        hidden: true,
+        meta: { title: '创建运费', affix: false }
+      },
+      {
+        path: 'update/:id',
+        props: true,
+        hidden: true,
+        component: () => import('@/views/freight/update'),
+        name: 'UpdateFreight',
+        meta: { title: '修改产品', affix: false }
+      }
     ]
   },
   {
@@ -231,6 +246,7 @@ export const constantRoutes = [
       }
     ]
   },
+
   {
     path: '/acl',
     component: Layout,

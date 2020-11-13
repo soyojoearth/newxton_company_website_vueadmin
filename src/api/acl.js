@@ -1,4 +1,4 @@
-import request from '@/utils/request'
+import request from '@/utils/requestJSON'
 
 export function roleList(data) {
   return request({

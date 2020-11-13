@@ -1,5 +1,5 @@
 import request from '@/utils/request'
-import requestForm from '@/utils/requestPic'
+import requestJSON from '@/utils/requestJSON'
 
 // 配送地区列表
 export function getRegionList() {
@@ -11,8 +11,7 @@ export function getRegionList() {
 
 // 配送地区添加/修改
 export function saveRegion(data) {
-  return requestForm({
-    headers: { 'content-type': 'application/json' },
+  return requestJSON({
     url: '/api/admin/delivery_region/save',
     method: 'post',
     data
@@ -21,7 +20,7 @@ export function saveRegion(data) {
 
 // 配送地区删除
 export function deleteRegion(data) {
-  return request({
+  return requestJSON({
     url: '/api/admin/delivery_region/delete',
     method: 'post',
     data

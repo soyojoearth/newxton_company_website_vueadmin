@@ -1,32 +1,92 @@
 <template>
   <div class="app-container">
     <el-row>
-      <el-button type="primary" @click="handleCreate">创建</el-button>
+      <el-button
+        type="primary"
+        @click="handleCreate"
+      >创建</el-button>
     </el-row>
     <el-card style="margin-top:10px">
-      <el-table ref="multipleTable" :data="listData" tooltip-effect="dark" @selection-change="handleSelectionChange">
-        <el-table-column prop="brandName" label="品牌名称" height="30px" />
-        <el-table-column prop="" label="品牌图片" show-overflow-tooltip>
+      <el-table
+        ref="multipleTable"
+        :data="listData"
+        tooltip-effect="dark"
+        @selection-change="handleSelectionChange"
+      >
+        <el-table-column
+          prop="brandName"
+          label="品牌名称"
+          height="30px"
+        />
+        <el-table-column
+          prop=""
+          label="品牌图片"
+          show-overflow-tooltip
+        >
           <template slot-scope="scope">
-            <img :src="scope.row.picUrlPathWithDomain" class="brandImg" />
+            <img
+              :src="scope.row.picUrlPathWithDomain"
+              class="brandImg"
+            />
           </template>
         </el-table-column>
-        <el-table-column prop="" label="操作" show-overflow-tooltip header-align="left">
+        <el-table-column
+          prop=""
+          label="操作"
+          show-overflow-tooltip
+          header-align="left"
+        >
           <template slot-scope="scope">
-            <el-button type="text" size="small" @click="editorClick(scope.row)">编辑</el-button>
-            <el-button type="text" size="small" @click="deleteClick(scope.row)">删除</el-button>
+            <el-button
+              type="text"
+              size="small"
+              @click="editorClick(scope.row)"
+            >编辑</el-button>
+            <el-button
+              type="text"
+              size="small"
+              @click="deleteClick(scope.row)"
+            >删除</el-button>
           </template>
         </el-table-column>
       </el-table>
     </el-card>
 
-    <el-dialog title="品牌管理" :visible.sync="saveDialog" :close-on-click-modal="false" :show-close="false" :close-on-press-escape="false" width="500px" center>
-      <el-form ref="brandParamRef" :model="brandParam" :rules="brandParamRules">
-        <el-form-item label="品牌名称" prop="brandName" :label-width="formLabelWidth">
-          <el-input v-model="brandParam.brandName" autocomplete="off" maxlength="50" style="float: left;width: 335px" />
+    <el-dialog
+      title="品牌管理"
+      :visible.sync="saveDialog"
+      :close-on-click-modal="false"
+      :show-close="false"
+      :close-on-press-escape="false"
+      width="500px"
+      center
+    >
+      <el-form
+        ref="brandParamRef"
+        :model="brandParam"
+        :rules="brandParamRules"
+      >
+        <el-form-item
+          label="品牌名称"
+          prop="brandName"
+          :label-width="formLabelWidth"
+        >
+          <el-input
+            v-model="brandParam.brandName"
+            autocomplete="off"
+            maxlength="50"
+            style="float: left;width: 335px"
+          />
         </el-form-item>
-        <el-form-item label="品牌图片" prop="uploadfileId" :label-width="formLabelWidth">
-          <el-input v-show="false" v-model="brandParam.uploadfileId" />
+        <el-form-item
+          label="品牌图片"
+          prop="uploadfileId"
+          :label-width="formLabelWidth"
+        >
+          <el-input
+            v-show="false"
+            v-model="brandParam.uploadfileId"
+          />
           <el-upload
             class="upload-demo"
             action="/api/admin/upload/public_pic"
@@ -44,9 +104,15 @@
           </el-upload>
         </el-form-item>
       </el-form>
-      <div slot="footer" class="dialog-footer">
+      <div
+        slot="footer"
+        class="dialog-footer"
+      >
         <el-button @click="closeDialog">取 消</el-button>
-        <el-button type="primary" @click="saveConfirm">确 定</el-button>
+        <el-button
+          type="primary"
+          @click="saveConfirm"
+        >确 定</el-button>
       </div>
     </el-dialog>
   </div>
@@ -56,7 +122,7 @@
 import { getToken, getUserId } from '@/utils/auth'
 
 export default {
-  data() {
+  data () {
     const validateBrandName = (rule, value, callback) => {
       if (value == null || value.length === 0) {
         callback(new Error('品牌名称不能为空'))
@@ -91,38 +157,38 @@ export default {
   },
   computed: {
   },
-  created() {
+  created () {
     this.load()
   },
-  mounted() {
+  mounted () {
   },
   methods: {
-    load() {
+    load () {
       this.$store.dispatch('brand/getBrandList').then(() => {
         this.listData = []
         this.listData = this.$store.state.brand.brandList
       })
     },
-    handleSelectionChange(val) {
+    handleSelectionChange (val) {
       this.multipleSelection = val
     },
-    handleCreate() {
+    handleCreate () {
       this.brandParam = {}
       this.resetForm('brandParamRef')
       this.saveDialog = true
     },
     // 删除上传图片触发
-    handleRemove(file, fileList) {
+    handleRemove (file, fileList) {
       this.brandParam.uploadfileId = null
     },
     // 点击上传图片触发
-    handlePreview(file) {
+    handlePreview (file) {
     },
-    UploadOnSuccess(res, file, fileList) {
+    UploadOnSuccess (res, file, fileList) {
       this.$set(this.brandParam, 'uploadfileId', res.id)
       this.$forceUpdate()
     },
-    beforeAvatarUpload(file) {
+    beforeAvatarUpload (file) {
       const isImg = file.type === 'image/jpeg' || file.type === 'image/png' || file.type === 'image/gif'
       const isLt20M = file.size / 1024 / 1024 < 20
       if (!isImg) {
@@ -133,12 +199,12 @@ export default {
       }
       return isImg && isLt20M
     },
-    closeDialog: function() {
+    closeDialog: function () {
       this.saveDialog = false
       this.fileList = []
     },
     // 确认添加或修改
-    saveConfirm: function() {
+    saveConfirm: function () {
       this.$refs.brandParamRef.validate(valid => {
         if (valid) {
           this.saveChange()
@@ -146,7 +212,7 @@ export default {
       })
     },
     // 保存操作
-    saveChange() {
+    saveChange () {
       this.newParams = Object.assign({}, this.brandParam)
       this.$store.dispatch('brand/saveBrand', this.newParams).then(() => {
         const status = this.$store.state.brand.brandSaveStatus
@@ -165,7 +231,7 @@ export default {
         }
       })
     },
-    editorClick: function(data) {
+    editorClick: function (data) {
       this.resetForm('brandParamRef')
       this.saveDialog = true
       this.fileList = [{
@@ -178,7 +244,7 @@ export default {
         uploadfileId: data.uploadFileId
       }
     },
-    deleteClick: function(data) {
+    deleteClick: function (data) {
       this.$confirm('确认删除?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -208,7 +274,7 @@ export default {
       })
     },
     // 重置表单
-    resetForm(formName) {
+    resetForm (formName) {
       if (this.$refs[formName] != null) {
         this.$refs[formName].resetFields()
       }
@@ -217,8 +283,8 @@ export default {
 }
 </script>
 <style rel="stylesheet/scss" lang="scss">
-  .brandImg{
-    vertical-align: middle;
-    max-height: 80px;
-  }
+.brandImg {
+  vertical-align: middle;
+  max-height: 80px;
+}
 </style>
