@@ -1,13 +1,33 @@
 <template>
   <div class="app-container">
+    <el-card style="margin-top:10px;font-size:14px;line-height:30px;">
+      <el-row style="font-weight:800;">
+        操作提示：
+      </el-row>
+      <el-row>
+        1、此处配置默认空白，但不影响网站正常运行。
+      </el-row>
+      <el-row>
+        2、如需个性化，请在下面对应配置相关内容。
+      </el-row>
+      <el-row>
+        3、如果服务器放置在大陆以外的地区，不需要ICP备案；但是如果想要放在大陆机房，或做大陆cdn，或者申请竞价广告、公众号等，则必须备案。
+      </el-row>
+    </el-card>
     <el-card style="margin-top:10px">
       <el-form ref="form" label-width="160px">
-        <template v-for="item in list">
-          <el-form-item :key="item.id" :label="item.settingName">
-            <el-input v-model="item.settingValue" :type="item.displayType" :placeholder="item.placeholder" rows="6" />
-
-          </el-form-item>
-        </template>
+        <el-form-item label="统计代码">
+          <el-input v-model="list.statCode" type="textarea" rows="6" resize="none" />
+        </el-form-item>
+        <el-form-item label="客服链接">
+          <el-input v-model="list.contactLink" type="text" rows="6" />
+        </el-form-item>
+        <el-form-item label="第三方网页客服代码">
+          <el-input v-model="list.contactCode" type="textarea" rows="6"  resize="none" />
+        </el-form-item>
+        <el-form-item label="备案号">
+          <el-input v-model="list.beianCode" type="text" rows="6" />
+        </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="onSubmit">确定</el-button>
         </el-form-item>
@@ -35,8 +55,9 @@ export default {
       new Promise((resolve, rejust) => {
         getWebInfo()
           .then(res => {
-            then.list = res.list
-            then.oldList = JSON.parse(JSON.stringify(res.list))
+            then.list = res.detail
+            console.log(res.detail)
+            // then.oldList = JSON.parse(JSON.stringify(res.list))
             resolve()
           })
           .catch(error => {
@@ -47,30 +68,23 @@ export default {
     },
     onSubmit() {
       var list = this.list
-      var oldList = this.oldList
-      var sum = 0
-      var postDatas = []
-      for (let i = 0; i < list.length; i++) {
-        if (list[i].settingValue !== oldList[i].settingValue) {
-          sum++
-          var postData = {}
-          postData['setting_value'] = list[i].settingValue
-          postData['setting_key'] = list[i].settingKey
-          postDatas.push(postData)
-        }
-      }
-      console.log(postDatas.length)
-      for (let i = 0; i < sum; i++) {
-        getWebSave(postDatas[i])
-        // console.log(postDatas[i])
-      }
-      if (sum > 0) {
-        Message({
+      var postDatas = {}
+      postDatas['statCode'] = list.statCode
+      postDatas['contactCode'] = list.contactCode
+      postDatas['contactLink'] = list.contactLink
+      postDatas['beianCode'] = list.beianCode
+      getWebSave(postDatas).then(value => {
+        console.log(value)
+        this.$message({
           message: '修改成功',
-          type: 'success',
-          duration: 5 * 1000
+          type: 'success'
         })
-      }
+      }).catch(() => {
+        this.$message({
+          message: '修改失败',
+          type: 'error'
+        })
+      })
     }
   }
 }

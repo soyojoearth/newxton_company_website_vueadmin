@@ -57,18 +57,25 @@ export const constantRoutes = [
         name: 'OssSet',
         meta: { title: '图片搬家', affix: false }
       },
+    ]
+  },
+  {
+    path: '/shop',
+    component: Layout,
+    meta: { title: '商城设置', icon: 'shopping', affix: true },
+    children: [
       {
-        path: 'deal',
-        component: () => import('@/views/set/deal'),
-        name: 'deal',
-        meta: { title: '交易设置', affix: false }
+        path: 'set',
+        component: () => import('@/views/shop/set'),
+        name: 'set',
+        meta: { title: '基本部分', affix: false }
       },
       {
         path: 'pay',
         component: () => import('@/views/set/pay'),
         name: 'pay',
         meta: { title: '支付方式管理', affix: false }
-      },
+      }
     ]
   },
   {
@@ -94,6 +101,21 @@ export const constantRoutes = [
         name: 'config',
         meta: { title: '运费模版管理', affix: false }
       },
+      {
+        path: 'create',
+        component: () => import('@/views/freight/create'),
+        name: 'CreateFreight',
+        hidden: true,
+        meta: { title: '创建运费', affix: false }
+      },
+      {
+        path: 'update/:id',
+        props: true,
+        hidden: true,
+        component: () => import('@/views/freight/update'),
+        name: 'UpdateFreight',
+        meta: { title: '修改产品', affix: false }
+      }
     ]
   },
   {
@@ -212,6 +234,7 @@ export const constantRoutes = [
       }
     ]
   },
+
   {
     path: '/acl',
     component: Layout,
