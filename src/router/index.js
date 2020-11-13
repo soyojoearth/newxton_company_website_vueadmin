@@ -57,24 +57,12 @@ export const constantRoutes = [
         name: 'OssSet',
         meta: { title: '图片搬家', affix: false }
       },
-      {
-        path: 'deal',
-        component: () => import('@/views/set/deal'),
-        name: 'deal',
-        meta: { title: '交易设置', affix: false }
-      },
-      {
-        path: 'pay',
-        component: () => import('@/views/set/pay'),
-        name: 'pay',
-        meta: { title: '支付方式管理', affix: false }
-      },
     ]
   },
   {
     path: '/shop',
     component: Layout,
-    meta: { title: '商城设置', icon: 'tree', affix: true },
+    meta: { title: '商城设置', icon: 'shopping', affix: true },
     children: [
       {
         path: 'set',

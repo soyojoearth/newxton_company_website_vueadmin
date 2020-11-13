@@ -1,4 +1,4 @@
-import { getRegionList, saveRegion, deleteRegion } from '@/api/region'
+import { getRegionList, saveRegion, deleteRegion, swapRegionOrder} from '@/api/region'
 
 const state = {
   listData: [],
@@ -53,6 +53,17 @@ const actions = {
       deleteRegion(data)
         .then(res => {
           commit('SET_DELETE_STATUS', res.status)
+          resolve()
+        })
+        .catch(err => {
+          reject(err)
+        })
+    })
+  },
+  swapRegionOrder({ commit }, data) {
+    return new Promise((resolve, reject) => {
+      swapRegionOrder(data)
+        .then(res => {
           resolve()
         })
         .catch(err => {

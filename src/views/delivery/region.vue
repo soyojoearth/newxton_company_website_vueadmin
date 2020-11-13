@@ -21,24 +21,26 @@
       <el-button type="primary" @click="handleCreate">新增地区</el-button>
     </el-row>
     <el-card style="margin-top:10px">
-      <el-table ref="multipleTable" :data="listData" tooltip-effect="dark" row-key="id" :default-sort= "{prop: 'regionName', order: 'descending'}" :tree-props="{children: 'children', hasChildren: 'hasChildren'}" @selection-change="handleSelectionChange">>
-        <el-table-column prop="regionName" label="地区" height="30px" sortable>
+      <el-table ref="multipleTable" :data="listData" tooltip-effect="dark" row-key="id" :tree-props="{children: 'children', hasChildren: 'hasChildren'}" @selection-change="handleSelectionChange">>
+        <el-table-column prop="regionName" label="地区" height="30px">
           <template slot-scope="scope">
             <span :title="scope.row.regionName">{{scope.row.regionName}}</span>
           </template>
         </el-table-column>
-<!--        <el-table-column prop="" label="排序" height="30px">-->
-<!--          <template slot-scope="scope">-->
-<!--            <el-button-->
-<!--              size="mini"-->
-<!--              :disabled="scope.$index===0"-->
-<!--              @click="moveUp(scope.$index,scope.row,scope)"><i class="el-icon-arrow-up"></i></el-button>-->
-<!--            <el-button-->
-<!--              size="mini"-->
-<!--              :disabled="scope.$index===(listData.length-1)"-->
-<!--              @click="moveDown(scope.$index,scope.row)"><i class="el-icon-arrow-down"></i></el-button>-->
-<!--          </template>-->
-<!--        </el-table-column>-->
+        <el-table-column prop="" label="排序" height="30px">
+          <template slot-scope="scope">
+            <el-col>
+              <i
+                class="el-icon-bottom"
+                @click="handleSort(scope.row, 'bot')"
+              />
+              <i
+                class="el-icon-top"
+                @click="handleSort(scope.row, 'top')"
+              />
+            </el-col>
+          </template>
+        </el-table-column>
         <el-table-column prop="" label="操作" show-overflow-tooltip align="right">
           <template slot-scope="scope">
             <el-button size="small" @click="editorClick(scope.row)">修改</el-button>
@@ -95,7 +97,8 @@ export default {
       listData: [],
       hereList: [],
       simpleData: [],
-      editorLower: false
+      editorLower: false,
+      pidDataList: {}
     }
   },
   computed: {
@@ -111,9 +114,20 @@ export default {
         const datas = this.$store.state.region.listData
         const newData = []
         recursiveList(datas, newData)
+        this.listData = []
         this.listData = newData
-        console.log(newData)
+        this.simpleData = []
         this.simpleData = this.$store.state.region.simpleData
+        this.pidDataList = {}
+        const that = this
+        this.simpleData.forEach(function(value) {
+          let pidData = that.pidDataList[value.region_pid]
+          if (pidData == null) {
+            pidData = []
+          }
+          pidData.push(value)
+          that.pidDataList[value.region_pid] = pidData
+        })
       })
       // eslint-disable-next-line no-unused-vars
       // 递归查询结果
@@ -133,35 +147,33 @@ export default {
     handleSelectionChange(val) {
       this.multipleSelection = val
     },
-    // 向上移动
-    moveUp(index, row, scope) {
-      console.log(scope)
-      const that = this
-      console.log('上移', index, row)
-      console.log(that.listData[index])
-      if (index > 0) {
-        const upDate = that.listData[index - 1]
-        that.listData.splice(index - 1, 1)
-        that.listData.splice(index, 0, upDate)
-      } else {
-        alert('已经是第一条，不可上移')
+    handleSort(row, pos) {
+      let regionPid = row.regionPid
+      if (regionPid == null) {
+        // eslint-disable-next-line no-const-assign
+        regionPid = 0
       }
-    },
-    // 向下移动
-    moveDown(index, row) {
-      const that = this
-      console.log('下移', index, row)
-      if ((index + 1) === that.listData.length) {
-        alert('已经是最后一条，不可下移')
-      } else {
-        console.log(index)
-        const downDate = that.listData[index + 1]
-        that.listData.splice(index + 1, 1)
-        that.listData.splice(index, 0, downDate)
+      let actionIndex = 0
+      const regionPidList = this.pidDataList[regionPid]
+      for (const i in regionPidList) {
+        const index = Number(i)
+        if (regionPidList[index].region_id === row.id) {
+          if (pos === 'top') {
+            // eslint-disable-next-line no-undefs
+            actionIndex = index - 1
+          } else {
+            actionIndex = index + 1
+          }
+          break
+        }
       }
-    },
-    getChildren: function() {
-      this.listData
+      const newRow = regionPidList[actionIndex]
+      if (newRow == null) {
+        return false
+      }
+      this.$store.dispatch('region/swapRegionOrder', { id1: row.id, id2: newRow.region_id }).then(() => {
+        this.load()
+      })
     },
     handleCreate() {
       this.saveParam = {}
