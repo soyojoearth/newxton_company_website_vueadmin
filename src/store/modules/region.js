@@ -2,6 +2,7 @@ import { getRegionList, saveRegion, deleteRegion } from '@/api/region'
 
 const state = {
   listData: [],
+  simpleData: [],
   saveStatus: Number,
   deleteStatus: Number
 }
@@ -9,6 +10,9 @@ const state = {
 const mutations = {
   SET_LIST_DATA: (state, data) => {
     state.listData = data
+  },
+  SET_SIMPLE_DATA: (state, data) => {
+    state.simpleData = data
   },
   SET_SAVE_STATUS: (state, data) => {
     state.saveStatus = data
@@ -24,6 +28,7 @@ const actions = {
       getRegionList()
         .then(res => {
           commit('SET_LIST_DATA', res.list)
+          commit('SET_SIMPLE_DATA', res.list_simple)
           resolve()
         })
         .catch(err => {
