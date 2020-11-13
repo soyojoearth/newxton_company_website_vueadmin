@@ -23,7 +23,7 @@
         <el-row>
           <el-col :span="24">
             <el-form-item
-              label="计件方式"
+              label="计费方式"
               prop="type"
             >
               <el-radio-group
@@ -70,7 +70,9 @@
               <el-input
                 placeholder="请输入内容"
                 style="width:120px"
-                type="number"
+                type="text"
+                onkeyup="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}"
+                onafterpaste="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'0')}else{this.value=this.value.replace(/\D/g,'')}"
                 v-model="scope.row.billableQuantity"
               ></el-input>
               {{unit}}
@@ -104,7 +106,9 @@
               <el-input
                 placeholder="请输入内容"
                 style="width:120px"
-                type="number"
+                type="text"
+                onkeyup="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}"
+                onafterpaste="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'0')}else{this.value=this.value.replace(/\D/g,'')}"
                 v-model="scope.row.additionQuantity"
               ></el-input>
               <span>{{unit}}</span>
@@ -178,7 +182,7 @@
     </el-card>
     <el-dialog
       title="提示"
-      width="60%"
+      width="50%"
       :visible.sync="dialogVisible"
     >
       <el-transfer
@@ -312,7 +316,7 @@ export default {
               regionName: ''
             }
             form.regionId = i.region_id
-            form.regionName = i.region_name_display
+            form.regionName = i.region_name
             arr.push(form)
           }
         })
@@ -404,5 +408,11 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+>>> .el-transfer-panel__body {
+  height: 500px;
+}
+>>> .el-transfer-panel__list {
+  height: 500px;
 }
 </style>

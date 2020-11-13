@@ -15,7 +15,8 @@
         slot="header"
         class="clearfix"
       >
-        <span>{{heavyData.name}}</span>
+        <span style="margin-right:50px">{{heavyData.name}}</span>
+
         <el-button
           type="text"
           @click="update_heavy"
@@ -35,7 +36,7 @@
         style="width: 100%"
         @selection-change="handleSelectionChange_heavy"
       >
-        <el-table-column type="selection" />
+
         <el-table-column
           prop="productName"
           label="配送区域"
@@ -95,7 +96,7 @@
         slot="header"
         class="clearfix"
       >
-        <span>{{piecesData.name}}</span>
+        <span style="margin-right:50px">{{piecesData.name}}</span>
         <el-button
           type="text"
           @click="update_pieces"
@@ -115,7 +116,7 @@
         style="width: 100%"
         @selection-change="handleSelectionChange_pieces"
       >
-        <el-table-column type="selection" />
+
         <el-table-column
           prop="productName"
           label="配送区域"
@@ -175,7 +176,7 @@
         slot="header"
         class="clearfix"
       >
-        <span>{{volumeData.name}}</span>
+        <span style="margin-right:50px">{{volumeData.name}}</span>
         <el-button
           type="text"
           @click="update_volume"
@@ -195,7 +196,7 @@
         style="width: 100%"
         @selection-change="handleSelectionChange_volume"
       >
-        <el-table-column type="selection" />
+
         <el-table-column
           prop="productName"
           label="配送区域"
