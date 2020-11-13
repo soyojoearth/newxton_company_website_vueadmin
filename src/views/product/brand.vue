@@ -98,16 +98,8 @@
             :file-list="fileList"
             list-type="picture"
             :limit="1"
-            <<<<<<<
-            HEAD
-            <<<<<<<
-            HEAD=======style="width:300px;hight:50px"
-          >>>>>>> 0c1c3e923d19a237098db79693259c0567f52749
-            >
-            =======
             style="width:300px;hight:50px"
-            >
-            >>>>>>> 62a2706c4aa445671053ceb2c5b9a9238ccdfe8b
+          >
             <el-button type="primary">选 择</el-button>
           </el-upload>
         </el-form-item>
