@@ -22,11 +22,7 @@
 
     <el-dialog title="品牌管理" :visible.sync="saveDialog" :close-on-click-modal="false" :show-close="false" :close-on-press-escape="false" width="500px" center>
       <el-form ref="brandParamRef" :model="brandParam" :rules="brandParamRules">
-<<<<<<< HEAD
-        <el-form-item label="商品名称" prop="brandName" :label-width="formLabelWidth">
-=======
         <el-form-item label="品牌名称" prop="brandName" :label-width="formLabelWidth">
->>>>>>> 0c1c3e923d19a237098db79693259c0567f52749
           <el-input v-model="brandParam.brandName" autocomplete="off" maxlength="50" style="float: left;width: 335px" />
         </el-form-item>
         <el-form-item label="品牌图片" prop="uploadfileId" :label-width="formLabelWidth">
@@ -42,10 +38,7 @@
             :file-list="fileList"
             list-type="picture"
             :limit="1"
-<<<<<<< HEAD
-=======
             style="width:300px;hight:50px"
->>>>>>> 0c1c3e923d19a237098db79693259c0567f52749
           >
             <el-button type="primary">选 择</el-button>
           </el-upload>
