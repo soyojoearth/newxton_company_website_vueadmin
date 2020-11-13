@@ -20,7 +20,7 @@ export function saveRegion(data) {
 
 // 配送地区删除
 export function deleteRegion(data) {
-  return request({
+  return requestJSON({
     url: '/api/admin/delivery_region/delete',
     method: 'post',
     data

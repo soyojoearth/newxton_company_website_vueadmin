@@ -39,10 +39,11 @@
 <!--              @click="moveDown(scope.$index,scope.row)"><i class="el-icon-arrow-down"></i></el-button>-->
 <!--          </template>-->
 <!--        </el-table-column>-->
-        <el-table-column prop="" label="操作" show-overflow-tooltip header-align="left">
+        <el-table-column prop="" label="操作" show-overflow-tooltip align="right">
           <template slot-scope="scope">
-            <el-button type="text" size="small" @click="editorClick(scope.row)">修改</el-button>
-            <el-button type="text" size="small" @click="editorLowerlClick(scope.row)">新增下级</el-button>
+            <el-button size="small" @click="editorClick(scope.row)">修改</el-button>
+            <el-button size="small" @click="editorLowerlClick(scope.row)">新增下级</el-button>
+            <el-button type="danger" size="small" @click="deleteClick(scope.row)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
