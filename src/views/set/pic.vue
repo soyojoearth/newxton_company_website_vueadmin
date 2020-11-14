@@ -5,10 +5,10 @@
         操作提示：
       </el-row>
       <el-row>
-        1、本系统默认当前服务器存储所有图片。
+        1、本系统默认当前服务器存储所有图片；
       </el-row>
       <el-row>
-        2、你可以在此选择存储在第三方图片云，就可以享受第三方图片云更优质的图片加载体验。
+        2、你可以在此选择存储在第三方图片云，就可以享受第三方图片云更优质的图片加载体验；
       </el-row>
       <el-row>
         3、如果要启用第三方图片云，请在对应第三方图片云申请该服务器，并配置下面对应的参数。
@@ -117,7 +117,7 @@ export default {
 
 <style>
 .el-card__header{
-  /* padding-bottom: 0px; */
-  /* padding:10px 20px; */
+  padding-bottom: 0px; 
+  padding:10px 20px;
 }
 </style>
