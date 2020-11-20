@@ -2,14 +2,12 @@ import request from '@/utils/request'
 import requestForm from '@/utils/requestPic'
 
 // 获取运费模版分类列表
-/*
-export function apiGetDeliveryConfigList() {
+export function getDeliveryConfigList() {
   return request({
     url: '/api/admin/delivery_config/list',
     method: 'post'
   })
 }
-*/
 
 // 物流设置 - 获取快递公司列表
 export function getDeliveryCompanyList(data) {

@@ -603,6 +603,8 @@ export default {
         picObject.id = response.id
         picObject.url = response.url
 
+        this.NxtStructProduct.pictureList.push(picObject);
+
         this.productForm.productPicList.push(response.url)
         this.productForm.productObj.push(picObject)
       } else {
@@ -633,6 +635,8 @@ export default {
     // 删除图片
     deleImg (data, index) {
       this.productForm.productPicList.splice(index, 1)
+      this.productForm.productObj.splice(index, 1)
+      this.NxtStructProduct.pictureList.splice(index, 1)
     },
     // 图片上传成功之后的校验：
     // 最多只能上传5张、必须是1：1的 ；不能超过100k

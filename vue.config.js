@@ -40,12 +40,12 @@ module.exports = {
     after: require('./mock/mock-server.js'),
     proxy: {
       '/api/admin': {
-        // target: 'http://192.168.8.101:8080',
+        // target: 'http://127.0.0.1:8080',
         target: 'https://dev.nxtframework.com',
         changeOrigin: true
       },
       '/public_pic': {
-        // target: 'http://192.168.8.101:8080',
+        // target: 'http://127.0.0.1:8080',
         target: 'https://dev.nxtframework.com',
         changeOrigin: true
       }
