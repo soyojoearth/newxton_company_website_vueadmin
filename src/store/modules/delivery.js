@@ -1,5 +1,5 @@
 import {
-  apiGetDeliveryConfigList,getDeliveryCompanyList,saveDeliveryCompany,deleteDeliveryCompany
+  getDeliveryConfigList,getDeliveryCompanyList,saveDeliveryCompany,deleteDeliveryCompany
 } from '@/api/delivery'
 import Vue from 'vue'
 const state = {
@@ -22,7 +22,7 @@ const actions = {
     commit
   }) {
     return new Promise((resolve, reject) => {
-      apiGetDeliveryConfigList()
+      getDeliveryConfigList()
         .then(res => {
           commit('SET_DELIVERY_CONFIG_LIST', res.list)
           resolve()

@@ -412,7 +412,6 @@ export default {
   methods: {
     async load () {
       const then = this
-
       this.productForm.productObj = {}
       this.productForm.productPicList = []
       await this.$store.dispatch('product/getDetail', this.id)
@@ -422,14 +421,22 @@ export default {
 
       const allDetail = this.$store.state.product.allDetail
       
-      this.productForm.productObj = this.$store.state.product.allDetail.pictureList
+      this.productForm.productObj = allDetail.pictureList
+
+
+
 
       for (const key in this.productForm.productObj) {
+        console.log(this.productForm.productObj[key].url)
         this.productForm.productPicList.push(this.productForm.productObj[key].url)
       }
 
     },
     handleUpdate () {
+      
+      //图片
+      this.allDetail.pictureList = this.productForm.productObj
+
 
       this.$store.dispatch('product/updateProduct', this.allDetail)
       this.$router.replace({ path: '/product/product' })
@@ -570,6 +577,7 @@ export default {
           type: 'success',
           duration: 2000
         })
+        
         this.productForm.productPicList.push(response.url)
         this.productForm.productObj.push({ 'id': response.id, 'url': response.url })
       } else {
@@ -601,6 +609,7 @@ export default {
     // 删除图片
     deleImg (data, index) {
       this.productForm.productPicList.splice(index, 1)
+      this.productForm.productObj.splice(index, 1)
     },
     // 图片上传成功之后的校验：
     // 最多只能上传5张、必须是1：1的 ；不能超过100k
