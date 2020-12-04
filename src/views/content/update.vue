@@ -108,8 +108,14 @@ export default {
       this.formLabelAlign.detail = this.$store.state.new.Detail[this.id]
     },
     handleUpdate() {
-      this.$store.dispatch('new/updateNew', this.formLabelAlign)
-      this.$router.replace({ path: '/content/content' })
+      this.$store.dispatch('new/updateNew', this.formLabelAlign).then(res => {
+        this.$message({
+          message: '更新成功！',
+          type: 'success'
+        })
+        this.$router.back()
+      })
+      // this.$router.replace({ path: '/content/list' })
     },
     handleAvatarSuccess(res, file) {
       this.imageUrl = file.url
