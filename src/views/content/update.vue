@@ -152,6 +152,7 @@ export default {
       // this.$refs.editor.setContent(this.formLabelAlign.detail)
       // console.log(this.formLabelAlign.detail)
       this.$forceUpdate()
+
     }
   }
 }
