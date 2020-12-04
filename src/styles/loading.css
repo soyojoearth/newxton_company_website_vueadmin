@@ -1,0 +1,23 @@
+.el-loading-spinner {
+  /*这个是自己想设置的 gif 加载动图*/
+  background-image: url('../assets/loading.gif');
+  background-repeat: no-repeat;
+  background-size: 50px 50px;
+  height: 100px;
+  width: 100%;
+  background-position: center;
+  /*覆盖 element-ui  默认的 50%    因为此处设置了height:100%,所以不设置的话，会只显示一半，因为被top顶下去了*/
+  top: 40%;
+}
+
+.el-loading-spinner .circular {
+  /*隐藏 之前  element-ui  默认的 loading 动画*/
+
+  display: none;
+
+}
+
+.el-loading-spinner .el-loading-text {
+  /*为了使得文字在loading图下面*/
+  margin: 85px 0px;
+}

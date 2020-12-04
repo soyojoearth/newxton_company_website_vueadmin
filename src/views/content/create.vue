@@ -74,7 +74,7 @@ import { mapState } from 'vuex'
 import { getToken, getUserId } from '@/utils/auth'
 export default {
   components: { Tinymce },
-  data() {
+  data () {
     return {
       radio2: '1',
       checked: false,
@@ -97,15 +97,16 @@ export default {
       category_list: state => state.new.CategoryListData
     })
   },
-  created() {
+  created () {
+
     this.$store.dispatch('new/getCategory')
   },
   methods: {
-    handleAvatarSuccess(res, file) {
+    handleAvatarSuccess (res, file) {
       this.imageUrl = file.url
       console.log(this.imageUrl)
     },
-    beforeAvatarUpload(file) {
+    beforeAvatarUpload (file) {
       const isImg = file.type === 'image/jpeg' || file.type === 'image/png' || file.type === 'image/gif'
       const isLt20M = file.size / 1024 / 1024 < 20
       if (!isImg) {
@@ -116,7 +117,7 @@ export default {
       }
       return isImg && isLt20M
     },
-    UploadOnSuccess(res, file, fileList) {
+    UploadOnSuccess (res, file, fileList) {
       this.$refs.editor.imageSuccessCBK([{ url: res.url }])
       // this.formLabelAlign.detail = this.formLabelAlign.detail + `<img src="${res.url}"/>`
       // console.log(this.formLabelAlign.detail)
@@ -124,15 +125,21 @@ export default {
       // console.log(this.formLabelAlign.detail)
       this.$forceUpdate()
     },
-    handleCreate() {
+    handleCreate () {
+      this.$myLoading.myLoading.loading()
       const then = this
       this.formLabelAlign.is_recommend = this.formLabelAlign.is_recommend ? 1 : 0
       this.$store.dispatch('new/createNew', this.formLabelAlign).then(res => {
+        then.$myLoading.myLoading.closeLoading()
+
         this.$message({
           message: '创建成功！',
           type: 'success'
         })
-        then.$router.back()
+        console.log(res);
+        if (res.status === 0) {
+          then.$router.back()
+        }
       })
     }
   }

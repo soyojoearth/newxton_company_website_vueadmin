@@ -73,7 +73,7 @@ const actions = {
   createProduct ({ state }, data) {
     return new Promise((resolve, reject) => {
       createProduct(data).then(res => {
-        resolve()
+        resolve(res)
       }).catch(err => {
         reject(err)
       })
@@ -96,7 +96,7 @@ const actions = {
   updateProduct ({ state }, data) {
     return new Promise((resolve, reject) => {
       updateProduct(data).then(res => {
-        resolve()
+        resolve(res)
       }).catch(err => {
         reject(err)
       })

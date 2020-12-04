@@ -5,72 +5,81 @@
         label-position="left"
         label-width="120px"
       >
-      <el-row>
-        <el-col :span="24">
-        <el-form-item label="标题" >
-          <el-input v-model="allDetail.productName" />
-        </el-form-item>
-        </el-col>
-      </el-row>
-      <el-row>
-        <el-col :span="24">
-        <el-form-item label="促销语">
-          <el-input v-model="allDetail.productSubtitle" />
-        </el-form-item>
-        </el-col>
-      </el-row>
-      <el-row>
-        <el-col :span="24">
-        <el-form-item label="产品类别">
-          <el-select
-            v-model="allDetail.categoryId"
-            placeholder="请选择"
-          >
-            <el-option
-              v-for="item in category_list"
-              :key="item.category_id"
-              :label="item.category_name_display"
-              :value="item.category_id"
-            />
-          </el-select>
-        </el-form-item>
-        </el-col>
-      </el-row>
         <el-row>
-            <el-col :span="12">
-                <el-form-item label="货号">
-                  <el-input class="input_small" v-model="allDetail.itemNo" />
-                </el-form-item>
-            </el-col>
-            <el-col :span="12">
-                <el-form-item label="品牌">
-                  <el-select
-                    v-model="allDetail.brandId"
-                    placeholder="请选择"
-                  >
-                    <el-option
-                      v-for="item in brand_list"
-                      :key="item.id"
-                      :label="item.brandName"
-                      :value="item.id"
-                    />
-                  </el-select>
-                </el-form-item>
-            </el-col>
+          <el-col :span="24">
+            <el-form-item label="标题">
+              <el-input v-model="allDetail.productName" />
+            </el-form-item>
+          </el-col>
         </el-row>
-        
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="促销语">
+              <el-input v-model="allDetail.productSubtitle" />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="产品类别">
+              <el-select
+                v-model="allDetail.categoryId"
+                placeholder="请选择"
+              >
+                <el-option
+                  v-for="item in category_list"
+                  :key="item.category_id"
+                  :label="item.category_name_display"
+                  :value="item.category_id"
+                />
+              </el-select>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="货号">
+              <el-input
+                class="input_small"
+                v-model="allDetail.itemNo"
+              />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="品牌">
+              <el-select
+                v-model="allDetail.brandId"
+                placeholder="请选择"
+              >
+                <el-option
+                  v-for="item in brand_list"
+                  :key="item.id"
+                  :label="item.brandName"
+                  :value="item.id"
+                />
+              </el-select>
+            </el-form-item>
+          </el-col>
+        </el-row>
+
         <el-row>
           <el-col :span="12">
 
             <el-form-item label="最低起购">
-              <el-input class="input_small" v-model="allDetail.dealQuantityMin" />
+              <el-input
+                class="input_small"
+                v-model="allDetail.dealQuantityMin"
+              />
             </el-form-item>
 
           </el-col>
 
           <el-col :span="12">
             <el-form-item label="单次最多购买">
-              <el-input class="input_small" v-model="allDetail.dealQuantityMax" />
+              <el-input
+                class="input_small"
+                v-model="allDetail.dealQuantityMax"
+              />
             </el-form-item>
           </el-col>
         </el-row>
@@ -97,115 +106,125 @@
           <el-col :span="24">
             <el-form-item label="产品规格">
               <el-radio-group v-model="allDetail.withSku">
-                <el-radio class="radio" :label="false">单一规格</el-radio>
-                <el-radio class="radio" :label="true">多规格</el-radio>
+                <el-radio
+                  class="radio"
+                  :label="false"
+                >单一规格</el-radio>
+                <el-radio
+                  class="radio"
+                  :label="true"
+                >多规格</el-radio>
               </el-radio-group>
             </el-form-item>
           </el-col>
         </el-row>
-        
+
         <el-row v-if="allDetail.withSku==false">
           <el-col :span="12">
 
             <el-form-item label="价格">
-              <el-input v-model="allDetail.price" class="input_small" />
+              <el-input
+                v-model="allDetail.price"
+                class="input_small"
+              />
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="折扣" >
+            <el-form-item label="折扣">
               <el-input
-                class="input_small" v-model="allDetail.priceDiscount"
+                class="input_small"
+                v-model="allDetail.priceDiscount"
               />
             </el-form-item>
-        </el-col>
+          </el-col>
         </el-row>
         <el-row v-if="allDetail.withSku==false">
           <el-col :span="12">
             <el-form-item label="总库存">
-              <el-input class="input_small" v-model="allDetail.inventoryQuantity" />
+              <el-input
+                class="input_small"
+                v-model="allDetail.inventoryQuantity"
+              />
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            
+
           </el-col>
         </el-row>
 
-        <el-row  v-if="allDetail.withSku==true">
+        <el-row v-if="allDetail.withSku==true">
           <el-col :span="24">
 
-        <el-form-item label="产品规格">
-          <el-card shadow="never">
+            <el-form-item label="产品规格">
+              <el-card shadow="never">
 
-            <el-card shadow="never" >
-              <el-form-item label="规格名称">
-                <el-tag
-                  :key="index"
-                  v-for="(tag,index) in attributeNameTags"
-                  closable
-                  :disable-transitions="false"
-                  @close="handleAttributeNameClose(tag)"
-                >
-                  {{tag.valueName}}
-                </el-tag>
-                <el-input
-                  class="input-new-tag"
-                  v-model="AttributeNameinputValue"
-                  ref="saveAttributeNameTagInput"
-                  size="small"
-                  @keyup.enter.native="handleInputConfirm"
-                  @blur="handleInputConfirm"
-                >
-                </el-input>
-                <el-button
-                  class="button-new-tag"
-                  size="small"
-                  @click="showAttributeNameInput"
-                >添加规格</el-button>
-                <span class="tips"> &nbsp;&nbsp;请填写规格名，如：颜色、容量、尺码等………（最多可以添加2种）</span>
-              </el-form-item>
-            </el-card>
-            <el-row>&nbsp;</el-row>
-            <el-card shadow="never" >
-            <el-form-item
-              
-              :key="index"
-              v-for="(item,index) in allDetail.skuList"
-              :label="item.skuKeyName"
-              
-            >
-              <el-tag
-                :key="index"
-                v-for="(skuValue,index) in item.skuValueList"
-                closable
-                :disable-transitions="false"
-                @close="handleColorClose(item.skuKeyName,skuValue)"
-              >
-                {{skuValue.skuValueName}}
-              </el-tag>
-              <el-input
-                class="input-new-tag"
-                ref="saveColorTagInput"
-                v-model="item.skuValueNameNew"
-                size="small"
-              >
-              </el-input>
-              <el-button
-                class="button-new-tag"
-                size="small"
-                @click="handleConfirm(item.skuKeyName,item)"
-              >增加</el-button>
+                <el-card shadow="never">
+                  <el-form-item label="规格名称">
+                    <el-tag
+                      :key="index"
+                      v-for="(tag,index) in attributeNameTags"
+                      closable
+                      :disable-transitions="false"
+                      @close="handleAttributeNameClose(tag)"
+                    >
+                      {{tag.valueName}}
+                    </el-tag>
+                    <el-input
+                      class="input-new-tag"
+                      v-model="AttributeNameinputValue"
+                      ref="saveAttributeNameTagInput"
+                      size="small"
+                      @keyup.enter.native="handleInputConfirm"
+                      @blur="handleInputConfirm"
+                    >
+                    </el-input>
+                    <el-button
+                      class="button-new-tag"
+                      size="small"
+                      @click="showAttributeNameInput"
+                    >添加规格</el-button>
+                    <span class="tips"> &nbsp;&nbsp;请填写规格名，如：颜色、容量、尺码等………（最多可以添加2种）</span>
+                  </el-form-item>
+                </el-card>
+                <el-row>&nbsp;</el-row>
+                <el-card shadow="never">
+                  <el-form-item
+                    :key="index"
+                    v-for="(item,index) in allDetail.skuList"
+                    :label="item.skuKeyName"
+                  >
+                    <el-tag
+                      :key="index"
+                      v-for="(skuValue,index) in item.skuValueList"
+                      closable
+                      :disable-transitions="false"
+                      @close="handleColorClose(item.skuKeyName,skuValue)"
+                    >
+                      {{skuValue.skuValueName}}
+                    </el-tag>
+                    <el-input
+                      class="input-new-tag"
+                      ref="saveColorTagInput"
+                      v-model="item.skuValueNameNew"
+                      size="small"
+                    >
+                    </el-input>
+                    <el-button
+                      class="button-new-tag"
+                      size="small"
+                      @click="handleConfirm(item.skuKeyName,item)"
+                    >增加</el-button>
 
+                  </el-form-item>
+                </el-card>
+
+              </el-card>
             </el-form-item>
-            </el-card>
 
-            
-          </el-card>
-        </el-form-item>
-
-        </el-col>
+          </el-col>
         </el-row>
 
-        <el-form-item  v-if="allDetail.withSku==true">
+        <el-form-item v-if="allDetail.withSku==true">
           <el-card shadow="never">
 
             <el-table
@@ -241,7 +260,6 @@
 
           </el-card>
         </el-form-item>
-
 
         <el-form-item label="产品图片">
           <div class="box">
@@ -291,7 +309,7 @@
 
           </div>
         </el-form-item>
-        
+
         <el-form-item style="margin-bottom: 30px;">
           <Tinymce
             ref="editor"
@@ -313,19 +331,13 @@
           </el-upload>
         </el-form-item>
         <el-form-item>
-          
+
           推荐
-          <el-switch
-              v-model="allDetail.isRecommend"
-            />
+          <el-switch v-model="allDetail.isRecommend" />
           热卖
-          <el-switch
-              v-model="allDetail.isHot"
-            />
+          <el-switch v-model="allDetail.isHot" />
           新品
-          <el-switch
-              v-model="allDetail.isNew"
-            />
+          <el-switch v-model="allDetail.isNew" />
         </el-form-item>
         <el-form-item>
           <el-button
@@ -334,9 +346,7 @@
           >发布</el-button>
           &nbsp;&nbsp;&nbsp;&nbsp;
           立即上架
-          <el-switch
-              v-model="allDetail.isSelling"
-            />
+          <el-switch v-model="allDetail.isSelling" />
         </el-form-item>
       </el-form>
     </el-card>
@@ -420,7 +430,7 @@ export default {
       await this.$store.dispatch('delivery/getDeliveryConfigList')
 
       const allDetail = this.$store.state.product.allDetail
-      
+
       this.productForm.productObj = allDetail.pictureList
 
 
@@ -433,13 +443,20 @@ export default {
 
     },
     handleUpdate () {
-      
+
       //图片
       this.allDetail.pictureList = this.productForm.productObj
 
+      this.$myLoading.myLoading.loading()
+      const then = this
 
-      this.$store.dispatch('product/updateProduct', this.allDetail)
-      this.$router.replace({ path: '/product/product' })
+      this.$store.dispatch('product/updateProduct', this.allDetail).then(res => {
+        then.$myLoading.myLoading.closeLoading()
+        if (res.status === 0) {
+          this.$router.replace({ path: '/product/product' })
+        }
+      })
+
 
     },
     handleAvatarSuccess (res, file) {
@@ -461,18 +478,18 @@ export default {
 
       var than = this;
 
-      for(var i=than.allDetail.skuValuePriceEtcList.length-1;i>=0;i--){
-          var itemPriceEtc = than.allDetail.skuValuePriceEtcList[i];
-          if(itemPriceEtc.skuValueName1 == skuValueItem.skuValueName || itemPriceEtc.skuValueName2 == skuValueItem.skuValueName){
-            than.allDetail.skuValuePriceEtcList.splice(i, 1) 
-          }
+      for (var i = than.allDetail.skuValuePriceEtcList.length - 1; i >= 0; i--) {
+        var itemPriceEtc = than.allDetail.skuValuePriceEtcList[i];
+        if (itemPriceEtc.skuValueName1 == skuValueItem.skuValueName || itemPriceEtc.skuValueName2 == skuValueItem.skuValueName) {
+          than.allDetail.skuValuePriceEtcList.splice(i, 1)
+        }
       }
 
       this.allDetail.skuList.forEach(element => {
         if (element.skuKeyName === skuKeyName) {
           element.skuValueList.splice(element.skuValueList.indexOf(skuValueItem), 1);
-          if(element.skuValueList.length == 0){
-            this.allDetail.skuList.splice(this.allDetail.skuList.indexOf(element), 1) 
+          if (element.skuValueList.length == 0) {
+            this.allDetail.skuList.splice(this.allDetail.skuList.indexOf(element), 1)
           }
           return
         }
@@ -503,47 +520,47 @@ export default {
         than.allDetail.skuList.forEach(element => {
           num++;
           if (element.skuKeyName === skuKeyName) {
-      
-            element.skuValueList.push({ 'skuValueName': skuItem.skuValueNameNew})
 
-            if(than.allDetail.skuList.length == 1){
+            element.skuValueList.push({ 'skuValueName': skuItem.skuValueNameNew })
+
+            if (than.allDetail.skuList.length == 1) {
               var itemSkuValuePriceEtc = {
-                "skuValueName1":skuItem.skuValueNameNew,
-                "skuValueName2":null,
-                "skuValueInventoryQuantity":100,
-                "skuValuePrice":100,
-                "skuValuePriceDiscount":1
+                "skuValueName1": skuItem.skuValueNameNew,
+                "skuValueName2": null,
+                "skuValueInventoryQuantity": 100,
+                "skuValuePrice": 100,
+                "skuValuePriceDiscount": 1
               }
               than.allDetail.skuValuePriceEtcList.push(itemSkuValuePriceEtc)
             }
             element.skuValueName = null
             return
           }
-          else{
-              element.skuValueList.forEach(skuValue => {
-                  var skuValueName1 = skuItem.skuValueNameNew;
-                  var skuValueName2 = skuValue.skuValueName;
-                  if(num == 1){
-                    [skuValueName1,skuValueName2] = [skuValueName2,skuValueName1];
-                  }
-                  var itemSkuValuePriceEtc = {
-                    "skuValueName1":skuValueName1,
-                    "skuValueName2":skuValueName2,
-                    "skuValueInventoryQuantity":100,
-                    "skuValuePrice":100,
-                    "skuValuePriceDiscount":1
-                  }
-                  than.allDetail.skuValuePriceEtcList.push(itemSkuValuePriceEtc)
-              });
-              for(var i=than.allDetail.skuValuePriceEtcList.length-1;i>=0;i--){
-                  var itemPriceEtc = than.allDetail.skuValuePriceEtcList[i];
-                  if(itemPriceEtc.skuValueName1 == null || itemPriceEtc.skuValueName2 == null){
-                    than.allDetail.skuValuePriceEtcList.splice(i, 1) 
-                  }
+          else {
+            element.skuValueList.forEach(skuValue => {
+              var skuValueName1 = skuItem.skuValueNameNew;
+              var skuValueName2 = skuValue.skuValueName;
+              if (num == 1) {
+                [skuValueName1, skuValueName2] = [skuValueName2, skuValueName1];
               }
+              var itemSkuValuePriceEtc = {
+                "skuValueName1": skuValueName1,
+                "skuValueName2": skuValueName2,
+                "skuValueInventoryQuantity": 100,
+                "skuValuePrice": 100,
+                "skuValuePriceDiscount": 1
+              }
+              than.allDetail.skuValuePriceEtcList.push(itemSkuValuePriceEtc)
+            });
+            for (var i = than.allDetail.skuValuePriceEtcList.length - 1; i >= 0; i--) {
+              var itemPriceEtc = than.allDetail.skuValuePriceEtcList[i];
+              if (itemPriceEtc.skuValueName1 == null || itemPriceEtc.skuValueName2 == null) {
+                than.allDetail.skuValuePriceEtcList.splice(i, 1)
+              }
+            }
           }
         });
-        
+
       }
     },
     handleSizeInputConfirm () {
@@ -556,7 +573,7 @@ export default {
     },
     handleInputConfirm () {
       let skuKeyName = this.AttributeNameinputValue;
-      if(this.allDetail.skuList.length >= 2){
+      if (this.allDetail.skuList.length >= 2) {
         return
       }
       if (skuKeyName) {
@@ -577,7 +594,7 @@ export default {
           type: 'success',
           duration: 2000
         })
-        
+
         this.productForm.productPicList.push(response.url)
         this.productForm.productObj.push({ 'id': response.id, 'url': response.url })
       } else {
@@ -741,7 +758,7 @@ export default {
     width: 80%;
   }
   .tips {
-    font-size:14px;
+    font-size: 14px;
     color: #8c939d;
   }
 }
