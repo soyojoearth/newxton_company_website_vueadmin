@@ -496,317 +496,150 @@
 
     </div>
     <div v-show="showPage === 'printPage'">
-      <el-card class="operatingHints">
-        <el-row style="font-weight:800;">
-          操作提示：
+      <div  id="printTest">
+        <el-row style="margin-top: 10px">
+          <el-col :span="6" :offset="10">
+            <h1>订单信息</h1>
+          </el-col>
         </el-row>
-        <el-row>
-          1、订单列表，可查看订单详情、费用、对应商品、发货状态、物流信息等。
-        </el-row>
-        <el-row>
-          2、可在订单详情里面“打印订单”。
-        </el-row>
-        <el-row>
-          3、可在订单详情里面填写发货信息，进行发货。
-        </el-row>
-      </el-card>
-      <el-row style="margin-top: 10px">
+        <el-card class="operatingHints">
+          <el-row style="margin-top: 10px">
+            基本信息
+          </el-row>
+          <el-row style="margin-top: 10px">
+            <el-col :offset="1">
+              订单编号：{{ detailData.serialNum }}
+            </el-col>
+          </el-row>
+          <el-row style="margin-top: 10px">
+            <el-col :span="4" :offset="1">
+              会员ID：{{ detailData.userId }}
+            </el-col>
+            <el-col :span="4" :offset="1">
+              成交平台：{{ detailData.dealPlatform }}
+            </el-col>
+          </el-row>
+          <el-row style="margin-top: 10px">
+            <el-col :span="8" :offset="1">
+              下单时间：{{ detailData.datelineCreateReadable }}
+            </el-col>
+            <el-col :span="8" :offset="2">
+              付款时间：{{ detailData.datelinePaidReadable != null ? detailData.datelinePaidReadable: '- -' }}
+            </el-col>
+          </el-row>
+          <el-divider />
+          <el-row style="margin-top: 10px">
+            <el-col :span="2">
+              收货信息
+            </el-col>
+          </el-row>
+          <el-row style="margin-top: 10px">
+            <el-col :span="4" :offset="1">
+              收货人：{{ detailData.deliveryPerson }}
+            </el-col>
+            <el-col :span="4" :offset="2">
+              联系方式：{{ detailData.deliveryPhone }}
+            </el-col>
+          </el-row>
+          <el-row style="margin-top: 10px">
+            <el-col :offset="1">
+              收货地址：{{ detailData.deliveryAddress }}
+            </el-col>
+          </el-row>
+          <el-row style="margin-top: 10px">
+            <el-col :span="4" :offset="1">
+              邮编：{{ detailData.deliveryPostcode }}
+            </el-col>
+            <el-col :span="8" :offset="2">
+              配送方式：{{ detailData.deliveryConfigName }}
+            </el-col>
+          </el-row>
+          <el-row style="margin-top: 10px">
+            <el-col :span="4" :offset="1">
+              留言：{{ detailData.deliveryRemark }}
+            </el-col>
+          </el-row>
+          <el-divider />
+          <el-row style="margin-top: 10px">
+            <el-col :span="2">
+              商品信息
+            </el-col>
+          </el-row>
+          <el-row style="margin-top: 10px">
+            <el-col :span="22" :offset="1">
+              <el-table ref="multipleTable" :data="detailData.orderFormProductList" tooltip-effect="dark">
+                <el-table-column prop="productId" label="货号" width="60px" />
+                <el-table-column prop="brandName" label="商品信息" width="180px">
+                  <template slot-scope="scope">
+                    <img :src="scope.row.picUrl" class="brandImg">
+                    <span>{{ scope.row.productName }}</span>
+                  </template>
+                </el-table-column>
+                <el-table-column prop="brandName" label="规格" width="60px">
+                  <template slot-scope="scope">
+                    <span v-for="data in scope.row.productSku">{{ data.skuValueName }} </span>
+                  </template>
+                </el-table-column>
+                <el-table-column prop="quantity" label="数量" width="60px" />
+                <el-table-column prop="" label="商品价格" width="90px">
+                  <template slot-scope="scope">
+                    <span>￥{{ scope.row.productPrice }} </span>
+                  </template>
+                </el-table-column>
+                <el-table-column prop="" label="成交价" width="90px">
+                  <template slot-scope="scope">
+                    <span>￥{{ scope.row.productPriceDeal }} </span>
+                  </template>
+                </el-table-column>
+                <el-table-column prop="" label="金额小计" width="90px">
+                  <template slot-scope="scope">
+                    <span>￥{{ scope.row.productPriceDeal }} </span>
+                  </template>
+                </el-table-column>
+                <el-table-column/>
+              </el-table>
+            </el-col>
+          </el-row>
+          <el-row style="margin-top: 10px">
+            <el-col :span="8" :offset="18">
+              订单总额：¥ {{ detailData.amountFinally }}
+            </el-col>
+          </el-row>
+          <el-divider />
+          <el-row style="margin-top: 10px">
+            <el-col :span="2">
+              费用信息
+            </el-col>
+          </el-row>
+          <el-row style="margin-top: 10px">
+            <el-col :span="4" :offset="1">
+              总计: {{ detailData.amountInitial }}
+            </el-col>
+            <el-col :span="4" :offset="2">
+              运费： {{ detailData.deliveryCost }}
+            </el-col>
+            <el-col :span="4" :offset="2">
+              运费调整： {{ detailData.manualDeliveryCostDiscount }}
+            </el-col>
+            <el-col :span="4" :offset="2">
+              价格调整:  {{ detailData.amountDiscount }}
+            </el-col>
+          </el-row>
+          <el-row style="margin-top: 10px">
+            <el-col :span="4" :offset="1">
+              总计应付： {{ detailData.amountFinally }}
+            </el-col>
+          </el-row>
+        </el-card>
+      </div>
+      <el-row style="margin-top: 10px" class="no-print">
+        <el-col :span="2" :offset="9">
+          <el-button v-print="'#printTest'" type="primary">打印</el-button>
+        </el-col>
         <el-col :span="2">
           <el-button @click="showListPag">返回</el-button>
         </el-col>
-        <el-col :span="2" :offset="9">
-          <el-button type="primary" @click="printOrder">打印订单</el-button>
-        </el-col>
       </el-row>
-
-      <el-card class="operatingHints">
-        <el-row style="margin-top: 10px">
-          基本信息
-        </el-row>
-        <el-row style="margin-top: 10px">
-          <el-col :span="4" :offset="1">
-            订单编号：{{ detailData.serialNum }}
-          </el-col>
-          <el-col :span="4" :offset="2">
-            会员ID：{{ detailData.userId }}
-          </el-col>
-        </el-row>
-        <el-row style="margin-top: 10px">
-          <el-col :span="4" :offset="1">
-            成交平台：{{ detailData.dealPlatform }}
-          </el-col>
-          <el-col :span="4" :offset="2">
-            下单时间：{{ detailData.datelineCreateReadable }}
-          </el-col>
-          <el-col :span="4" :offset="2">
-            付款时间：{{ detailData.datelinePaidReadable != null ? detailData.datelinePaidReadable: '- -' }}
-          </el-col>
-        </el-row>
-        <el-divider />
-        <el-row style="margin-top: 10px">
-          <el-col :span="2">
-            收货信息
-          </el-col>
-          <el-col :span="2" :offset="20">
-            <el-button type="primary" size="small" @click="modifyAddress(detailData)">修改收货信息</el-button>
-          </el-col>
-        </el-row>
-        <el-row style="margin-top: 10px">
-          <el-col :span="4" :offset="1">
-            收货人：{{ detailData.deliveryPerson }}
-          </el-col>
-          <el-col :span="4" :offset="2">
-            联系方式：{{ detailData.deliveryPhone }}
-          </el-col>
-        </el-row>
-        <el-row style="margin-top: 10px">
-          <el-col :offset="1">
-            收货地址：{{ detailData.deliveryAddress }}
-          </el-col>
-        </el-row>
-        <el-row style="margin-top: 10px">
-          <el-col :span="4" :offset="1">
-            邮编：{{ detailData.deliveryPostcode }}
-          </el-col>
-          <el-col :span="4" :offset="2">
-            配送方式：{{ detailData.deliveryConfigName }}
-          </el-col>
-        </el-row>
-        <el-row style="margin-top: 10px">
-          <el-col :span="4" :offset="1">
-            留言：{{ detailData.deliveryRemark }}
-          </el-col>
-        </el-row>
-        <el-divider />
-        <el-row style="margin-top: 10px">
-          <el-col :span="2">
-            商品信息
-          </el-col>
-        </el-row>
-        <el-row style="margin-top: 10px">
-          <el-col :span="22" :offset="1">
-            <el-table ref="multipleTable" :data="detailData.orderFormProductList" tooltip-effect="dark">
-              <el-table-column prop="productId" label="货号" />
-              <el-table-column prop="brandName" label="商品信息">
-                <template slot-scope="scope">
-                  <img :src="scope.row.picUrl" class="brandImg">
-                  <span>{{ scope.row.productName }}</span>
-                </template>
-              </el-table-column>
-              <el-table-column prop="brandName" label="规格">
-                <template slot-scope="scope">
-                  <span v-for="data in scope.row.productSku">{{ data.skuValueName }} </span>
-                </template>
-              </el-table-column>
-              <el-table-column prop="quantity" label="数量" />
-              <el-table-column prop="" label="商品价格">
-                <template slot-scope="scope">
-                  <span>￥{{ scope.row.productPrice }} </span>
-                </template>
-              </el-table-column>
-              <el-table-column prop="" label="成交价">
-                <template slot-scope="scope">
-                  <span>￥{{ scope.row.productPriceDeal }} </span>
-                </template>
-              </el-table-column>
-              <el-table-column prop="" label="金额小计">
-                <template slot-scope="scope">
-                  <span>￥{{ scope.row.productPriceDeal }} </span>
-                </template>
-              </el-table-column>
-            </el-table>
-          </el-col>
-        </el-row>
-        <el-row style="margin-top: 10px">
-          <el-col :span="4" :offset="20">
-            订单总额：¥ {{ detailData.amountFinally }}
-          </el-col>
-        </el-row>
-        <el-divider />
-        <el-row style="margin-top: 10px">
-          <el-col :span="2">
-            费用信息
-          </el-col>
-          <el-col :span="2" :offset="20">
-            <el-button type="primary" size="small" @click="adjustPrice(detailData)">调整价格</el-button>
-          </el-col>
-        </el-row>
-        <el-row style="margin-top: 10px">
-          <el-col :span="4" :offset="1">
-            总计: {{ detailData.amountInitial }}
-          </el-col>
-          <el-col :span="4" :offset="2">
-            运费： {{ detailData.deliveryCost }}
-          </el-col>
-          <el-col :span="4" :offset="2">
-            运费调整： {{ detailData.manualDeliveryCostDiscount }}
-          </el-col>
-          <el-col :span="4" :offset="2">
-            价格调整:  {{ detailData.amountDiscount }}
-          </el-col>
-        </el-row>
-        <el-row style="margin-top: 10px">
-          <el-col :span="4" :offset="1">
-            总计应付： {{ detailData.amountFinally }}
-          </el-col>
-        </el-row>
-        <el-divider />
-        <el-row style="margin-top: 10px">
-          <el-col :span="2">
-            操作信息
-          </el-col>
-        </el-row>
-        <el-row style="margin-top: 10px">
-          <el-col :span="1" :offset="1">
-            操作备注
-          </el-col>
-          <el-col :span="21">
-            <el-input v-model="detailData.deliveryRemark" disabled type="textarea" style="width: 100%" placeholder="请输入内容" maxlength="30" show-word-limit />
-          </el-col>
-        </el-row>
-        <el-row style="margin-top: 10px">
-          <el-col :span="2" :offset="2">
-            <el-button v-if="!detailData.delivery" type="primary" size="small" @click="deliveryAction(detailData.id)">发货</el-button>
-            <!--            <el-button v-else type="primary" size="small" @click="unDeliveryAction">取消发货</el-button>-->
-          </el-col>
-          <el-col :span="2" :offset="2">
-            <el-button v-if="detailData.delivery" type="primary" size="small" @click="modifyChangeFast(detailData)">修改快递信息</el-button>
-          </el-col>
-        </el-row>
-        <el-divider />
-        <el-row style="margin-top: 10px">
-          <el-col :span="2">
-            操作记录
-          </el-col>
-        </el-row>
-        <el-row style="margin-top: 10px">
-          <el-col :span="22" :offset="1">
-            <!--            <el-table ref="multipleTable" :data="listData" tooltip-effect="dark" >-->
-            <!--              <el-table-column prop="brandName" label="操作者">-->
-
-            <!--              </el-table-column>-->
-            <!--              <el-table-column prop="brandName" label="操作时间">-->
-
-            <!--              </el-table-column>-->
-            <!--              <el-table-column prop="" label="付款状态">-->
-            <!--                <template slot-scope="scope">-->
-            <!--                </template>-->
-            <!--              </el-table-column>-->
-            <!--              <el-table-column prop="" label="发货状态">-->
-            <!--                <template slot-scope="scope">-->
-            <!--                </template>-->
-            <!--              </el-table-column>-->
-            <!--              <el-table-column prop="brandName" label="操作描述">-->
-
-            <!--              </el-table-column>-->
-            <!--              <el-table-column prop="brandName" label="备注">-->
-
-            <!--              </el-table-column>-->
-            <!--            </el-table>-->
-          </el-col>
-        </el-row>
-        <el-row style="margin-top: 10px">
-          <el-col :span="2" :offset="1">
-            商家内入订单备注
-          </el-col>
-          <el-col :span="20">
-            <el-input v-model="detailData.sellerRemark" type="textarea" style="width: 100%" placeholder="请输入内容" maxlength="30" show-word-limit />
-          </el-col>
-        </el-row>
-        <el-row style="margin-top: 10px">
-          <el-col :span="2" :offset="3">
-            <el-button type="primary" @click="updateAction(detailData)">更新</el-button>
-          </el-col>
-        </el-row>
-      </el-card>
-
-      <el-dialog title="价格调整" :visible.sync="priceDialog" :close-on-click-modal="false" :show-close="false" :close-on-press-escape="false" width="500px" center>
-        <el-form ref="dialogRef" :model="priceParam" :rules="priceParamRules" :label-width="formLabelWidth">
-          <el-form-item label="商品总价" prop="amountInitial">
-            <span>{{ priceParam.amountInitial }}</span>
-          </el-form-item>
-          <el-form-item label="运费" prop="deliveryCost">
-            <span>{{ priceParam.deliveryCost }}</span>
-          </el-form-item>
-          <el-form-item label="运费调整" prop="manualDeliveryCostDiscount">
-            <el-input-number v-model="priceParam.manualDeliveryCostDiscount" style="width: 200px" :controls="false" />
-          </el-form-item>
-          <el-form-item label="价格微调" prop="manualAmountDiscount">
-            <el-input-number v-model="priceParam.manualAmountDiscount" style="width: 200px" :controls="false" />
-          </el-form-item>
-        </el-form>
-        <div style="margin-left: 120px">
-          <el-button type="primary" @click="savePrice">确 定</el-button>
-          <el-button @click="priceDialog = false">取 消</el-button>
-        </div>
-        <div style="margin-left: 30px;margin-top: 20px;color: red">
-          请输入要调整的金额, 正数价格上调, 负数价格下调, 0维持原价
-        </div>
-      </el-dialog>
-
-      <el-dialog title="发货信息" :visible.sync="deliveryDialog" :close-on-click-modal="false" :show-close="false" :close-on-press-escape="false" width="500px" center>
-        <el-form ref="deliveryRef" :model="deliveryParam" :rules="deliveryParamRules" :label-width="formLabelWidth">
-          <el-form-item label="物流公司" prop="deliveryCompanyId">
-            <el-select v-model="deliveryParam.deliveryCompanyId" placeholder="--请选择--">
-              <el-option v-for="item in $store.state.delivery.deliveryCompanyList" :key="item.id" :label="item.name" :value="item.id">
-                {{ item.name }}
-              </el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item label="快递单号" prop="deliverySerialNum">
-            <el-input v-model="deliveryParam.deliverySerialNum" style="width: 200px" :controls="false" />
-          </el-form-item>
-          <el-form-item label="操作备注" prop="remark">
-            <el-input v-model="deliveryParam.remark" type="textarea" style="width: 200px" :controls="false" />
-          </el-form-item>
-        </el-form>
-        <div style="margin-left: 120px">
-          <el-button type="primary" @click="saveDelivery">确 定</el-button>
-          <el-button @click="deliveryDialog = false">取 消</el-button>
-        </div>
-      </el-dialog>
-
-      <el-dialog title="修改收货地址" :visible.sync="addressDialog" :close-on-click-modal="false" :show-close="false" :close-on-press-escape="false" width="500px" center>
-        <el-form ref="addressRef" :model="addressParam" :rules="addressParamRules" :label-width="formLabelWidth">
-          <el-form-item label="收货人" prop="deliveryPerson">
-            <el-input v-model="addressParam.deliveryPerson" style="width: 200px" :controls="false" />
-          </el-form-item>
-          <el-form-item label="手机" prop="deliveryPhone">
-            <el-input v-model="addressParam.deliveryPhone" style="width: 200px" :controls="false" />
-          </el-form-item>
-          <el-form-item label="邮编" prop="deliveryPostcode">
-            <el-input v-model="addressParam.deliveryPostcode" style="width: 200px" :controls="false" />
-          </el-form-item>
-          <el-form-item label="国家" prop="">
-            <el-select placeholder="- 选择国家（不选不改） -" disabled>
-            </el-select>
-          </el-form-item>
-          <el-form-item label="省份" prop="">
-            <el-select placeholder="- 选择省份（不选不改） -" disabled>
-            </el-select>
-          </el-form-item>
-          <el-form-item label="城市" prop="">
-            <el-select placeholder="- 选择城市（不选不改） -" disabled>
-            </el-select>
-          </el-form-item>
-          <el-form-item label="地址" prop="deliveryAddress">
-            <el-input v-model="addressParam.deliveryAddress" type="textarea" style="width: 200px" :controls="false" />
-          </el-form-item>
-
-          <el-form-item label="备注" prop="deliveryRemark">
-            <el-input v-model="addressParam.deliveryRemark" style="width: 200px" :controls="false" />
-          </el-form-item>
-          <el-form-item label="配送方式" prop="">
-            <el-select disabled placeholder="- 选择运费模板（不选不改） -">
-            </el-select>
-          </el-form-item>
-        </el-form>
-        <div style="margin-left: 120px">
-          <el-button type="primary" @click="saveAddress">确 定</el-button>
-          <el-button @click="addressDialog = false">取 消</el-button>
-        </div>
-      </el-dialog>
-
     </div>
   </div>
 </template>
@@ -1069,6 +902,12 @@ export default {
     },
     printOrder() {
       this.showPage = 'printPage'
+    },
+    pointA() {
+      this.$print(this.$refs.print)
+    },
+    pointB() {
+      this.$print(this.$refs.print1)
     },
     modifyAddress(data) {
       this.addressParam = {}
