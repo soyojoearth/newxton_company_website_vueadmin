@@ -74,7 +74,7 @@ const actions = {
         content_detail: data.detail,
         is_recommend: data.is_recommend
       }).then(res => {
-        resolve(111)
+        resolve(res)
       }).catch(err => {
         rejust(err)
       })
@@ -89,7 +89,7 @@ const actions = {
         content_detail: data.detail,
         is_recommend: data.is_recommend ? 1 : 0
       }).then(res => {
-        resolve()
+        resolve(res)
       }).catch(err => {
         rejust(err)
       })

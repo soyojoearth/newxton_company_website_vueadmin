@@ -1,13 +1,20 @@
 <template>
   <div class="app-container">
     <el-card style="margin-top:10px">
-      <el-form label-position="top" label-width="80px" :model="formLabelAlign">
+      <el-form
+        label-position="top"
+        label-width="80px"
+        :model="formLabelAlign"
+      >
         <el-form-item label="标题">
           <el-input v-model="formLabelAlign.title" />
         </el-form-item>
         <el-form-item>
           <div style="margin-top: 20px">
-            <el-select v-model="formLabelAlign.category_id" placeholder="请选择">
+            <el-select
+              v-model="formLabelAlign.category_id"
+              placeholder="请选择"
+            >
               <el-option
                 v-for="item in category_list"
                 :key="item.category_id"
@@ -21,7 +28,11 @@
           </div>
         </el-form-item>
         <el-form-item style="margin-bottom: 30px;">
-          <Tinymce ref="editor" v-model="formLabelAlign.detail" :height="400" />
+          <Tinymce
+            ref="editor"
+            v-model="formLabelAlign.detail"
+            :height="400"
+          />
         </el-form-item>
         <el-form-item>
           <span>上传图片</span>
@@ -43,7 +54,10 @@
           <el-checkbox v-model="formLabelAlign.is_recommend">推荐</el-checkbox>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="handleUpdate">发布</el-button>
+          <el-button
+            type="primary"
+            @click="handleUpdate"
+          >发布</el-button>
         </el-form-item>
       </el-form>
     </el-card>
@@ -62,7 +76,7 @@ export default {
       default: 0
     }
   },
-  data() {
+  data () {
     return {
       radio2: '1',
       checked: false,
@@ -86,11 +100,11 @@ export default {
       category_list: state => state.new.CategoryListData
     })
   },
-  created() {
+  created () {
     this.load()
   },
   methods: {
-    async load() {
+    async load () {
       const ListData = this.$store.state.new.ListData
       const then = this
       ListData.map(item => {
@@ -107,14 +121,20 @@ export default {
       this.$store.dispatch('new/getCategory')
       this.formLabelAlign.detail = this.$store.state.new.Detail[this.id]
     },
-    handleUpdate() {
-      this.$store.dispatch('new/updateNew', this.formLabelAlign)
-      this.$router.replace({ path: '/content/content' })
+    handleUpdate () {
+      this.$myLoading.myLoading.loading()
+      var _this = this
+      this.$store.dispatch('new/updateNew', this.formLabelAlign).then(res => {
+        _this.$myLoading.myLoading.closeLoading()
+        if (res.status === 0) {
+          _this.$router.replace({ path: '/content/content' })
+        }
+      })
     },
-    handleAvatarSuccess(res, file) {
+    handleAvatarSuccess (res, file) {
       this.imageUrl = file.url
     },
-    beforeAvatarUpload(file) {
+    beforeAvatarUpload (file) {
       const isImg = file.type === 'image/jpeg' || file.type === 'image/png' || file.type === 'image/gif'
       const isLt20M = file.size / 1024 / 1024 < 20
       if (!isImg) {
@@ -125,48 +145,49 @@ export default {
       }
       return isImg && isLt20M
     },
-    UploadOnSuccess(res, file, fileList) {
+    UploadOnSuccess (res, file, fileList) {
       this.$refs.editor.imageSuccessCBK([{ url: res.url }])
       // this.formLabelAlign.detail = this.formLabelAlign.detail + `<img src="${res.url}"/>`
       // console.log(this.formLabelAlign.detail)
       // this.$refs.editor.setContent(this.formLabelAlign.detail)
       // console.log(this.formLabelAlign.detail)
       this.$forceUpdate()
+
     }
   }
 }
 </script>
 
 <style>
-  .avatar-uploader .el-upload {
-    border: 1px dashed #d9d9d9;
-    border-radius: 6px;
-    cursor: pointer;
-    position: relative;
-    overflow: hidden;
-  }
-  .avatar-uploader .el-upload:hover {
-    border-color: #409EFF;
-  }
-  .avatar-uploader-icon {
-    font-size: 28px;
-    color: #8c939d;
-    width: 30px;
-    height: 30px;
-    line-height: 30px;
-    text-align: center;
-  }
-  .avatar {
-    width: 30px;
-    height: 30px;
-    display: block;
-  }
-  .el-upload--picture-card{
-    width: 60px;
-    height: 60px;
-    line-height: 66px;
-  }
-  .el-upload-list__item{
-    display: none !important;
-  }
+.avatar-uploader .el-upload {
+  border: 1px dashed #d9d9d9;
+  border-radius: 6px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+.avatar-uploader .el-upload:hover {
+  border-color: #409eff;
+}
+.avatar-uploader-icon {
+  font-size: 28px;
+  color: #8c939d;
+  width: 30px;
+  height: 30px;
+  line-height: 30px;
+  text-align: center;
+}
+.avatar {
+  width: 30px;
+  height: 30px;
+  display: block;
+}
+.el-upload--picture-card {
+  width: 60px;
+  height: 60px;
+  line-height: 66px;
+}
+.el-upload-list__item {
+  display: none !important;
+}
 </style>
