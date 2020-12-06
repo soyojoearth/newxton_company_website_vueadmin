@@ -910,15 +910,15 @@ export default {
     modifyAddress(data) {
       this.addressParam = {}
       this.$set(this.addressParam, 'id', data.id)
-      this.$set(this.addressParam, 'deliveryCountry', data.deliveryCountry)
-      this.$set(this.addressParam, 'deliveryProvince', data.deliveryProvince)
-      this.$set(this.addressParam, 'deliveryCity', data.deliveryCity)
+      this.$set(this.addressParam, 'deliveryCountry', null)
+      this.$set(this.addressParam, 'deliveryProvince', null)
+      this.$set(this.addressParam, 'deliveryCity', null)
       this.$set(this.addressParam, 'deliveryAddress', data.deliveryAddress)
       this.$set(this.addressParam, 'deliveryPerson', data.deliveryPerson)
       this.$set(this.addressParam, 'deliveryPhone', data.deliveryPhone)
       this.$set(this.addressParam, 'deliveryPostcode', data.deliveryPostcode)
       this.$set(this.addressParam, 'deliveryRemark', data.deliveryRemark)
-      this.$set(this.addressParam, 'deliveryConfigId', data.deliveryConfigId)
+      this.$set(this.addressParam, 'deliveryConfigId', null)
       this.addressDialog = true
       this.resetForm('addressRef')
     },
