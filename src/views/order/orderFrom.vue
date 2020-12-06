@@ -637,7 +637,7 @@
           <el-button v-print="'#printTest'" type="primary">打印</el-button>
         </el-col>
         <el-col :span="2">
-          <el-button @click="showListPag">返回</el-button>
+          <el-button @click="showEditorPag(detailData)">返回</el-button>
         </el-col>
       </el-row>
     </div>
@@ -900,14 +900,12 @@ export default {
     showListPag() {
       this.showPage = 'homePage'
     },
+    showEditorPag(data) {
+      this.showDetailInterface(data.id)
+      this.showPage = 'editorPage'
+    },
     printOrder() {
       this.showPage = 'printPage'
-    },
-    pointA() {
-      this.$print(this.$refs.print)
-    },
-    pointB() {
-      this.$print(this.$refs.print1)
     },
     modifyAddress(data) {
       this.addressParam = {}
