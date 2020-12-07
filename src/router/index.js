@@ -119,6 +119,19 @@ export const constantRoutes = [
     ]
   },
   {
+    path: '/order',
+    component: Layout,
+    meta: { title: '订单设置', icon: 'tree', affix: false },
+    children: [
+      {
+        path: 'orderFrom',
+        component: () => import('@/views/order/orderFrom'),
+        name: 'orderFrom',
+        meta: { title: '订单管理', affix: false }
+      }
+    ]
+  },
+  {
     path: '/content',
     component: Layout,
     meta: { title: '内容管理', icon: 'content', affix: false },
