@@ -45,17 +45,26 @@ const mutations = {
 }
 
 const actions = {
+
+
+
   getList ({ commit, state }, params) {
+    Vue.prototype.$myLoading.myLoading.loading()
+
     params['page_number'] = state.ListNumber
     // console.log(params);
     return new Promise((resolve, reject) => {
       getProductList(params).then(res => {
         commit('SET_LIST_DATA', res.result.list)
-        commit('SET_PAGE_COUNT', res.result.list.length)
+        commit('SET_PAGE_COUNT', res.result.count)
+        Vue.prototype.$myLoading.myLoading.closeLoading()
         resolve()
       }).catch(err => {
+        Vue.prototype.$myLoading.myLoading.closeLoading()
         reject(err)
       })
+
+
     })
   },
   deleteProduct ({ state }, id) {

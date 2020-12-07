@@ -7,11 +7,11 @@
       >添加商品</el-button>
       <div style="float:right">
         <el-select
-          v-model="params.category_id"
+          v-model="params.categoryId"
           placeholder="请选择"
         >
           <el-option
-            value=""
+            :value="null"
             label="分类：全部"
           ></el-option>
           <el-option
@@ -29,19 +29,21 @@
           style="width:150px"
         >
           <el-option
-            value=""
+            :value="null"
             label="上下架：全部"
           ></el-option>
           <el-option
-            v-for="item in isOptions"
-            :key="item.value"
-            :label="'上下架：'+item.label"
-            :value="item.value"
-          >
-          </el-option>
+            :value="true"
+            label="上架"
+          ></el-option>
+          <el-option
+            :value="false"
+            label="下架"
+          ></el-option>
+
         </el-select>
         <el-select
-          v-model="params.is_recommend"
+          v-model="params.isRecommend"
           placeholder="请选择"
           style="width:150px"
         >
@@ -60,7 +62,7 @@
           style="width:150px"
         >
           <el-option
-            value=""
+            :value="null"
             label="新品：全部"
           ></el-option>
           <el-option
@@ -77,7 +79,7 @@
           style="width:150px"
         >
           <el-option
-            value=""
+            :value="null"
             label="热卖：全部"
           ></el-option>
           <el-option
@@ -89,7 +91,7 @@
           </el-option>
         </el-select>
         <el-input
-          v-model="params.search_keyword"
+          v-model="params.searchKeyword"
           style="width:150px"
           placeholder="搜索关键词"
         ></el-input>
@@ -121,7 +123,7 @@
 
               <el-image
                 style="width: 50px; height: 50px;"
-                :src="scope.row.pic_url"
+                :src="scope.row.pic_url+'?imageView2/1/w/50/h/50/q/75'"
               >
               </el-image>
               <div style="padding:5px">
@@ -326,7 +328,7 @@
           icon="el-icon-arrow-left"
           @click="handlePage(-1)"
         >上一页</el-button>
-        <el-button>{{ listNumber }}/{{pageCount}}</el-button>
+        <el-button>{{ listNumber }}/{{Math.ceil(pageCount/params.limit)}}</el-button>
         <el-button
           type="primary"
           icon="el-icon-arrow-right"
@@ -346,7 +348,7 @@ export default {
     return {
       multipleSelection: [],
       options: [{
-        value: '',
+        value: null,
         label: '是否推荐：全部'
       }, {
         value: '1',
@@ -356,21 +358,22 @@ export default {
         label: '仅不推荐'
       }],
       isOptions: [{
-        value: '1',
+        value: true,
         label: '是'
       }, {
-        value: '0',
+        value: false,
         label: '否'
       }],
       params: {
-        category_id: '',
-        is_recommend: '',
-        search_keyword: '',
-        isSelling: '',
-        isNew: '',
-        isHot: '',
+        categoryId: null,
+        isRecommend: null,
+        searchKeyword: '',
+        isSelling: null,
+        isNew: null,
+        isHot: null,
         offset: 0,
-        limit: 20
+        limit: 20,
+        requireCount: true
       },
       newParams: {
         offset: 0,
@@ -398,13 +401,19 @@ export default {
   },
   methods: {
     load () {
+      // this.$myLoading.myLoading.loading()
       this.$store.commit('product/SET_LIST_NUMBER', 1)
       this.$store.dispatch('product/getList', this.newParams)
+      this.$myLoading.myLoading.closeLoading()
     },
     change () {
+      this.$myLoading.myLoading.loading()
+
       this.newParams = Object.assign({}, this.params)
       this.$store.commit('product/SET_LIST_NUMBER', 1)
       this.$store.dispatch('product/getList', this.newParams)
+      this.$myLoading.myLoading.closeLoading()
+
     },
 
     toggleSelection (rows) {
@@ -417,17 +426,15 @@ export default {
       }
     },
     handlePage (page) {
-
-      // if (this.listNumber + page < 1 || this.listNumber + page > this.pageCount) {
-      //   return false
-      // }
-      this.$store.commit('product/SET_LIST_NUMBER', this.listNumber + page)
-      this.newParams.offset = this.listNumber * this.newParams.limit
-      if (this.listNumber === 1) {
-        this.newParams.offset = 0
+      if ((this.listNumber + page) <= 0 || (this.listNumber + page) > Math.ceil(this.pageCount / this.params.limit)) {
+        return false
       }
-      this.$store.dispatch('product/getList', this.newParams)
+      this.$myLoading.myLoading.loading()
+      this.$store.commit('product/SET_LIST_NUMBER', this.listNumber + page)
+      this.newParams.offset = (this.listNumber - 1) * this.newParams.limit
 
+      this.$store.dispatch('product/getList', this.newParams)
+      this.$myLoading.myLoading.closeLoading()
     },
     handleSort (index, row, pos) {
       // eslint-disable-next-line no-unused-vars
