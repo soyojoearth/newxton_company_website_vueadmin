@@ -373,9 +373,12 @@ export default {
         isHot: null,
         offset: 0,
         limit: 20,
-        requireCount: true
+        requireCount: true,
+        isTrash: false
+
       },
       newParams: {
+        isTrash: false,
         offset: 0,
         limit: 20
       }
