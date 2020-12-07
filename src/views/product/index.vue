@@ -351,10 +351,10 @@ export default {
         value: null,
         label: '是否推荐：全部'
       }, {
-        value: '1',
+        value: true,
         label: '仅含推荐'
       }, {
-        value: '0',
+        value: false,
         label: '仅不推荐'
       }],
       isOptions: [{
