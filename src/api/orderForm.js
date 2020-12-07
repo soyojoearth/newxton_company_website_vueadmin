@@ -54,3 +54,11 @@ export function orderUpdateDelivery(data) {
   })
 }
 
+// 显示配送区域列表
+export function getDeliveryList(data) {
+  return requestJSON({
+    url: '/api/order_form/delivery_region/list',
+    method: 'post',
+    data
+  })
+}

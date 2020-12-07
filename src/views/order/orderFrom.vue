@@ -60,25 +60,22 @@
                 :value="item.value"
               />
             </el-select>
-            <el-button type="primary" @click="searchAction">筛选</el-button>
+            <el-button type="primary" @click="searchDate">筛选</el-button>
           </el-col>
         </el-row>
         <el-card style="margin:10px 10px">
           <el-row style="font-weight:800;">
-            <el-col :span="1">
-              <el-checkbox v-model="allChecked" @change="allCheckedAction" disabled/>
-            </el-col>
             <el-col :span="4" :offset="1">
               <span>商品信息</span>
             </el-col>
             <el-col :span="2">
               <span>商品清单</span>
             </el-col>
-            <el-col :span="2">
+            <el-col :span="3">
               <span>订单总金额</span>
             </el-col>
             <el-col :span="2">
-              <span>买家</span>
+              <span>收货人</span>
             </el-col>
             <el-col :span="4">
               <span>收货信息</span>
@@ -94,91 +91,77 @@
             </el-col>
           </el-row>
         </el-card>
-        <div style="overflow: auto;max-height: 450px">
-          <el-card v-for="item in listData" style="margin:10px 10px 0 10px;min-height: 100px">
-            <el-row>
-              <el-col :span="4" style="margin-left: 10px">
-                <span>下单时间：{{ item.datelineCreateReadable }}</span>
-              </el-col>
-              <el-col :span="6">
-                <span>订单编号：{{ item.serialNum }}</span>
-              </el-col>
-              <el-divider />
-            </el-row>
-            <el-row style="margin:10px 10px 0 0" type="flex" align="middle">
-              <el-col :span="1">
-                <el-checkbox v-model="item.rowChecked" @change="rowCheckedAction(item)"/>
-              </el-col>
-
-              <el-col :span="6">
-                <el-row v-for="itm in item.orderFormProductList">
-                  <el-col :span="20">
-                    <el-row type="flex" align="middle">
-                      <el-col :span="6" :offset="1">
-                        <el-image :src="itm.picUrl" class="brandImg" />
-                      </el-col>
-                      <el-col :span="18" :offset="1">
-                        <div>
-                          {{ itm.productName }}{{itm.picUrl}}
-                        </div>
-                        <div>
-                          <span>规格：</span>
-                          <span v-for="itmi in itm.productSku"> {{ itmi.skuKeyName }}/{{ itmi.skuValueName }}</span>
-                        </div>
-                      </el-col>
-                    </el-row>
-                  </el-col>
-                  <el-col :span="4">
-                    <el-row type="flex" align="middle">
-                      <!--                <el-divider direction="vertical"></el-divider>-->
-                      <span>¥{{ itm.productPrice }}</span>
-                      <span>/件</span>
-                    </el-row>
-                  </el-col>
-                </el-row>
-              </el-col>
-              <el-col :span="3">
-                <el-row style="text-align: center">¥{{ item.amountFinally }}</el-row>
-                <el-row style="text-align: center">（运费：¥{{ item.deliveryCost }}）</el-row>
-                <el-row style="text-align: center">支付方式：无</el-row>
-                <el-row style="text-align: center">成交终端：{{ item.dealPlatform }}</el-row>
-              </el-col>
-              <el-col :span="2">
-                <el-row style="text-align: center">{{ item.deliveryPerson }}</el-row>
-              </el-col>
-              <el-col :span="4">
-                <el-row style="text-align: left">{{ item.deliveryPerson }}</el-row>
-                <el-row style="text-align: left">电话：{{ item.deliveryPhone }}</el-row>
-                <el-row style="text-align: left">地址：{{ item.deliveryAddress }}</el-row>
-              </el-col>
-              <el-col :span="2">
-                <el-row style="text-align: center">{{ item.deliveryConfigName }}</el-row>
-              </el-col>
-              <el-col :span="2">
-                <el-row style="text-align: center">{{ item.paid? '已付款' : '未付款' }}</el-row>
-                <el-row style="text-align: center">{{ item.delivery? '已发货' : '未发货' }}</el-row>
-                <el-row style="text-align: center">{{ item.done? '已完成' : '未完成' }}</el-row>
-              </el-col>
-              <el-col :span="2">
-                <el-button type="text" @click="showDetail(item)">查看详情</el-button>
-              </el-col>
-            </el-row>
-          </el-card>
-          <el-card style="margin:10px 10px 0 10px;min-height: 100px">
-            <el-row>
-              <el-col :offset="8">
-                <el-button type="primary" icon="el-icon-arrow-left" @click="handlePage(-1)">上一页</el-button>
-                <el-button>{{ searchBean.offset }} / {{ pageCount }}</el-button>
-                <el-button type="primary" icon="el-icon-arrow-right" @click="handlePage(1)">下一页</el-button>
-              </el-col>
-            </el-row>
-          </el-card>
-        </div>
-        <el-row style="margin-top: 10px">
-          <el-col :span="2">
-            <el-button type="primary">选中导出Excel数据</el-button>
+        <el-card v-for="item in listData" style="margin:10px 10px 0 10px;min-height: 100px">
+          <el-row>
+            <el-col :span="4" style="margin-left: 10px">
+              <span>下单时间：{{ item.datelineCreateReadable }}</span>
+            </el-col>
+            <el-col :span="6">
+              <span>订单编号：{{ item.serialNum }}</span>
+            </el-col>
+            <el-divider />
+          </el-row>
+          <el-row style="margin:10px 10px 0 0" type="flex" align="middle">
+            <el-col :span="6">
+              <el-row v-for="itm in item.orderFormProductList">
+                <el-col :span="20">
+                  <el-row type="flex" align="middle">
+                    <el-col :span="6" :offset="1">
+                      <el-image :src="itm.picUrl" class="brandImg" />
+                    </el-col>
+                    <el-col :span="18" :offset="1">
+                      <div>
+                        {{ itm.productName }}{{itm.picUrl}}
+                      </div>
+                      <div>
+                        <span>规格：</span>
+                        <span v-for="itmi in itm.productSku"> {{ itmi.skuKeyName }}/{{ itmi.skuValueName }}</span>
+                      </div>
+                    </el-col>
+                  </el-row>
+                </el-col>
+                <el-col :span="4">
+                  <el-row type="flex" align="middle">
+                    <!--                <el-divider direction="vertical"></el-divider>-->
+                    <span>¥{{ itm.productPrice }}</span>
+                    <span>/件</span>
+                  </el-row>
+                </el-col>
+              </el-row>
+            </el-col>
+            <el-col :span="3">
+              <el-row style="text-align: center">¥{{ item.amountFinally }}</el-row>
+              <el-row style="text-align: center">（运费：¥{{ item.deliveryCost }}）</el-row>
+              <el-row style="text-align: center">支付方式：无</el-row>
+              <el-row style="text-align: center">成交终端：{{ item.dealPlatform }}</el-row>
+            </el-col>
+            <el-col :span="3">
+              <el-row style="text-align: center">{{ item.deliveryPerson }}</el-row>
+            </el-col>
+            <el-col :span="4">
+              <el-row style="text-align: left">{{ item.deliveryPerson }}</el-row>
+              <el-row style="text-align: left">电话：{{ item.deliveryPhone }}</el-row>
+              <el-row style="text-align: left">地址：{{ item.deliveryCountry }}{{ item.deliveryProvince }}{{ item.deliveryCity }}{{ item.deliveryAddress }}</el-row>
+            </el-col>
+            <el-col :span="2">
+              <el-row style="text-align: center">{{ item.deliveryConfigName }}</el-row>
+            </el-col>
+            <el-col :span="2">
+              <el-row style="text-align: center">{{ item.paid? '已付款' : '未付款' }}</el-row>
+              <el-row style="text-align: center">{{ item.delivery? '已发货' : '未发货' }}</el-row>
+              <el-row style="text-align: center">{{ item.done? '已完成' : '未完成' }}</el-row>
+            </el-col>
+            <el-col :span="2">
+              <el-button type="text" @click="showDetail(item)">查看详情</el-button>
+            </el-col>
+          </el-row>
+        </el-card>
+        <el-row style="margin-top:20px">
+          <el-col :offset="18">
+            <el-button type="primary" icon="el-icon-arrow-left" @click="handlePage(-1)">上一页</el-button>
+            <el-button>{{ searchBean.offset }} / {{ pageCount }}</el-button>
+            <el-button type="primary" icon="el-icon-arrow-right" @click="handlePage(1)">下一页</el-button>
           </el-col>
-
         </el-row>
       </el-card>
     </div>
@@ -215,7 +198,7 @@
             订单编号：{{ detailData.serialNum }}
           </el-col>
           <el-col :span="4" :offset="2">
-            会员ID：{{ detailData.userId }}
+            会员ID：{{ detailData.username }}
           </el-col>
         </el-row>
         <el-row style="margin-top: 10px">
@@ -248,7 +231,7 @@
         </el-row>
         <el-row style="margin-top: 10px">
           <el-col :offset="1">
-            收货地址：{{ detailData.deliveryAddress }}
+            收货地址：{{detailData.deliveryCountry}}{{detailData.deliveryProvince}}{{detailData.deliveryCity}}{{ detailData.deliveryAddress }}
           </el-col>
         </el-row>
         <el-row style="margin-top: 10px">
@@ -293,10 +276,10 @@
               </el-table-column>
               <el-table-column prop="" label="成交价">
                 <template slot-scope="scope">
-                  <span>￥{{ scope.row.productPriceDeal }} </span>
+                  <span>￥{{ scope.row.productPriceDeal - scope.row.manualPriceDiscount }} </span>
                 </template>
               </el-table-column>
-              <el-table-column prop="" label="金额小计">
+              <el-table-column prop="" label="付款价">
                 <template slot-scope="scope">
                   <span>￥{{ scope.row.productPriceDeal }} </span>
                 </template>
@@ -323,13 +306,13 @@
             总计: {{ detailData.amountInitial }}
           </el-col>
           <el-col :span="4" :offset="2">
-            运费： {{ detailData.deliveryCost }}
+            运费： {{ detailData.deliveryCost + detailData.manualDeliveryCostDiscount }}
           </el-col>
           <el-col :span="4" :offset="2">
             运费调整： {{ detailData.manualDeliveryCostDiscount }}
           </el-col>
           <el-col :span="4" :offset="2">
-            价格调整:  {{ detailData.amountDiscount }}
+            价格调整:  {{ detailData.manualPriceDiscount }}
           </el-col>
         </el-row>
         <el-row style="margin-top: 10px">
@@ -465,15 +448,24 @@
             <el-input v-model="addressParam.deliveryPostcode" style="width: 200px" :controls="false" />
           </el-form-item>
           <el-form-item label="国家" prop="">
-            <el-select placeholder="- 选择国家（不选不改） -" disabled>
+            <el-select v-model="addressParam.deliveryCountry" placeholder="- 选择国家（不选不改） -" clearable @change="getProvinceList">
+              <el-option v-for="item in countryList" :key="item.id" :label="item.regionName" :value="item.id">
+                {{ item.regionName }}
+              </el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="省份" prop="">
-            <el-select placeholder="- 选择省份（不选不改） -" disabled>
+            <el-select  v-model="addressParam.deliveryProvince" placeholder="- 选择省份（不选不改） -" clearable @change="getCityList">
+              <el-option v-for="item in provinceList" :key="item.id" :label="item.regionName" :value="item.id">
+                {{ item.regionName }}
+              </el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="城市" prop="">
-            <el-select placeholder="- 选择城市（不选不改） -" disabled>
+            <el-select  v-model="addressParam.deliveryCity" placeholder="- 选择城市（不选不改） -" clearable>
+              <el-option v-for="item in cityList" :key="item.id" :label="item.regionName" :value="item.id">
+                {{ item.regionName }}
+              </el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="地址" prop="deliveryAddress">
@@ -484,7 +476,10 @@
             <el-input v-model="addressParam.deliveryRemark" style="width: 200px" :controls="false" />
           </el-form-item>
           <el-form-item label="配送方式" prop="">
-            <el-select disabled placeholder="- 选择运费模板（不选不改） -">
+            <el-select v-model="addressParam.deliveryConfigId" placeholder="- 选择运费模板（不选不改） -" clearable>
+              <el-option v-for="item in $store.state.orderForm.freightList" :key="item.id" :label="item.name" :value="item.id">
+                {{ item.name }}
+              </el-option>
             </el-select>
           </el-form-item>
         </el-form>
@@ -513,7 +508,7 @@
           </el-row>
           <el-row style="margin-top: 10px">
             <el-col :span="4" :offset="1">
-              会员ID：{{ detailData.userId }}
+              会员ID：{{ detailData.username }}
             </el-col>
             <el-col :span="4" :offset="1">
               成交平台：{{ detailData.dealPlatform }}
@@ -543,7 +538,7 @@
           </el-row>
           <el-row style="margin-top: 10px">
             <el-col :offset="1">
-              收货地址：{{ detailData.deliveryAddress }}
+              收货地址：{{ detailData.deliveryCountry }}{{ detailData.deliveryProvince }}{{ detailData.deliveryCity }}{{ detailData.deliveryAddress }}
             </el-col>
           </el-row>
           <el-row style="margin-top: 10px">
@@ -588,10 +583,10 @@
                 </el-table-column>
                 <el-table-column prop="" label="成交价" width="90px">
                   <template slot-scope="scope">
-                    <span>￥{{ scope.row.productPriceDeal }} </span>
+                    <span>￥{{ scope.row.productPriceDeal - scope.row.manualPriceDiscount }} </span>
                   </template>
                 </el-table-column>
-                <el-table-column prop="" label="金额小计" width="90px">
+                <el-table-column prop="" label="付款价" width="90px">
                   <template slot-scope="scope">
                     <span>￥{{ scope.row.productPriceDeal }} </span>
                   </template>
@@ -616,13 +611,13 @@
               总计: {{ detailData.amountInitial }}
             </el-col>
             <el-col :span="4" :offset="2">
-              运费： {{ detailData.deliveryCost }}
+              运费： {{ detailData.deliveryCost + detailData.manualDeliveryCostDiscount }}
             </el-col>
             <el-col :span="4" :offset="2">
               运费调整： {{ detailData.manualDeliveryCostDiscount }}
             </el-col>
             <el-col :span="4" :offset="2">
-              价格调整:  {{ detailData.amountDiscount }}
+              价格调整:  {{ detailData.manualPriceDiscount }}
             </el-col>
           </el-row>
           <el-row style="margin-top: 10px">
@@ -749,9 +744,6 @@ export default {
       listData: [],
       pageCount: 0,
       showPage: 'homePage',
-      allChecked: false,
-      allCheckedId: [],
-      rowChecked: false,
       detailData: {},
       priceParam: {},
       priceDialog: false,
@@ -765,6 +757,9 @@ export default {
         deliverySerialNum: [{ required: true, trigger: 'blur', validator: validateDeliverySerialNum }]
       },
       addressParam: {},
+      countryList: [],
+      provinceList: [],
+      cityList: [],
       addressDialog: false,
       addressParamRules: {
         deliveryPerson: [{ required: true, trigger: 'blur', validator: validateDeliveryPerson }],
@@ -783,28 +778,12 @@ export default {
     this.searchDate()
     this.$store.dispatch('delivery/getDeliveryCompanyList')
     this.$store.dispatch('delivery/getDeliveryConfigList')
+    this.$store.dispatch('orderForm/getFreightList')
+    this.getCountryList()
   },
   methods: {
     searchDate() {
-      this.$store.dispatch('orderForm/searchListData', this.searchBean).then(() => {
-        this.listData = this.$store.state.orderForm.listData
-        this.pageCount = this.$store.state.orderForm.countData
-        console.log(this.allCheckedId)
-        if (this.allCheckedId != null && this.allCheckedId.length > 0) {
-          if (this.listData != null && this.listData.length > 0) {
-            for (const i in this.listData) {
-              for (const j in this.allCheckedId) {
-                if (this.listData[i].id === this.allCheckedId[j]) {
-                  this.$set(this.listData[i], 'rowChecked', false)
-                }
-              }
-            }
-          }
-        }
-      })
-    },
-    // 筛选操作
-    searchAction() {
+      this.$myLoading.myLoading.loading()
       if (this.starDate != null) {
         this.searchBean.datelineBegin = this.dateFormat('YYYY-mm-dd', this.starDate)
       } else {
@@ -815,7 +794,12 @@ export default {
       } else {
         this.searchBean.datelineEnd = null
       }
-      this.searchDate()
+      this.$store.dispatch('orderForm/searchListData', this.searchBean).then(() => {
+        this.listData = this.$store.state.orderForm.listData
+        this.pageCount = this.$store.state.orderForm.countData
+        const that = this
+        that.$myLoading.myLoading.closeLoading()
+      })
     },
     // 日期格式
     dateFormat(fmt, date) {
@@ -844,49 +828,6 @@ export default {
       this.searchBean.offset = this.searchBean.offset + page
       this.searchDate()
     },
-    allCheckedAction() {
-      this.allCheckedId = []
-      if (this.allChecked) {
-        if (this.listData != null && this.listData.length > 0) {
-          for (const i in this.listData) {
-            this.$set(this.listData[i], 'rowChecked', true)
-            this.rowCheckedAction(this.listData[i])
-          }
-        }
-      } else {
-        if (this.listData != null && this.listData.length > 0) {
-          for (const i in this.listData) {
-            this.$set(this.listData[i], 'rowChecked', false)
-          }
-        }
-      }
-    },
-    rowCheckedAction(data) {
-      const newCheckData = []
-      if (!data.rowChecked) {
-        this.allChecked = false
-        if (this.allCheckedId != null && this.allCheckedId.length > 0) {
-          for (const i in this.allCheckedId) {
-            if (this.allCheckedId[i] !== data.id) {
-              newCheckData.push(this.allCheckedId[i])
-            }
-          }
-          this.allCheckedId = newCheckData
-        } else {
-          this.allCheckedId.push(data.id)
-        }
-      } else {
-        if (this.allCheckedId != null && this.allCheckedId.length > 0) {
-          for (const i in this.allCheckedId) {
-            if (this.allCheckedId[i] !== data.id) {
-              this.allCheckedId.push(data.id)
-            }
-          }
-        } else {
-          this.allCheckedId.push(data.id)
-        }
-      }
-    },
     showDetail(data) {
       this.showDetailInterface(data.id)
       this.showPage = 'editorPage'
@@ -894,7 +835,17 @@ export default {
     showDetailInterface(id) {
       this.$store.dispatch('orderForm/searchDetailData', { id: id }).then(() => {
         this.detailData = this.$store.state.orderForm.detailData
-        console.log(this.detailData)
+        let manualPriceDiscount = 0.00
+        if (this.detailData != null) {
+          const orderFormProductList = this.detailData.orderFormProductList
+          if (orderFormProductList != null && orderFormProductList.length > 0) {
+            for (const i in orderFormProductList) {
+              manualPriceDiscount = manualPriceDiscount + orderFormProductList[i].manualPriceDiscount
+            }
+          }
+        }
+        manualPriceDiscount = manualPriceDiscount.toFixed(2)
+        this.detailData.manualPriceDiscount = manualPriceDiscount
       })
     },
     showListPag() {
@@ -921,6 +872,40 @@ export default {
       this.$set(this.addressParam, 'deliveryConfigId', null)
       this.addressDialog = true
       this.resetForm('addressRef')
+    },
+    getDeliveryList(data, dataList) {
+      const searchDate = {
+        parentId: data
+      }
+      this.$store.dispatch('orderForm/getDeliveryList', searchDate).then(() => {
+        dataList = this.$store.state.orderForm.deliveryList
+      })
+    },
+    getCountryList() {
+      this.countryList = []
+      this.$store.dispatch('orderForm/getDeliveryList', { parentId: 0 }).then(() => {
+        this.countryList = this.$store.state.orderForm.deliveryList
+      })
+    },
+    getProvinceList() {
+      this.provinceList = []
+      this.cityList = []
+      this.addressParam.deliveryProvince = null
+      this.addressParam.deliveryCity = null
+      if (this.addressParam.deliveryCountry != null && this.addressParam.deliveryCountry !== '') {
+        this.$store.dispatch('orderForm/getDeliveryList', { parentId: this.addressParam.deliveryCountry }).then(() => {
+          this.provinceList = this.$store.state.orderForm.deliveryList
+        })
+      }
+    },
+    getCityList() {
+      this.cityList = []
+      this.addressParam.deliveryCity = null
+      if (this.addressParam.deliveryProvince != null && this.addressParam.deliveryProvince !== '') {
+        this.$store.dispatch('orderForm/getDeliveryList', { parentId: this.addressParam.deliveryProvince }).then(() => {
+          this.cityList = this.$store.state.orderForm.deliveryList
+        })
+      }
     },
     saveAddress() {
       this.$refs.addressRef.validate(valid => {
@@ -955,6 +940,9 @@ export default {
         this.priceParam.manualDeliveryCostDiscount = data.manualDeliveryCostDiscount
       }
       this.$set(this.priceParam, 'manualAmountDiscount', 0)
+      if (data.manualPriceDiscount != null) {
+        this.$set(this.priceParam, 'manualAmountDiscount', data.manualPriceDiscount)
+      }
       this.priceDialog = true
     },
     deliveryAction(id) {

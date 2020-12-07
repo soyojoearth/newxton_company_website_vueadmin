@@ -53,6 +53,11 @@ module.exports = {
         // target: 'http://127.0.0.1:8080',
         target: 'https://dev.nxtframework.com',
         changeOrigin: true
+      },
+      '/api/order_form': {
+        // target: 'http://127.0.0.1:8080',
+        target: 'https://dev.nxtframework.com',
+        changeOrigin: true
       }
     }
   },
