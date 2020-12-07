@@ -4,9 +4,42 @@
       <el-button
         type="primary"
         @click="handleCreate"
-      >创建</el-button>
+      >添加商品</el-button>
       <div style="float:right">
-        是否推荐
+        <el-select
+          v-model="params.category_id"
+          placeholder="请选择"
+        >
+          <el-option
+            value=""
+            label="分类：全部"
+          ></el-option>
+          <el-option
+            v-for="item in category_list"
+            :key="item.category_id"
+            :label="item.category_name_display"
+            :value="item.category_id"
+          >
+          </el-option>
+        </el-select>
+
+        <el-select
+          v-model="params.isSelling"
+          placeholder="请选择"
+          style="width:150px"
+        >
+          <el-option
+            value=""
+            label="上下架：全部"
+          ></el-option>
+          <el-option
+            v-for="item in isOptions"
+            :key="item.value"
+            :label="'上下架：'+item.label"
+            :value="item.value"
+          >
+          </el-option>
+        </el-select>
         <el-select
           v-model="params.is_recommend"
           placeholder="请选择"
@@ -20,20 +53,38 @@
           >
           </el-option>
         </el-select>
-        类别
+
         <el-select
-          v-model="params.category_id"
+          v-model="params.isNew"
           placeholder="请选择"
+          style="width:150px"
         >
           <el-option
             value=""
-            label="全部"
+            label="新品：全部"
           ></el-option>
           <el-option
-            v-for="item in category_list"
-            :key="item.category_id"
-            :label="item.category_name_display"
-            :value="item.category_id"
+            v-for="item in isOptions"
+            :key="item.value"
+            :label="'新品：'+item.label"
+            :value="item.value"
+          >
+          </el-option>
+        </el-select>
+        <el-select
+          v-model="params.isHot"
+          placeholder="请选择"
+          style="width:150px"
+        >
+          <el-option
+            value=""
+            label="热卖：全部"
+          ></el-option>
+          <el-option
+            v-for="item in isOptions"
+            :key="item.value"
+            :label="'热卖：'+item.label"
+            :value="item.value"
           >
           </el-option>
         </el-select>
@@ -61,19 +112,102 @@
         <el-table-column type="selection" />
         <el-table-column
           prop="productName"
-          label="产品名称"
+          label="货品信息"
+          width="200"
+        >
+
+          <template slot-scope="scope">
+            <div style="display:flex;align-items: center;">
+
+              <el-image
+                style="width: 50px; height: 50px;"
+                :src="scope.row.pic_url"
+              >
+              </el-image>
+              <div style="padding:5px">
+                {{ scope.row.productName }}
+                </br>
+                货号：{{ scope.row.itemNo }}
+                </br>
+                分类：{{ scope.row.categoryName }}
+              </div>
+            </div>
+
+          </template>
+
+        </el-table-column>
+        <el-table-column
+          prop="priceMarket"
+          label="原价"
+          show-overflow-tooltip
         />
         <el-table-column
+          prop="priceSelling"
+          label="现价"
+          show-overflow-tooltip
+        />
+        <el-table-column
+          prop="inventoryQuantity"
+          label="库存"
+          show-overflow-tooltip
+        />
+        <el-table-column
+          prop="salsCount"
+          label="销量"
+          show-overflow-tooltip
+        />
+        <el-table-column
+          prop="datelineUpdatedReadable"
+          label="上次修改时间"
+          show-overflow-tooltip
+        />
+        <el-table-column
+          label="标签"
+          width="200"
+        >
+          <template slot-scope="scope">
+            上架
+            <el-switch
+              v-model="scope.row.isSelling"
+              :active-value="1"
+              :inactive-value="0"
+              @change="changeIsSelling(scope.$index, scope.row)"
+            /> 新品
+            <el-switch
+              v-model="scope.row.isNew"
+              :active-value="1"
+              :inactive-value="0"
+              @change="changeIsNew(scope.$index, scope.row)"
+            />
+            </br>
+            推荐
+            <el-switch
+              v-model="scope.row.isRecommend"
+              :active-value="1"
+              :inactive-value="0"
+              @change="changeRecommend(scope.$index, scope.row)"
+            />
+            热卖
+            <el-switch
+              v-model="scope.row.isHot"
+              :active-value="1"
+              :inactive-value="0"
+              @change="changeIsHot(scope.$index, scope.row)"
+            />
+          </template>
+        </el-table-column>
+        <!-- <el-table-column
           prop="categoryName"
           label="类型"
           show-overflow-tooltip
         />
         <el-table-column label="日期">
           <template slot-scope="scope">{{ scope.row.datelineCreateReadable }}</template>
-        </el-table-column>
+        </el-table-column> -->
         <el-table-column
           align="right"
           width="80"
+          label="排序"
         >
           <template slot-scope="scope">
             <el-col>
@@ -89,7 +223,7 @@
           </template>
         </el-table-column>
 
-        <el-table-column
+        <!-- <el-table-column
           label="推荐"
           align="right"
           width="70"
@@ -144,18 +278,27 @@
               @change="changeIsSelling(scope.$index, scope.row)"
             />
           </template>
-        </el-table-column>
+        </el-table-column> -->
 
         <el-table-column
-          label=""
+          label="操作"
           align="right"
-          width="80"
+          width="200"
         >
           <template slot-scope="scope">
             <el-button
               size="mini"
+              type="text"
               @click="handleEdit(scope.$index, scope.row)"
-            >编辑</el-button>
+            >编辑 </el-button>
+            <el-button
+              size="mini"
+              type="text"
+            >查看 </el-button>
+            <el-button
+              type="text"
+              size="mini"
+            >评论管理 </el-button>
           </template>
         </el-table-column>
 
@@ -172,7 +315,7 @@
           type="danger"
           icon="el-icon-delete"
           @click="handleDelete"
-        >删除</el-button>
+        >放入回收站</el-button>
       </el-col>
       <el-col
         :span="12"
@@ -197,14 +340,14 @@
 <script>
 import { Message } from 'element-ui'
 import { mapState } from 'vuex'
-
+import { set_trash } from '@/api/product'
 export default {
   data () {
     return {
       multipleSelection: [],
       options: [{
         value: '',
-        label: '全部'
+        label: '是否推荐：全部'
       }, {
         value: '1',
         label: '仅含推荐'
@@ -212,13 +355,26 @@ export default {
         value: '0',
         label: '仅不推荐'
       }],
+      isOptions: [{
+        value: '1',
+        label: '是'
+      }, {
+        value: '0',
+        label: '否'
+      }],
       params: {
         category_id: '',
         is_recommend: '',
-        search_keyword: ''
+        search_keyword: '',
+        isSelling: '',
+        isNew: '',
+        isHot: '',
+        offset: 0,
+        limit: 20
       },
       newParams: {
-
+        offset: 0,
+        limit: 20
       }
     }
   },
@@ -261,11 +417,15 @@ export default {
       }
     },
     handlePage (page) {
-      if (this.listNumber + page < 1 || this.listNumber + page > this.pageCount) {
-        return false
-      }
+
+      // if (this.listNumber + page < 1 || this.listNumber + page > this.pageCount) {
+      //   return false
+      // }
       this.$store.commit('product/SET_LIST_NUMBER', this.listNumber + page)
-      console.log(this.newParams);
+      this.newParams.offset = this.listNumber * this.newParams.limit
+      if (this.listNumber === 1) {
+        this.newParams.offset = 0
+      }
       this.$store.dispatch('product/getList', this.newParams)
 
     },
@@ -288,17 +448,34 @@ export default {
       this.multipleSelection = val
     },
     async handleDelete () {
-      console.log(this.multipleSelection)
+      var listData = []
       const items = this.multipleSelection
       for (let i = 0; i < items.length; i++) {
-        await this.$store.dispatch('product/deleteProduct', items[i].id)
+        listData.push(items[i].id)
       }
+      var form = {
+
+        isTrash: true,
+        idList: listData
+      }
+      var res = await set_trash(form)
       Message({
-        message: '删除成功！',
+        message: '放入回收站成功！',
         type: 'success',
         duration: 1000
       })
       this.load()
+      // console.log(this.multipleSelection)
+      // const items = this.multipleSelection
+      // for (let i = 0; i < items.length; i++) {
+      //   await this.$store.dispatch('product/deleteProduct', items[i].id)
+      // }
+      // Message({
+      //   message: '删除成功！',
+      //   type: 'success',
+      //   duration: 1000
+      // })
+      // this.load()
       // this.$store.dispatch('new/deleteNew', row.id)
     },
     handleEdit (index, row) {

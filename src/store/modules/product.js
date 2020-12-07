@@ -50,8 +50,8 @@ const actions = {
     // console.log(params);
     return new Promise((resolve, reject) => {
       getProductList(params).then(res => {
-        commit('SET_LIST_DATA', res.list)
-        commit('SET_PAGE_COUNT', res.page_count)
+        commit('SET_LIST_DATA', res.result.list)
+        commit('SET_PAGE_COUNT', res.result.list.length)
         resolve()
       }).catch(err => {
         reject(err)
