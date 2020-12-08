@@ -132,7 +132,6 @@
             <el-col :span="3">
               <el-row style="text-align: center">¥{{ item.amountFinally }}</el-row>
               <el-row style="text-align: center">（运费：¥{{ item.deliveryCost }}）</el-row>
-              <el-row style="text-align: center">支付方式：无</el-row>
               <el-row style="text-align: center">成交终端：{{ item.dealPlatform }}</el-row>
             </el-col>
             <el-col :span="3">
@@ -793,6 +792,15 @@ export default {
         this.searchBean.datelineEnd = this.dateFormat('YYYY-mm-dd', this.endDate)
       } else {
         this.searchBean.datelineEnd = null
+      }
+      if (this.searchBean.isPaid != null && this.searchBean.isPaid === '') {
+        this.searchBean.isPaid = null
+      }
+      if (this.searchBean.isDelivery != null && this.searchBean.isDelivery === '') {
+        this.searchBean.isDelivery = null
+      }
+      if (this.searchBean.dealPlatform != null && this.searchBean.dealPlatform === '') {
+        this.searchBean.dealPlatform = null
       }
       this.$store.dispatch('orderForm/searchListData', this.searchBean).then(() => {
         this.listData = this.$store.state.orderForm.listData
