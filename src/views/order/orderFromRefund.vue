@@ -186,7 +186,7 @@
           <el-col :span="20" style="background-color: #F5F7FA">
 <!--            <el-input v-model="" disabled type="textarea" style="width: 100%" />-->
             <div>{{detailData.orderFormRefundDetail.reasionDescription}}</div>
-            <el-image v-for="item in detailData.orderFormRefundDetail.reasonImageList" style="width: 100px; height: 100px;margin-left: 10px" :src="item" :preview-src-list="[item]" />
+            <el-image class="brandImg" v-for="item in detailData.orderFormRefundDetail.reasonImageList" style="width: 100px; height: 100px;margin-left: 10px" :src="item" :preview-src-list="[ item ]" fit="cover" />
           </el-col>
         </el-row>
         <el-divider />
@@ -275,7 +275,11 @@ export default {
       pageCount: 0,
       showPage: 'homePage',
       detailData: {},
-      approvalData: {}
+      approvalData: {},
+      srcList: [
+        'https://fuss10.elemecdn.com/8/27/f01c15bb73e1ef3793e64e6b7bbccjpeg.jpeg',
+        'https://fuss10.elemecdn.com/1/8e/aeffeb4de74e2fde4bd74fc7b4486jpeg.jpeg'
+      ]
     }
   },
   computed: {
@@ -379,5 +383,10 @@ export default {
 .brandImg {
   vertical-align: middle;
   max-height: 80px;
+}
+.bg-img1 {
+  width: 200px;
+  height: 200px;
+  background-size: contain;
 }
 </style>
