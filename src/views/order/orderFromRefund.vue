@@ -315,9 +315,11 @@ export default {
     },
     showListPag() {
       this.showPage = 'homePage'
+      this.searchDate()
     },
     showDetail(data) {
       this.detailData = {}
+      this.approvalData = {}
       this.$store.dispatch('orderFormRefund/searchDetailData', { id: data.id }).then(() => {
         this.detailData = this.$store.state.orderFormRefund.detailData
         if (this.detailData.orderFormRefundDetail.orderFormRefundProductList != null && this.detailData.orderFormRefundDetail.orderFormRefundProductList.length > 0) {
