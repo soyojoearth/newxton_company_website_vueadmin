@@ -6,60 +6,29 @@
           操作提示：
         </el-row>
         <el-row>
-          1、订单列表，可查看订单详情、费用、对应商品、发货状态、物流信息等。
+          1、用户已经付款，然后再申请“取消订单”，会出现在这里；无论有没有发货。
         </el-row>
         <el-row>
-          2、可在订单详情里面“打印订单”。
+          2、可以在这里根据情况，同意或拒绝退款申请。
         </el-row>
         <el-row>
-          3、可在订单详情里面填写发货信息，进行发货。
+          3、同意退款后，金额退到用户余额。然后用户在个人中心申请提现。
         </el-row>
       </el-card>
 
       <el-card class="operatingHints">
         <el-row style="margin-top: 10px">
           <el-col :span="18" :offset="7">
-            <el-date-picker
-              v-model="starDate"
-              type="date"
-              :picker-options="beginDateAfter"
-              format="yyyy-MM-dd"
-              placeholder="请输入开始日期"
-              :clearable="true"
-            />
-            <span class="date-in">~</span>
-            <el-date-picker
-              v-model="endDate"
-              type="date"
-              format="yyyy-MM-dd"
-              :picker-options="beginDateBefore"
-              placeholder="请输入结束时间"
-              :clearable="true"
-            />
-            <el-select v-model="searchBean.isPaid" placeholder="支付状态" :clearable="true">
+            <el-select v-model="searchBean.status" placeholder="处理状态" :clearable="true">
               <el-option
-                v-for="item in payList"
+                v-for="item in statusList"
                 :key="item.value"
                 :label="item.label"
                 :value="item.value"
               />
             </el-select>
-            <el-select v-model="searchBean.isDelivery" placeholder="发货状态" :clearable="true">
-              <el-option
-                v-for="item in deliveryList"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              />
-            </el-select>
-            <el-select v-model="searchBean.dealPlatform" placeholder="成交终端" :clearable="true">
-              <el-option
-                v-for="item in platformList"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              />
-            </el-select>
+            <el-input v-model="detailData.username" placeholder="用户名" style="width: 150px" maxlength="30"></el-input>
+            <el-input v-model="detailData.orderFormSerialNum" placeholder="订单编号" style="width: 150px" maxlength="30"></el-input>
             <el-button type="primary" @click="searchDate">筛选</el-button>
           </el-col>
         </el-row>
@@ -110,9 +79,9 @@
                       <el-image :src="itm.picUrl" class="brandImg" />
                     </el-col>
                     <el-col :span="18" :offset="1">
-                      <span>
-                        {{ itm.productName }}
-                      </span>
+                      <div>
+                        {{ itm.productName }}{{itm.picUrl}}
+                      </div>
                       <div>
                         <span>规格：</span>
                         <span v-for="itmi in itm.productSku"> {{ itmi.skuKeyName }}/{{ itmi.skuValueName }}</span>
@@ -158,7 +127,7 @@
         <el-row style="margin-top:20px">
           <el-col :offset="18">
             <el-button type="primary" icon="el-icon-arrow-left" @click="handlePage(-1)">上一页</el-button>
-            <el-button>{{ searchBean.listNumber }} / {{ pageCount }}</el-button>
+            <el-button>{{ searchBean.offset }} / {{ pageCount }}</el-button>
             <el-button type="primary" icon="el-icon-arrow-right" @click="handlePage(1)">下一页</el-button>
           </el-col>
         </el-row>
@@ -694,16 +663,30 @@ export default {
 
     return {
       searchBean: {
-        offset: 0,
-        limit: 10,
-        listNumber: 1
+        offset: 1,
+        limit: 10
       },
-      payList: [{
-        value: true,
-        label: '已支付'
+      statusList: [{
+        value: -1,
+        label: '拒绝退款'
       }, {
-        value: false,
-        label: '未支付'
+        value: 0,
+        label: '已申请'
+      }, {
+        value: 1,
+        label: '完成'
+      }, {
+        value: 2,
+        label: '等用户发货'
+      }, {
+        value: 3,
+        label: '收到货退款'
+      }, {
+        value: 4,
+        label: '收到货有问题，请修改金额'
+      }, {
+        value: 5,
+        label: '用户已寄出物品'
       }],
       deliveryList: [{
         value: true,
@@ -725,22 +708,6 @@ export default {
         value: 3,
         label: 'wx'
       }],
-      // 开始日期选中
-      starDate: new Date(new Date().getTime() - 5 * 24 * 3600 * 1000),
-      // 结束日期选中
-      endDate: new Date(),
-      // 开始日期选择限制
-      beginDateAfter: {
-        disabledDate: (time) => {
-          return time.getTime() > Date.now() || time.getTime() > this.endDate
-        }
-      },
-      // 结束日期选择限制
-      beginDateBefore: {
-        disabledDate: (time) => {
-          return time.getTime() > Date.now() || this.starDate > time.getTime()
-        }
-      },
       listData: [],
       pageCount: 0,
       showPage: 'homePage',
@@ -831,11 +798,10 @@ export default {
       return fmt
     },
     handlePage(page) {
-      if (this.searchBean.listNumber + page < 1 || this.searchBean.listNumber + page > this.pageCount) {
+      if (this.searchBean.offset + page < 1 || this.searchBean.offset + page > this.pageCount) {
         return false
       }
-      this.searchBean.listNumber = this.searchBean.listNumber + page
-      this.searchBean.offset = (this.searchBean.listNumber - 1) * this.searchBean.limit
+      this.searchBean.offset = this.searchBean.offset + page
       this.searchDate()
     },
     showDetail(data) {
