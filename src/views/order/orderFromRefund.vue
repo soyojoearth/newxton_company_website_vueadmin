@@ -127,7 +127,6 @@
         <el-row style="margin-top: 10px">
           <el-col :span="22" :offset="1">
             <el-table ref="multipleTable" :data="detailData.orderFormRefundDetail.orderFormRefundProductList" tooltip-effect="dark">
-              <el-table-column prop="orderFormProductId" label="货号" />
               <el-table-column prop="brandName" label="商品信息">
                 <template slot-scope="scope">
                   <img :src="scope.row.picUrl" class="brandImg">
@@ -184,10 +183,10 @@
           <el-col :span="1" :offset="1">
             留言：
           </el-col>
-          <el-col :span="20">
-            <el-input v-model="detailData.orderFormRefundDetail.reasionDescription" disabled type="textarea" style="width: 100%" />
-            <el-image v-for="item in detailData.orderFormRefundDetail.reasonImageList" style="width: 100px; height: 100px" :src="item" :preview-src-list="[item]">
-            </el-image>
+          <el-col :span="20" style="background-color: #F5F7FA">
+<!--            <el-input v-model="" disabled type="textarea" style="width: 100%" />-->
+            <div>{{detailData.orderFormRefundDetail.reasionDescription}}</div>
+            <el-image v-for="item in detailData.orderFormRefundDetail.reasonImageList" style="width: 100px; height: 100px;margin-left: 10px" :src="item" :preview-src-list="[item]" />
           </el-col>
         </el-row>
         <el-divider />
