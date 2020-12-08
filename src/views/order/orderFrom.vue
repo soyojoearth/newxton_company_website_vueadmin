@@ -805,7 +805,7 @@ export default {
       }
       this.$store.dispatch('orderForm/searchListData', this.searchBean).then(() => {
         this.listData = this.$store.state.orderForm.listData
-        this.pageCount = this.$store.state.orderForm.countData
+        this.pageCount = Math.ceil(this.$store.state.orderForm.countData / this.searchBean.limit)
         const that = this
         that.$myLoading.myLoading.closeLoading()
       })
