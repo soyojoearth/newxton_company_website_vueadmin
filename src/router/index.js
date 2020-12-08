@@ -235,6 +235,25 @@ export const constantRoutes = [
     ]
   },
   {
+    path: '/reviews',
+    component: Layout,
+    meta: { title: '评论管理', icon: 'product', affix: false },
+    children: [
+      {
+        path: 'reviews',
+        component: () => import('@/views/reviews/index'),
+        name: 'reviews',
+        meta: { title: '评论列表', affix: false }
+      },
+      {
+        path: 'detail/:id',
+        component: () => import('@/views/reviews/detail'),
+        name: 'reviewsDetail',
+        meta: { title: '评论详情', affix: false }
+      }
+    ]
+  },
+  {
     path: '/message',
     component: Layout,
     meta: { title: '留言管理', icon: 'message', affix: false },
