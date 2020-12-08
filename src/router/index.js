@@ -128,6 +128,12 @@ export const constantRoutes = [
         component: () => import('@/views/order/orderFrom'),
         name: 'orderFrom',
         meta: { title: '订单管理', affix: false }
+      },
+      {
+        path: 'orderFromRefund',
+        component: () => import('@/views/order/orderFromRefund'),
+        name: 'orderFromRefund',
+        meta: { title: '订单售后', affix: false }
       }
     ]
   },
