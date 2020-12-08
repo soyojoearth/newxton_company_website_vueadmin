@@ -192,9 +192,11 @@ export default {
   },
   methods: {
     async load () {
+      this.$myLoading.myLoading.loading()
       var res = await getList(this.newParams)
       this.listData = res.result.list
       this.pageCount = res.result.count
+      this.$myLoading.myLoading.closeLoading()
     },
 
 
@@ -211,17 +213,17 @@ export default {
       if ((this.listNumber + page) <= 0 || (this.listNumber + page) > Math.ceil(this.pageCount / this.params.limit)) {
         return false
       }
-      this.$myLoading.myLoading.loading()
+
       this.listNumber = this.listNumber + page
       this.newParams.offset = (this.listNumber - 1) * this.newParams.limit
       this.load()
 
-      this.$myLoading.myLoading.closeLoading()
+
     },
     change () {
-      this.$myLoading.myLoading.loading()
+
       this.load()
-      this.$myLoading.myLoading.closeLoading()
+
     },
     handleSort (index, row, pos) {
       // eslint-disable-next-line no-unused-vars

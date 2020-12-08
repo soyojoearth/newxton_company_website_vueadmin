@@ -123,10 +123,12 @@ export default {
 
   methods: {
     async getList () {
+      this.$myLoading.myLoading.loading()
       var res = await getDetail({ id: parseInt(this.id) })
       this.list = res.result
       this.form.id = res.result.id
       console.log(this.list);
+      this.$myLoading.myLoading.closeLoading()
     },
     async handleReply () {
       var res = await reply(this.form)
@@ -134,6 +136,7 @@ export default {
         this.form.content = ''
       }
       this.getList()
+
     }
   }
 }
