@@ -21,7 +21,7 @@
       <div style="float:right;line-height: 40px;">
 
         <el-input
-          v-model="params.searchKeyword"
+          v-model="newParams.productUrl"
           style="width:150px"
           placeholder="输入商品链接筛选"
         ></el-input>
@@ -169,12 +169,12 @@ export default {
       multipleSelection: [],
 
       params: {
-        searchKeyword: '',
+
         offset: 0,
         limit: 20,
       },
       newParams: {
-        isTrash: false,
+        productUrl: '',
         offset: 0,
         limit: 20
       },
@@ -216,6 +216,11 @@ export default {
       this.newParams.offset = (this.listNumber - 1) * this.newParams.limit
       this.load()
 
+      this.$myLoading.myLoading.closeLoading()
+    },
+    change () {
+      this.$myLoading.myLoading.loading()
+      this.load()
       this.$myLoading.myLoading.closeLoading()
     },
     handleSort (index, row, pos) {
