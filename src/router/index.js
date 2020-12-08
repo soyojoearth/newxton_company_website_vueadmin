@@ -253,6 +253,7 @@ export const constantRoutes = [
       },
       {
         path: 'detail/:id',
+        hidden: true,
         component: () => import('@/views/reviews/detail'),
         name: 'reviewsDetail',
         meta: { title: '评论详情', affix: false }

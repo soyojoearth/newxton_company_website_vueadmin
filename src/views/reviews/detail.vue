@@ -1,5 +1,14 @@
 <template>
   <div class="app-container">
+    <el-card style="margin:10px 0;font-size:14px;line-height:30px;">
+      <el-row style="font-weight:800;">
+        操作提示：
+      </el-row>
+      <el-row>
+        1、这个界面看上去像聊天界面，但是买家只可以追评1次，而商家管理员回复次数不受限，都会展示到对应商品详情页。
+      </el-row>
+
+    </el-card>
     <el-card shadow="never">
       <div style="padding:0 0 20px 0">
         评论回复
@@ -55,7 +64,7 @@
       >
         <div
           class="itemList"
-          :class="index%2===0?'reverse':''"
+          :class="item.originType===1?'reverse':''"
         >
           <div class="avatar">
             <el-image
@@ -66,7 +75,7 @@
           <div class="content">
             <div
               class="top"
-              :class="index%2===0?'reverse':''"
+              :class="item.originType===1?'reverse':''"
             >
               <div class="title">{{item.username}}</div>
               <div class="time">{{item.date}}</div>
@@ -121,6 +130,9 @@ export default {
     },
     async handleReply () {
       var res = await reply(this.form)
+      if (res.status == 0) {
+        this.form.content = ''
+      }
       this.getList()
     }
   }

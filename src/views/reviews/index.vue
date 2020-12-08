@@ -1,13 +1,29 @@
 <template>
   <div class="app-container">
+    <el-card style="margin:10px 0;font-size:14px;line-height:30px;">
+      <el-row style="font-weight:800;">
+        操作提示：
+      </el-row>
+      <el-row>
+        1、用户对购买的商品进行评价后，会展示在这里。默认新增的评论暂时不显示，点击“显示”立即展示在对应商品详情页。
+      </el-row>
+      <el-row>
+        2、可控制某条评价是否显示。
+      </el-row>
+      <el-row>
+        3、可以对评论进行推荐，被推荐的评论排在前面。
+      </el-row>
+    </el-card>
     <el-row>
-
-      <div style="float:right">
+      <div style="float:left;">
+        一共{{listData.length}}条评论
+      </div>
+      <div style="float:right;line-height: 40px;">
 
         <el-input
           v-model="params.searchKeyword"
           style="width:150px"
-          placeholder="搜索关键词"
+          placeholder="输入商品链接筛选"
         ></el-input>
         <el-button
           type="primary"
@@ -25,7 +41,7 @@
         style="width: 100%"
         @selection-change="handleSelectionChange"
       >
-        <el-table-column type="selection" />
+
         <el-table-column
           prop="productName"
           label="商品信息"
@@ -180,15 +196,7 @@ export default {
       this.listData = res.result.list
       this.pageCount = res.result.count
     },
-    change () {
-      this.$myLoading.myLoading.loading()
 
-      this.newParams = Object.assign({}, this.params)
-      this.$store.commit('product/SET_LIST_NUMBER', 1)
-      this.$store.dispatch('product/getList', this.newParams)
-      this.$myLoading.myLoading.closeLoading()
-
-    },
 
     toggleSelection (rows) {
       if (rows) {
