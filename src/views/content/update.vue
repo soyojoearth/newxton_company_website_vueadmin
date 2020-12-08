@@ -127,7 +127,7 @@ export default {
       this.$store.dispatch('new/updateNew', this.formLabelAlign).then(res => {
         _this.$myLoading.myLoading.closeLoading()
         if (res.status === 0) {
-          _this.$router.replace({ path: '/content/content' })
+          _this.$router.replace({ path: '/content/list' })
         }
       })
     },
