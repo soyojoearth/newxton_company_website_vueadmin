@@ -60,8 +60,6 @@
 
 <script>
 
-import defaultOptions from '@/components/MarkdownEditor/default-options'
-
 export default {
   data() {
     const levelNameDeliverySerialNum = (rule, value, callback) => {
