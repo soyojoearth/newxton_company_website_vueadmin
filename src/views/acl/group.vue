@@ -38,7 +38,7 @@
 
     <el-dialog title=""
                :visible.sync="dialogVisible"
-               width="80%">
+               width="70%">
       <el-form ref="form"
                label-position="top"
                :model="form"
@@ -75,7 +75,7 @@
 
     <el-dialog title=""
                :visible.sync="dialogVisibleCreate"
-               width="80%">
+               width="70%">
       <el-form ref="form"
                label-position="top"
                :model="form"
