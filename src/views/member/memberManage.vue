@@ -17,8 +17,12 @@
 
     <el-card class="operatingHints">
       <el-row style="margin-top: 10px">
-        <el-col :offset="9">
-          <el-input v-model="searchBean.levelNum" onkeyup="value=value.replace(/[^\d]/g,'')" placeholder="会员等级" style="width: 150px" />
+        <el-col :offset="8">
+          <el-select v-model="searchBean.levelNum" placeholder="会员等级" clearable>
+            <el-option v-for="item in $store.state.memberLevel.listData" :key="item.levelNum" :label="item.levelName" :value="item.levelNum">
+              {{ item.levelName }}
+            </el-option>
+          </el-select>
           <el-input v-model="searchBean.userId" placeholder="会员ID" style="width: 150px" />
           <el-input v-model="searchBean.username" placeholder="会员昵称" style="width: 150px" />
           <el-date-picker
@@ -204,7 +208,7 @@ export default {
       // 开始日期选择限制
       beginDateAfter: {
         disabledDate: (time) => {
-          return time.getTime() > Date.now() || time.getTime() > this.endDate
+          return time.getTime() > Date.now() || this.endDate != null ? time.getTime() > this.endDate : false
         }
       },
       // 结束日期选择限制
@@ -214,6 +218,7 @@ export default {
         }
       },
       listData: [],
+      pageCount: 0,
       memberInfoDialog: false,
       memberInfoParam: {},
       memberInfoParamRules: {},
@@ -267,7 +272,6 @@ export default {
       }
       this.$store.dispatch('memberManage/searchListData', this.searchBean).then(() => {
         this.listData = this.$store.state.memberManage.listData
-        console.log(this.listData)
         this.pageCount = Math.ceil(this.$store.state.memberManage.countData / this.searchBean.limit)
         const that = this
         that.$myLoading.myLoading.closeLoading()
@@ -304,12 +308,10 @@ export default {
     showBasicData(data) {
       this.$store.dispatch('memberManage/searchDetailData', { userId: data.userId }).then(() => {
         this.memberInfoParam = this.$store.state.memberManage.detailData
-        console.log(this.memberInfoParam)
         this.memberInfoDialog = true
       })
     },
     saveMemberInfo() {
-      console.log(this.memberInfoParam)
       if (this.memberInfoParam.levelNum != null && this.memberInfoParam.levelNum === '') {
         this.memberInfoParam.levelNum = null
       }
@@ -348,7 +350,6 @@ export default {
     showAddressDetail(data) {
       this.$store.dispatch('memberManage/getAddressList', { userId: data.userId }).then(() => {
         this.addressParam = this.$store.state.memberManage.addressData
-        console.log(this.addressParam)
         this.addressDialog = true
       })
     },
