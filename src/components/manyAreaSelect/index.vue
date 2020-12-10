@@ -53,7 +53,7 @@
         <button class="button"
                 :class="notLimitButton.notLimitDistrict ?'success':''"
                 @click="districNotLitmit({regionName:'不限',regionId:'0'})"
-                :disabled="!selectItem.city.regionName ||!selectItem.province.regionName || notLimitButton.notLimitCity ">不限地区</button>
+                :disabled="!selectItem.city.regionName ||!selectItem.province.regionName || notLimitButton.notLimitCity ">全选地区</button>
       </div>
     </div>
     <div class="trangle">
