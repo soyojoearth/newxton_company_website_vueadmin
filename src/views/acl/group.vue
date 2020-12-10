@@ -38,7 +38,7 @@
 
     <el-dialog title=""
                :visible.sync="dialogVisible"
-               width="50%">
+               width="80%">
       <el-form ref="form"
                label-position="top"
                :model="form"
@@ -52,9 +52,16 @@
         </el-form-item>
         <el-form-item label="操作权限">
           <template>
-            <el-transfer v-model="aclActionValue"
-                         :data="aclActionData"
-                         :titles="['全部操作权限', '拥有操作权限']"></el-transfer>
+            <el-checkbox :indeterminate="isIndeterminate"
+                         v-model="checkAll"
+                         @change="handleCheckAllChange">全选</el-checkbox>
+            <el-checkbox-group v-model="checkedAcl"
+                               @change="handleCheckedCitiesChange">
+              <el-checkbox v-for="city in aclActionData"
+                           :label="city.key"
+                           :key="city.key"
+                           style="width:180px">{{city.label}}</el-checkbox>
+            </el-checkbox-group>
           </template>
         </el-form-item>
       </el-form>
@@ -68,14 +75,12 @@
 
     <el-dialog title=""
                :visible.sync="dialogVisibleCreate"
-               width="50%">
-      <!-- <el-form
-        ref="form"
-        label-position="top"
-        :model="form"
-        label-width="80px"
-        status-icon
-      >
+               width="80%">
+      <el-form ref="form"
+               label-position="top"
+               :model="form"
+               label-width="80px"
+               status-icon>
         <el-form-item label="权限组名称">
           <el-input v-model="form.groupName" />
         </el-form-item>
@@ -84,14 +89,24 @@
         </el-form-item>
         <el-form-item label="操作权限">
           <template>
-            <el-transfer
+            <el-checkbox :indeterminate="isIndeterminate"
+                         v-model="checkAll"
+                         @change="handleCheckAllChange">全选</el-checkbox>
+            <el-checkbox-group v-model="checkedAcl"
+                               @change="handleCheckedCitiesChange">
+              <el-checkbox v-for="city in aclActionData"
+                           :label="city.key"
+                           :key="city.key"
+                           style="width:180px">{{city.label}}</el-checkbox>
+            </el-checkbox-group>
+            <!-- <el-transfer
               v-model="aclActionValue"
               :data="aclActionData"
               :titles="['全部权限组', '拥有权限组']"
-            ></el-transfer>
+            ></el-transfer> -->
           </template>
         </el-form-item>
-      </el-form> -->
+      </el-form>
 
       <div slot="footer"
            class="dialog-footer">
@@ -118,6 +133,7 @@
 
 <script>
 import { Message } from 'element-ui'
+const cityOptions = ['上海', '北京', '广州', '深圳'];
 export default {
   data () {
     return {
@@ -133,7 +149,12 @@ export default {
       aclActionData: [],
       aclActionValue: [],
       prepareDeleteGroupId: null,
-      prepareDeleteGroupName: null
+      prepareDeleteGroupName: null,
+      //
+      checkAll: false,
+      checkedAcl: [],
+      cities: cityOptions,
+      isIndeterminate: true
     }
   },
   computed: {
@@ -149,6 +170,21 @@ export default {
     load () {
       this.$store.dispatch('acl/getGroupList')
       this.$store.dispatch('acl/getActionList')
+    },
+    handleCheckAllChange (val) {
+      this.aclActionValue = []
+      this.aclActionData.forEach(i => {
+        this.aclActionValue.push(i.key)
+      })
+      this.checkedAcl = val ? this.aclActionValue : [];
+      // this.aclActionValue = val ? this.aclActionValue : [];
+      this.isIndeterminate = false;
+
+    },
+    handleCheckedCitiesChange (value) {
+      let checkedCount = value.length;
+      this.checkAll = checkedCount === this.aclActionData.length;
+      this.isIndeterminate = checkedCount > 0 && checkedCount < this.aclActionData.length;
     },
 
     handleCreate () {
@@ -202,12 +238,13 @@ export default {
           }
         }
         then.aclActionData = data;
-        then.aclActionValue = value;
+        then.checkedAcl = value;
         then.dialogVisible = true
       })
     },
 
     handPostData () {
+      console.log(this.checkedAcl);
       var then = this
       console.log(1);
       this.$myLoading.myLoading.loading()
@@ -215,7 +252,7 @@ export default {
         id: this.form.groupId,
         groupName: this.form.groupName,
         groupRemark: this.form.groupRemark,
-        groupActionList: this.aclActionValue
+        groupActionList: this.checkedAcl
       }).then(res => {
         then.dialogVisible = false
         then.$myLoading.myLoading.closeLoading()
@@ -229,11 +266,13 @@ export default {
     },
 
     handPostDataCreate () {
+      console.log(this.checkedAcl);
+
       var then = this
       this.$store.dispatch('acl/groupAdd', {
         groupName: this.form.groupName,
         groupRemark: this.form.groupRemark,
-        groupActionList: this.aclActionValue
+        groupActionList: this.checkedAcl
       }).then(res => {
         then.dialogVisible = false
         Message({
