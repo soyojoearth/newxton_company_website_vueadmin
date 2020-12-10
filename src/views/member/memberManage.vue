@@ -17,8 +17,12 @@
 
     <el-card class="operatingHints">
       <el-row style="margin-top: 10px">
-        <el-col :offset="9">
-          <el-input v-model="searchBean.levelNum" onkeyup="value=value.replace(/[^\d]/g,'')" placeholder="会员等级" style="width: 150px" />
+        <el-col :offset="8">
+          <el-select v-model="searchBean.levelNum" placeholder="会员等级" clearable>
+            <el-option v-for="item in $store.state.memberLevel.listData" :key="item.levelNum" :label="item.levelName" :value="item.levelNum">
+              {{ item.levelName }}
+            </el-option>
+          </el-select>
           <el-input v-model="searchBean.userId" placeholder="会员ID" style="width: 150px" />
           <el-input v-model="searchBean.username" placeholder="会员昵称" style="width: 150px" />
           <el-date-picker
@@ -204,7 +208,7 @@ export default {
       // 开始日期选择限制
       beginDateAfter: {
         disabledDate: (time) => {
-          return time.getTime() > Date.now() || time.getTime() > this.endDate
+          return time.getTime() > Date.now() || this.endDate != null ? time.getTime() > this.endDate : false
         }
       },
       // 结束日期选择限制
