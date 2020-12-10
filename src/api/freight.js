@@ -38,6 +38,16 @@ export function deleteFreight (data) {
 export function getAreaList (data) {
   return requestJSON({
     url: '/api/admin/delivery_region/list',
+    // url: '/api/delivery_region/tree',
+
+    method: 'post',
+    data
+  })
+}
+//获取地区/api/admin/delivery_region/list
+export function getAreaTree (data) {
+  return requestJSON({
+    url: '/api/delivery_region/tree',
     method: 'post',
     data
   })

@@ -2,7 +2,7 @@
 const path = require('path')
 const defaultSettings = require('./src/settings.js')
 
-function resolve(dir) {
+function resolve (dir) {
   return path.join(__dirname, dir)
 }
 
@@ -44,6 +44,11 @@ module.exports = {
         target: 'https://dev.nxtframework.com',
         changeOrigin: true
       },
+      '/api': {
+        // target: 'http://127.0.0.1:8080',
+        target: 'https://dev.nxtframework.com',
+        changeOrigin: true
+      },
       '/public_pic': {
         // target: 'http://127.0.0.1:8080',
         target: 'https://dev.nxtframework.com',
@@ -71,7 +76,7 @@ module.exports = {
       }
     }
   },
-  chainWebpack(config) {
+  chainWebpack (config) {
     config.plugins.delete('preload') // TODO: need test
     config.plugins.delete('prefetch') // TODO: need test
 
