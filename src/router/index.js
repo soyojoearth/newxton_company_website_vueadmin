@@ -136,6 +136,24 @@ export const constantRoutes = [
         meta: { title: '订单售后', affix: false }
       }
     ]
+  },  {
+    path: '/member',
+    component: Layout,
+    meta: { title: '会员列表', icon: 'tree', affix: false },
+    children: [
+      {
+        path: 'memberManage',
+        component: () => import('@/views/member/memberManage'),
+        name: 'memberManage',
+        meta: { title: '会员列表', affix: false }
+      },
+      {
+        path: 'memberLevel',
+        component: () => import('@/views/member/memberLevel'),
+        name: 'memberLevel',
+        meta: { title: '会员等级', affix: false }
+      }
+    ]
   },
   {
     path: '/content',
