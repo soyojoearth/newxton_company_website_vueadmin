@@ -218,6 +218,7 @@ export default {
         }
       },
       listData: [],
+      pageCount: 0,
       memberInfoDialog: false,
       memberInfoParam: {},
       memberInfoParamRules: {},
@@ -271,7 +272,6 @@ export default {
       }
       this.$store.dispatch('memberManage/searchListData', this.searchBean).then(() => {
         this.listData = this.$store.state.memberManage.listData
-        console.log(this.listData)
         this.pageCount = Math.ceil(this.$store.state.memberManage.countData / this.searchBean.limit)
         const that = this
         that.$myLoading.myLoading.closeLoading()
@@ -308,12 +308,10 @@ export default {
     showBasicData(data) {
       this.$store.dispatch('memberManage/searchDetailData', { userId: data.userId }).then(() => {
         this.memberInfoParam = this.$store.state.memberManage.detailData
-        console.log(this.memberInfoParam)
         this.memberInfoDialog = true
       })
     },
     saveMemberInfo() {
-      console.log(this.memberInfoParam)
       if (this.memberInfoParam.levelNum != null && this.memberInfoParam.levelNum === '') {
         this.memberInfoParam.levelNum = null
       }
@@ -352,7 +350,6 @@ export default {
     showAddressDetail(data) {
       this.$store.dispatch('memberManage/getAddressList', { userId: data.userId }).then(() => {
         this.addressParam = this.$store.state.memberManage.addressData
-        console.log(this.addressParam)
         this.addressDialog = true
       })
     },
