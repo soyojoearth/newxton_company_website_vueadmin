@@ -292,20 +292,22 @@ export default {
     async load () {
       var res = await getFreightList({})
       res.list.forEach(element => {
-        switch (element.type) {
-          case 1:
-            this.heavyListData = element.itemList
-            this.heavyData = element
-            break;
-          case 2:
-            this.volumeListData = element.itemList
-            this.volumeData = element
-            break;
-          case 3:
-            this.piecesListData = element.itemList
+        // switch (element.type) {
+        //   case 1:
+        //     this.heavyListData = element.itemList
+        //     this.heavyData = element
+        //     break;
+        //   case 2:
+        //     this.volumeListData = element.itemList
+        //     this.volumeData = element
+        //     break;
+        //   case 3:
+        //     this.piecesListData = element.itemList
+        //     this.piecesData = element
+        //     break;
+        // }
+        this.piecesListData = element.itemList
             this.piecesData = element
-            break;
-        }
       });
     },
 

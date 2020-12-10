@@ -39,11 +39,6 @@ module.exports = {
     },
     after: require('./mock/mock-server.js'),
     proxy: {
-      '/api/admin': {
-        // target: 'http://127.0.0.1:8080',
-        target: 'https://dev.nxtframework.com',
-        changeOrigin: true
-      },
       '/api': {
         // target: 'http://127.0.0.1:8080',
         target: 'https://dev.nxtframework.com',
@@ -55,11 +50,6 @@ module.exports = {
         changeOrigin: true
       },
       '/common/images': {
-        // target: 'http://127.0.0.1:8080',
-        target: 'https://dev.nxtframework.com',
-        changeOrigin: true
-      },
-      '/api/order_form': {
         // target: 'http://127.0.0.1:8080',
         target: 'https://dev.nxtframework.com',
         changeOrigin: true

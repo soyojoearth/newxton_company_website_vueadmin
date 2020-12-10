@@ -16,7 +16,7 @@
           </el-col>
         </el-row>
 
-        <el-row>
+        <el-row hidden>
           <el-col :span="24">
             <el-form-item label="计费方式"
                           prop="type">
@@ -212,7 +212,7 @@ export default {
           { required: true, message: '请输入模板名称', trigger: 'blur' }
         ],
         type: [
-          { required: true, message: '请选择活动区域', trigger: 'change' }
+          { required: false, message: '请选择活动区域', trigger: 'change' }
         ],
 
       }
@@ -224,7 +224,7 @@ export default {
     var list = this.$route.params.list
     this.form.id = list.id
     this.form.name = list.name
-    this.form.type = list.type.toString()
+    // this.form.type = list.type.toString()
     this.tableData = list.itemList
     console.log(list);
   },
