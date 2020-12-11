@@ -57,6 +57,7 @@
           <el-table-column prop="statusText" label="状态" />
         </el-table>
       </el-row>
+
       <el-row style="margin-top:20px">
         <el-col :offset="18">
           <el-button type="primary" icon="el-icon-arrow-left" @click="handlePage(-1)">上一页</el-button>

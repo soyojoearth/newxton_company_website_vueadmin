@@ -111,6 +111,7 @@
           <span>（确认收货后几天，佣金才可转入余额）</span>
         </el-col>
       </el-row>
+
       <el-row style="margin-top: 10px">
         <el-col :offset="2">
           <el-button type="primary" @click="commissionConfirm">确定</el-button>
