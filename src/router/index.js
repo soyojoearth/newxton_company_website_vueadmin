@@ -81,7 +81,7 @@ export const constantRoutes = [
   {
     path: '/delivery',
     component: Layout,
-    meta: { title: '物流设置', icon: 'tree', affix: false },
+    meta: { title: '物流设置', icon: 'tree-table', affix: false },
     children: [
       {
         path: 'region',
@@ -121,7 +121,7 @@ export const constantRoutes = [
   {
     path: '/order',
     component: Layout,
-    meta: { title: '订单设置', icon: 'tree', affix: false },
+    meta: { title: '订单管理', icon: 'tab', affix: false },
     children: [
       {
         path: 'orderFrom',
@@ -137,10 +137,81 @@ export const constantRoutes = [
       }
     ]
   },
+
+
+
+  {
+    path: '/product',
+    component: Layout,
+    meta: { title: '产品管理', icon: 'product', affix: false },
+    children: [
+      {
+        path: 'product',
+        component: () => import('@/views/product/index'),
+        name: 'product',
+        meta: { title: '产品列表', affix: false }
+      },
+      {
+        path: 'trash',
+        component: () => import('@/views/product/trash'),
+        name: 'trash',
+        meta: { title: '回收站', affix: false }
+      },
+      {
+        path: 'create',
+        component: () => import('@/views/product/create'),
+        name: 'CreateProduct',
+        hidden: true,
+        meta: { title: '创建产品', affix: false }
+      },
+      {
+        path: 'update/:id',
+        props: true,
+        hidden: true,
+        component: () => import('@/views/product/update'),
+        name: 'UpdateProduct',
+        meta: { title: '修改产品', affix: false }
+      },
+      {
+        path: 'kind',
+        component: () => import('@/views/product/kind'),
+        name: 'KindProduct',
+        hidden: false,
+        meta: { title: '产品分类', affix: false }
+      },
+      {
+        path: 'brand',
+        component: () => import('@/views/product/brand'),
+        name: 'brand',
+        hidden: false,
+        meta: { title: '品牌管理', affix: false }
+      }
+    ]
+  },
+  {
+    path: '/reviews',
+    component: Layout,
+    meta: { title: '评论管理', icon: 'skill', affix: false },
+    children: [
+      {
+        path: 'reviews',
+        component: () => import('@/views/reviews/index'),
+        name: 'reviews',
+        meta: { title: '评论列表', affix: false }
+      },
+      {
+        path: 'detail/:id',
+        hidden: true,
+        component: () => import('@/views/reviews/detail'),
+        name: 'reviewsDetail',
+        meta: { title: '评论详情', affix: false }
+      }
+    ]
+  },
   {
     path: '/member',
     component: Layout,
-    meta: { title: '会员列表', icon: 'tree', affix: false },
+    meta: { title: '会员列表', icon: 'user', affix: false },
     children: [
       {
         path: 'memberManage',
@@ -178,7 +249,7 @@ export const constantRoutes = [
   {
     path: '/transaction',
     component: Layout,
-    meta: { title: '财务管理', icon: 'tree', affix: false },
+    meta: { title: '财务管理', icon: 'money', affix: false },
     children: [
       {
         path: 'transactionList',
@@ -247,74 +318,6 @@ export const constantRoutes = [
         name: 'banner',
         meta: { title: '轮播横幅', affix: false }
       },
-    ]
-  },
-  {
-    path: '/product',
-    component: Layout,
-    meta: { title: '产品管理', icon: 'product', affix: false },
-    children: [
-      {
-        path: 'product',
-        component: () => import('@/views/product/index'),
-        name: 'product',
-        meta: { title: '产品列表', affix: false }
-      },
-      {
-        path: 'trash',
-        component: () => import('@/views/product/trash'),
-        name: 'trash',
-        meta: { title: '回收站', affix: false }
-      },
-      {
-        path: 'create',
-        component: () => import('@/views/product/create'),
-        name: 'CreateProduct',
-        hidden: true,
-        meta: { title: '创建产品', affix: false }
-      },
-      {
-        path: 'update/:id',
-        props: true,
-        hidden: true,
-        component: () => import('@/views/product/update'),
-        name: 'UpdateProduct',
-        meta: { title: '修改产品', affix: false }
-      },
-      {
-        path: 'kind',
-        component: () => import('@/views/product/kind'),
-        name: 'KindProduct',
-        hidden: false,
-        meta: { title: '产品分类', affix: false }
-      },
-      {
-        path: 'brand',
-        component: () => import('@/views/product/brand'),
-        name: 'brand',
-        hidden: false,
-        meta: { title: '品牌管理', affix: false }
-      }
-    ]
-  },
-  {
-    path: '/reviews',
-    component: Layout,
-    meta: { title: '评论管理', icon: 'product', affix: false },
-    children: [
-      {
-        path: 'reviews',
-        component: () => import('@/views/reviews/index'),
-        name: 'reviews',
-        meta: { title: '评论列表', affix: false }
-      },
-      {
-        path: 'detail/:id',
-        hidden: true,
-        component: () => import('@/views/reviews/detail'),
-        name: 'reviewsDetail',
-        meta: { title: '评论详情', affix: false }
-      }
     ]
   },
   {
