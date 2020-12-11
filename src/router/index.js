@@ -136,7 +136,8 @@ export const constantRoutes = [
         meta: { title: '订单售后', affix: false }
       }
     ]
-  },  {
+  },
+  {
     path: '/member',
     component: Layout,
     meta: { title: '会员列表', icon: 'tree', affix: false },
@@ -152,6 +153,44 @@ export const constantRoutes = [
         component: () => import('@/views/member/memberLevel'),
         name: 'memberLevel',
         meta: { title: '会员等级', affix: false }
+      }
+    ]
+  },
+  {
+    path: '/commission',
+    component: Layout,
+    meta: { title: '分销管理', icon: 'tree', affix: false },
+    children: [
+      {
+        path: 'commissionSet',
+        component: () => import('@/views/commission/commissionSet'),
+        name: 'commissionSet',
+        meta: { title: '分销设置', affix: false }
+      },
+      {
+        path: 'commissionLog',
+        component: () => import('@/views/commission/commissionLog'),
+        name: 'commissionLog',
+        meta: { title: '分销日志', affix: false }
+      }
+    ]
+  },
+  {
+    path: '/transaction',
+    component: Layout,
+    meta: { title: '财务管理', icon: 'tree', affix: false },
+    children: [
+      {
+        path: 'transactionList',
+        component: () => import('@/views/transaction/transactionList'),
+        name: 'transactionList',
+        meta: { title: '用户资金记录', affix: false }
+      },
+      {
+        path: 'withdrawManage',
+        component: () => import('@/views/transaction/withdrawManage'),
+        name: 'withdrawManage',
+        meta: { title: '用户提现管理', affix: false }
       }
     ]
   },
