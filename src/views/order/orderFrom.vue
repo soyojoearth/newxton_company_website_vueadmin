@@ -81,9 +81,6 @@
               <span>收货信息</span>
             </el-col>
             <el-col :span="2">
-              <span>配送方式</span>
-            </el-col>
-            <el-col :span="2">
               <span>交易状态</span>
             </el-col>
             <el-col :span="2">
@@ -238,7 +235,6 @@
             邮编：{{ detailData.deliveryPostcode }}
           </el-col>
           <el-col :span="4" :offset="2">
-            配送方式：{{ detailData.deliveryConfigName }}
           </el-col>
         </el-row>
         <el-row style="margin-top: 10px">
@@ -474,13 +470,6 @@
           <el-form-item label="备注" prop="deliveryRemark">
             <el-input v-model="addressParam.deliveryRemark" style="width: 200px" :controls="false" />
           </el-form-item>
-          <el-form-item label="配送方式" prop="">
-            <el-select v-model="addressParam.deliveryConfigId" placeholder="- 选择运费模板（不选不改） -" clearable>
-              <el-option v-for="item in $store.state.orderForm.freightList" :key="item.id" :label="item.name" :value="item.id">
-                {{ item.name }}
-              </el-option>
-            </el-select>
-          </el-form-item>
         </el-form>
         <div style="margin-left: 120px">
           <el-button type="primary" @click="saveAddress">确 定</el-button>
@@ -545,7 +534,7 @@
               邮编：{{ detailData.deliveryPostcode }}
             </el-col>
             <el-col :span="8" :offset="2">
-              配送方式：{{ detailData.deliveryConfigName }}
+
             </el-col>
           </el-row>
           <el-row style="margin-top: 10px">
@@ -777,7 +766,7 @@ export default {
   mounted() {
     this.searchDate()
     this.$store.dispatch('delivery/getDeliveryCompanyList')
-    this.$store.dispatch('delivery/getDeliveryConfigList')
+    // this.$store.dispatch('delivery/getDeliveryConfigList')
     this.$store.dispatch('orderForm/getFreightList')
     this.getCountryList()
   },
