@@ -403,7 +403,13 @@ export default {
       this.$router.push({ name: 'UpdateProduct', params: { id: row.id } })
     },
     handleView (index, row) {
-      this.$router.push({ name: 'productDetail', params: { productId: row.productId } })
+      // const { href } = this.$router.resolve({
+      //   path: "/product/detail",
+      //   query: { productId: row.productId }
+      // });
+      // console.log(href);
+      window.open("#/product/detail?productId=" + row.id, '_blank');
+      // this.$router.push({ name: 'productDetail', params: { productId: row.productId } })
 
     },
     handleCreate () {

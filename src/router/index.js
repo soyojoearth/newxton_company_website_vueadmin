@@ -165,7 +165,7 @@ export const constantRoutes = [
         meta: { title: '创建产品', affix: false }
       },
       {
-              path: 'detail/:id',
+              path: 'detail',
               component: () => import('@/views/product/detail'),
               name: 'productDetail',
               hidden: true,
