@@ -139,3 +139,11 @@ export function set_trash (data) {
     data
   })
 }
+// 管理后台--产品--更新佣金比率
+export function update_commission_rate (data) {
+  return requestJSON({
+    url: '/api/admin/product/update_commission_rate',
+    method: 'post',
+    data
+  })
+}

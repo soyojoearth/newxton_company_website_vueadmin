@@ -55,6 +55,9 @@ const actions = {
     // console.log(params);
     return new Promise((resolve, reject) => {
       getProductList(params).then(res => {
+        res.result.list.forEach((element,index) => {
+          res.result.list[index]["NewCommissionRate"]=element.commissionRate
+        });
         commit('SET_LIST_DATA', res.result.list)
         commit('SET_PAGE_COUNT', res.result.count)
         Vue.prototype.$myLoading.myLoading.closeLoading()

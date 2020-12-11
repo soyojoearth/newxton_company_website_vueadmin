@@ -1,51 +1,37 @@
 <template>
   <div>
-    <vuedraggable
-      class="wrapper"
-      v-model="list"
-    >
+    <vuedraggable class="wrapper"
+                  v-model="list">
       <!-- 过度效果 -->
       <transition-group>
-        <div
-          v-for="(item,index) in list"
-          :key="index"
-          class="item"
-        >
-          <i
-            class="el-icon-close delIcon"
-            @click="deleImg(item,index)"
-          />
-          <img
-            :src="item.banner_picture_url"
-            style="height:300px;width:100%"
-            alt=""
-            srcset=""
-          >
+        <div v-for="(item,index) in list"
+             :key="index"
+             class="item">
+          <i class="el-icon-close delIcon"
+             @click="deleImg(item,index)" />
+          <img :src="item.banner_picture_url"
+               style="height:300px;width:100%"
+               alt=""
+               srcset="">
           <div class="link">
             <span style="width: 55px;">链接</span>
-            <el-input
-              v-model="item.banner_href_url"
-              placeholder="请输入内容"
-            ></el-input>
+            <el-input v-model="item.banner_href_url"
+                      placeholder="请输入内容"></el-input>
           </div>
 
         </div>
       </transition-group>
     </vuedraggable>
-    <el-upload
-      :show-file-list="false"
-      action=""
-      list-type="picture-card"
-      :http-request="handleUploadHttpRequest"
-      :on-success="handlePictureSuccess"
-    >
+    <el-upload :show-file-list="false"
+               action=""
+               list-type="picture-card"
+               :http-request="handleUploadHttpRequest"
+               :on-success="handlePictureSuccess">
       <i class="el-icon-plus" />
     </el-upload>
-    <el-button
-      plain
-      class="buttom"
-      @click="handlerSave"
-    >更新</el-button>
+    <el-button plain
+               class="buttom"
+               @click="handlerSave">更新</el-button>
   </div>
 </template>
 
@@ -97,7 +83,10 @@ export default {
       fd.append('location_name', this.location_name)
       fd.append('banner_picture_list', '[' + banner_picture_list.toString() + ']')
       fd.append('banner_href_list', '["' + banner_href_list.join('","') + '"]')
+      if (fd.get("banner_href_list") == '[""]') {
+        fd.set("banner_href_list", '[]')
 
+      }
       // console.log(data);
       var res = await save(fd)
       if (res.status === 0) {
