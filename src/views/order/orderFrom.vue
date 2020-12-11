@@ -60,7 +60,7 @@
                 :value="item.value"
               />
             </el-select>
-            <el-button type="primary" @click="searchDate">筛选</el-button>
+            <el-button type="primary" @click="searchAction">筛选</el-button>
           </el-col>
         </el-row>
         <el-card style="margin:10px 10px">
@@ -782,6 +782,11 @@ export default {
     this.getCountryList()
   },
   methods: {
+    searchAction() {
+      this.$set(this.searchBean, 'offset', 0)
+      this.$set(this.searchBean, 'listNumber', 1)
+      this.searchDate()
+    },
     searchDate() {
       this.$myLoading.myLoading.loading()
       if (this.starDate != null) {

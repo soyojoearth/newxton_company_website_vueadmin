@@ -22,7 +22,7 @@
             <el-option v-for="item in isList" :key="item.value" :label="item.label" :value="item.value" />
           </el-select>
           <el-input v-model="searchBean.username" placeholder="用户名" style="width: 150px" />
-          <el-button type="primary" @click="searchDate">筛选</el-button>
+          <el-button type="primary" @click="searchAction">筛选</el-button>
         </el-col>
       </el-row>
       <el-row style="margin-top: 10px">
@@ -107,8 +107,16 @@ export default {
     this.searchDate()
   },
   methods: {
+    searchAction() {
+      this.$set(this.searchBean, 'offset', 0)
+      this.$set(this.searchBean, 'listNumber', 1)
+      this.searchDate()
+    },
     searchDate() {
       this.$myLoading.myLoading.loading()
+      if (this.searchBean.type != null && this.searchBean.type === '') {
+        this.searchBean.type = null
+      }
       this.$store.dispatch('transaction/getTansactionList', this.searchBean).then(() => {
         this.listData = this.$store.state.transaction.listData
         this.pageCount = Math.ceil(this.$store.state.transaction.countData / this.searchBean.limit)

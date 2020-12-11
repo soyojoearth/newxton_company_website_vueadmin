@@ -29,7 +29,7 @@
             </el-select>
             <el-input v-model="searchBean.username" placeholder="用户名" style="width: 150px" maxlength="30"></el-input>
             <el-input v-model="searchBean.orderFormSerialNum" placeholder="订单编号" style="width: 150px" maxlength="30"></el-input>
-            <el-button type="primary" @click="searchDate">筛选</el-button>
+            <el-button type="primary" @click="searchAction">筛选</el-button>
           </el-col>
         </el-row>
         <el-row style="margin-top: 10px">
@@ -275,11 +275,7 @@ export default {
       pageCount: 0,
       showPage: 'homePage',
       detailData: {},
-      approvalData: {},
-      srcList: [
-        'https://fuss10.elemecdn.com/8/27/f01c15bb73e1ef3793e64e6b7bbccjpeg.jpeg',
-        'https://fuss10.elemecdn.com/1/8e/aeffeb4de74e2fde4bd74fc7b4486jpeg.jpeg'
-      ]
+      approvalData: {}
     }
   },
   computed: {
@@ -290,6 +286,11 @@ export default {
     this.searchDate()
   },
   methods: {
+    searchAction() {
+      this.$set(this.searchBean, 'offset', 0)
+      this.$set(this.searchBean, 'listNumber', 1)
+      this.searchDate()
+    },
     searchDate() {
       this.$myLoading.myLoading.loading()
       if (this.searchBean.status != null && this.searchBean.status === '') {

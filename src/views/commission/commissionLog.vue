@@ -29,7 +29,7 @@
           </el-select>
           <el-input v-model="searchBean.orderFormSerialNum" placeholder="订单编号" style="width: 150px" />
           <el-input v-model="searchBean.username" placeholder="获佣会员" style="width: 150px" />
-          <el-button type="primary" @click="searchDate">筛选</el-button>
+          <el-button type="primary" @click="searchAction">筛选</el-button>
         </el-col>
       </el-row>
       <el-row style="margin-top: 10px">
@@ -48,12 +48,12 @@
           <el-table-column prop="inviterUsername" label="获佣会员" width="120px" />
           <el-table-column prop="" label="获佣金额/百分比" width="130px">
             <template slot-scope="scope">
-              <span>{{ scope.row.commissionAmount }}/{{ scope.row.commissionRate }}%</span>
+              <span>{{ scope.row.commissionAmount }}({{ scope.row.commissionRate }}%)</span>
             </template>
           </el-table-column>
           <el-table-column prop="priceDeal" label="商品付款金额" width="120px" />
           <el-table-column prop="inviterLevel" label="推荐人级别" width="120px" />
-          <el-table-column prop="datelineReadable" label="发生时间" width="150px" />
+          <el-table-column prop="datelineReadable" label="发生时间" width="180px" />
           <el-table-column prop="statusText" label="状态" />
         </el-table>
       </el-row>
@@ -101,8 +101,22 @@ export default {
     this.searchDate()
   },
   methods: {
+    searchAction() {
+      this.$set(this.searchBean, 'offset', 0)
+      this.$set(this.searchBean, 'listNumber', 1)
+      this.searchDate()
+    },
     searchDate() {
       this.$myLoading.myLoading.loading()
+      if (this.searchBean.isPaid != null && this.searchBean.isPaid === '') {
+        this.searchBean.isPaid = null
+      }
+      if (this.searchBean.isReceive != null && this.searchBean.isReceive === '') {
+        this.searchBean.isReceive = null
+      }
+      if (this.searchBean.isTransfer != null && this.searchBean.isTransfer === '') {
+        this.searchBean.isTransfer = null
+      }
       this.$store.dispatch('commission/getCommissionLogs', this.searchBean).then(() => {
         this.listData = this.$store.state.commission.listData
         this.pageCount = Math.ceil(this.$store.state.commission.countData / this.searchBean.limit)

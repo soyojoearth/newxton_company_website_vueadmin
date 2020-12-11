@@ -16,7 +16,7 @@
             <el-option v-for="item in isList" :key="item.value" :label="item.label" :value="item.value" />
           </el-select>
           <el-input v-model="searchBean.username" placeholder="用户名" style="width: 150px" />
-          <el-button type="primary" @click="searchDate">筛选</el-button>
+          <el-button type="primary" @click="searchAction">筛选</el-button>
         </el-col>
       </el-row>
       <el-row style="margin-top: 10px">
@@ -35,7 +35,9 @@
           <el-table-column prop="statusText" label="审核结果" width="120px" />
           <el-table-column prop="" label="操作" show-overflow-tooltip header-align="left">
             <template slot-scope="scope">
-              <el-button type="text" size="small" @click="transactionListShow(scope.row)">查看资金记录</el-button>
+              <router-link :to="{path:'/transaction/transactionList', query: { username: scope.row.username }}" target="_blank">
+                <el-button type="text" size="small">查看资金记录</el-button>
+              </router-link>
               <el-button type="text" size="small" @click="withdrawApprovalShow(scope.row)">审核</el-button>
               <el-button type="text" size="small" @click="transferUpdateShow(scope.row)">填写汇款结果</el-button>
             </template>
@@ -189,8 +191,19 @@ export default {
     this.searchDate()
   },
   methods: {
+    searchAction() {
+      this.$set(this.searchBean, 'offset', 0)
+      this.$set(this.searchBean, 'listNumber', 1)
+      this.searchDate()
+    },
     searchDate() {
       this.$myLoading.myLoading.loading()
+      if (this.searchBean.status != null && this.searchBean.status === '') {
+        this.searchBean.status = null
+      }
+      if (this.searchBean.username != null && this.searchBean.username === '') {
+        this.searchBean.username = null
+      }
       this.$store.dispatch('withdraw/searchListData', this.searchBean).then(() => {
         this.listData = this.$store.state.withdraw.listData
         this.pageCount = Math.ceil(this.$store.state.withdraw.countData / this.searchBean.limit)
@@ -206,9 +219,6 @@ export default {
       this.searchBean.offset = (this.searchBean.listNumber - 1) * this.searchBean.limit
       this.searchDate()
     },
-    transactionListShow(data) {
-      this.$router.push({ path: '/transaction/transactionList', query: { username: data.username }})
-    },
     withdrawApprovalShow(data) {
       this.approvalParam = Object.assign({}, data)
       this.$set(this.approvalParam, 'approval', true)
@@ -222,6 +232,7 @@ export default {
             type: 'success',
             message: '审核成功'
           })
+          this.approvalDialog = false
           setTimeout(() => {
             this.searchDate()
           }, 1000)
