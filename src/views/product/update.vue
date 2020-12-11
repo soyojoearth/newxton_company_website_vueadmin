@@ -476,24 +476,48 @@ export default {
 
     handleColorClose (skuKeyName, skuValueItem) {
 
-      var than = this;
+        var than = this;
 
-      for (var i = than.allDetail.skuValuePriceEtcList.length - 1; i >= 0; i--) {
-        var itemPriceEtc = than.allDetail.skuValuePriceEtcList[i];
-        if (itemPriceEtc.skuValueName1 == skuValueItem.skuValueName || itemPriceEtc.skuValueName2 == skuValueItem.skuValueName) {
-          than.allDetail.skuValuePriceEtcList.splice(i, 1)
-        }
-      }
-
-      this.allDetail.skuList.forEach(element => {
-        if (element.skuKeyName === skuKeyName) {
-          element.skuValueList.splice(element.skuValueList.indexOf(skuValueItem), 1);
-          if (element.skuValueList.length == 0) {
-            this.allDetail.skuList.splice(this.allDetail.skuList.indexOf(element), 1)
+        var num = -1;
+        this.allDetail.skuList.forEach((element,index) => {
+          if (element.skuKeyName === skuKeyName) {
+            num = index;
+            element.skuValueList.splice(element.skuValueList.indexOf(skuValueItem), 1);
+            if (element.skuValueList.length == 0) {
+              this.allDetail.skuList.splice(this.allDetail.skuList.indexOf(element), 1)
+            }
+            return
           }
-          return
+        });
+
+        for (var i = than.allDetail.skuValuePriceEtcList.length - 1; i >= 0; i--) {
+          var itemPriceEtc = than.allDetail.skuValuePriceEtcList[i];
+          if(num == 0){
+              if (itemPriceEtc.skuValueName1 == skuValueItem.skuValueName) {
+                if(than.allDetail.skuList.length == 1){
+                  //不删
+                  than.allDetail.skuValuePriceEtcList[i]["skuValueName1"] = null;
+                }
+                else{
+                  //删
+                  than.allDetail.skuValuePriceEtcList.splice(i, 1)
+                }
+              }
+          }
+          if(num == 1){
+            if (itemPriceEtc.skuValueName2 == skuValueItem.skuValueName) {
+              if(than.allDetail.skuList.length == 1){
+                //不删
+                than.allDetail.skuValuePriceEtcList[i]["skuValueName2"] = null;
+              }
+              else{
+                //删
+                than.allDetail.skuValuePriceEtcList.splice(i, 1)
+              }
+            }
         }
-      });
+
+      }
 
     },
 

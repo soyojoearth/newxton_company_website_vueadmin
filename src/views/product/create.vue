@@ -504,15 +504,10 @@ export default {
 
       var than = this;
 
-      for (var i = than.NxtStructProduct.skuValuePriceEtcList.length - 1; i >= 0; i--) {
-        var itemPriceEtc = than.NxtStructProduct.skuValuePriceEtcList[i];
-        if (itemPriceEtc.skuValueName1 == skuValueItem.skuValueName || itemPriceEtc.skuValueName2 == skuValueItem.skuValueName) {
-          than.NxtStructProduct.skuValuePriceEtcList.splice(i, 1)
-        }
-      }
-
-      this.NxtStructProduct.skuList.forEach(element => {
+      var num = -1;
+      this.NxtStructProduct.skuList.forEach((element,index) => {
         if (element.skuKeyName === skuKeyName) {
+          num = index;
           element.skuValueList.splice(element.skuValueList.indexOf(skuValueItem), 1);
           if (element.skuValueList.length == 0) {
             this.NxtStructProduct.skuList.splice(this.NxtStructProduct.skuList.indexOf(element), 1)
@@ -520,6 +515,40 @@ export default {
           return
         }
       });
+
+
+      
+      for (var i = than.NxtStructProduct.skuValuePriceEtcList.length - 1; i >= 0; i--) {
+
+        var itemPriceEtc = than.NxtStructProduct.skuValuePriceEtcList[i];
+
+        if(num == 0){
+              if (itemPriceEtc.skuValueName1 == skuValueItem.skuValueName) {
+                if(than.NxtStructProduct.skuList.length == 1){
+                  //不删
+                  than.NxtStructProduct.skuValuePriceEtcList[i]["skuValueName1"] = null;
+                }
+                else{
+                  //删
+                  than.NxtStructProduct.skuValuePriceEtcList.splice(i, 1)
+                }
+              }
+          }
+          if(num == 1){
+            if (itemPriceEtc.skuValueName2 == skuValueItem.skuValueName) {
+              if(than.NxtStructProduct.skuList.length == 1){
+                //不删
+                than.NxtStructProduct.skuValuePriceEtcList[i]["skuValueName2"] = null;
+              }
+              else{
+                //删
+                than.NxtStructProduct.skuValuePriceEtcList.splice(i, 1)
+              }
+            }
+          }
+
+      }
+
 
     },
 
