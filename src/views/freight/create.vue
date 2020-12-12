@@ -147,7 +147,29 @@
         v-model="selectValue"
         :data="allValue"
       ></el-transfer> -->
-      <many-area-select :selectedData.sync="manyAreaValue"></many-area-select>
+      <!-- <many-area-select :selectedData.sync="manyAreaValue"></many-area-select> -->
+      <!-- <cn-region-picker v-model="pickCity"
+                        :width="500"
+                        @on-pick-city="pickedCity = $event">
+      </cn-region-picker> -->
+      <!-- <el-checkbox :indeterminate="isIndeterminate"
+                         v-model="checkAll"
+                         @change="handleCheckAllChange">全选</el-checkbox> -->
+
+      <div v-if="allValue.length!==0">
+        <el-checkbox v-model="checkAll"
+                     @change="handleCheckAllChange"
+                     :indeterminate="isIndeterminate"
+                     style="width:180px">{{allValue[0].region.regionName}}</el-checkbox>
+
+        <el-checkbox-group v-model="pickCity"
+                           @change="handleCheckedCitiesChange">
+          <el-checkbox v-for="city in allValue[0].sub_region_list"
+                       :label="city.region.regionName"
+                       :key="city.region.regionName"
+                       style="width:180px">{{city.region.regionName}}</el-checkbox>
+        </el-checkbox-group>
+      </div>
       <span slot="footer"
             class="dialog-footer">
         <el-button @click="dialogVisible = false">取 消</el-button>
@@ -161,10 +183,9 @@
 </template>
 
 <script>
-import { getAreaTree, createFreight } from '@/api/freight'
+import { getAreaList, createFreight } from '@/api/freight'
 import { mapState } from 'vuex'
 import manyAreaSelect from '@/components/manyAreaSelect/index'
-
 export default {
   components: {
     manyAreaSelect
@@ -190,6 +211,10 @@ export default {
         type: '3',
         itemList: []
       },
+
+      pickCity: [],
+      isIndeterminate: true,
+      checkAll: false,
       transferTitles: ['全部地区', '已选择地区'],
       tableData: [],
       pieces: '件数',
@@ -253,45 +278,79 @@ export default {
       })
     },
     async getAreaList () {
-      var res = await getAreaTree({})
-      // this.allValue = res.result
-      this.allArea = res.result[0]
+      var res = await getAreaList({})
+      this.allValue = res.list
+      // this.allArea = res.result[0]
+    },
+    handleCheckAllChange (val) {
+      console.log(val);
+      var pickAll = []
+      this.allValue[0].sub_region_list.forEach(i => {
+        pickAll.push(i.region.regionName)
+      })
+      this.pickCity = val ? pickAll : [];
+      this.isIndeterminate = false;
+      console.log(this.pickCity);
+
+    },
+    handleCheckedCitiesChange (value) {
+      let checkedCount = value.length;
+      this.checkAll = checkedCount === this.allValue[0].sub_region_list.length;
+      this.isIndeterminate = checkedCount > 0 && checkedCount < this.allValue[0].sub_region_list.length;
+
     },
     handleConfirmArea () {
-      console.log(this.manyAreaValue);
+      console.log(this.pickCity);
       var area = []
-      if (this.manyAreaValue.length !== 0) {
-        for (let index = 0; index < this.manyAreaValue.length; index++) {
-          const element = this.manyAreaValue[index];
-          var a = element.regionId.split("-")
-          var b = element.regionName.split("-")
-          if (a[2] != 0) {
-            var form = {
-              regionId: '',
-              regionName: ''
-            }
-            form.regionId = a[2]
-            form.regionName = b[2]
-            area.push(form)
 
-          } else {
-
-            this.allArea.child.forEach(e => {
-              if (e.regionId == a[1]) {
-                // console.log( this.manyAreaValue);
-                area = area.concat(e.child)
-                // this.manyAreaValue=this.manyAreaValue.concat( e.child)
-                return
+      if (this.pickCity.length !== 0) {
+        this.allValue[0].sub_region_list.forEach(i => {
+          this.pickCity.forEach(p => {
+            if (i.region.regionName === p) {
+              var form = {
+                regionId: '',
+                regionName: ''
               }
-            })
-          }
+              form.regionId = i.region.id
+              form.regionName = i.region.regionName
+              area.push(form)
+            }
+          })
 
-        }
+        })
       }
+      // if (this.manyAreaValue.length !== 0) {
+      //   for (let index = 0; index < this.manyAreaValue.length; index++) {
+      //     const element = this.manyAreaValue[index];
+      //     var a = element.regionId.split("-")
+      //     var b = element.regionName.split("-")
+      //     if (a[2] != 0) {
+      //       var form = {
+      //         regionId: '',
+      //         regionName: ''
+      //       }
+      //       form.regionId = a[2]
+      //       form.regionName = b[2]
+      //       area.push(form)
+
+      //     } else {
+
+      //       this.allArea.child.forEach(e => {
+      //         if (e.regionId == a[1]) {
+
+      //           area = area.concat(e.child)
+
+      //           return
+      //         }
+      //       })
+      //     }
+
+      //   }
+      // }
       this.currentRow.regionList = area
-      this.currentRow.selectRegionList = this.manyAreaValue
+      // this.currentRow.selectRegionList = this.manyAreaValue
       this.tableData.splice(this.currentIndex, 1, this.currentRow)
-      this.manyAreaValue = []
+      this.pickCity = []
       // this.allValue = this.allArea
       this.dialogVisible = false
     },
@@ -308,8 +367,12 @@ export default {
     },
     // 编辑
     handleEdit (index, row) {
-      console.log(row);
-      this.manyAreaValue = row.selectRegionList
+      // console.log(row);
+      this.pickCity = []
+      // this.manyAreaValue = row.selectRegionList
+      row.regionList.forEach(i => {
+        this.pickCity.push(i.regionName)
+      })
       this.currentIndex = index
       this.currentRow = row
       this.dialogVisible = true
