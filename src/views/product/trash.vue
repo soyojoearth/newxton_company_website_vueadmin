@@ -1,8 +1,7 @@
 <template>
   <div class="app-container">
     <el-row>
-      <el-button type="primary"
-                 @click="handleCreate">添加商品</el-button>
+      
       <div style="float:right">
         <el-select v-model="params.categoryId"
                    placeholder="请选择">
@@ -136,14 +135,7 @@
                        @change="changeIsHot(scope.$index, scope.row)" />
           </template>
         </el-table-column>
-        <!-- <el-table-column
-          prop="categoryName"
-          label="类型"
-          show-overflow-tooltip
-        />
-        <el-table-column label="日期">
-          <template slot-scope="scope">{{ scope.row.datelineCreateReadable }}</template>
-        </el-table-column> -->
+
         <el-table-column align="right"
                          width="80"
                          label="排序">
@@ -157,63 +149,6 @@
           </template>
         </el-table-column>
 
-        <!-- <el-table-column
-          label="推荐"
-          align="right"
-          width="70"
-        >
-          <template slot-scope="scope">
-            <el-switch
-              v-model="scope.row.isRecommend"
-              :active-value="1"
-              :inactive-value="0"
-              @change="changeRecommend(scope.$index, scope.row)"
-            />
-          </template>
-        </el-table-column>
-        <el-table-column
-          label="热卖"
-          align="right"
-          width="70"
-        >
-          <template slot-scope="scope">
-            <el-switch
-              v-model="scope.row.isHot"
-              :active-value="1"
-              :inactive-value="0"
-              @change="changeIsHot(scope.$index, scope.row)"
-            />
-          </template>
-        </el-table-column>
-        <el-table-column
-          label="新品"
-          align="right"
-          width="70"
-        >
-          <template slot-scope="scope">
-            <el-switch
-              v-model="scope.row.isNew"
-              :active-value="1"
-              :inactive-value="0"
-              @change="changeIsNew(scope.$index, scope.row)"
-            />
-          </template>
-        </el-table-column>
-        <el-table-column
-          label="上架"
-          align="right"
-          width="70"
-        >
-          <template slot-scope="scope">
-            <el-switch
-              v-model="scope.row.isSelling"
-              :active-value="1"
-              :inactive-value="0"
-              @change="changeIsSelling(scope.$index, scope.row)"
-            />
-          </template>
-        </el-table-column> -->
-
         <el-table-column label="操作"
                          align="right"
                          width="200">
@@ -221,8 +156,6 @@
             <el-button size="mini"
                        type="text"
                        @click="handleEdit(scope.$index, scope.row)">编辑 </el-button>
-            <el-button size="mini"
-                       type="text">查看 </el-button>
 
           </template>
         </el-table-column>
@@ -381,7 +314,7 @@ export default {
       }
       var res = await set_trash(form)
       Message({
-        message: '放入回收站成功！',
+        message: '恢复成功!',
         type: 'success',
         duration: 1000
       })
