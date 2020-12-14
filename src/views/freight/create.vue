@@ -155,21 +155,26 @@
       <!-- <el-checkbox :indeterminate="isIndeterminate"
                          v-model="checkAll"
                          @change="handleCheckAllChange">全选</el-checkbox> -->
+      <div :key="menuKey">
+        <div v-for="(item,index) in allValue"
+             :key="index">
 
-      <div v-if="allValue.length!==0">
-        <el-checkbox v-model="checkAll"
-                     @change="handleCheckAllChange"
-                     :indeterminate="isIndeterminate"
-                     style="width:180px">{{allValue[0].region.regionName}}</el-checkbox>
+          <el-checkbox v-model="checkAll"
+                       @change="handleCheckAllChange(item)"
+                       :indeterminate="item.isIndeterminate"
+                       disabled
+                       style="width:180px">{{item.region.regionName}}</el-checkbox>
 
-        <el-checkbox-group v-model="pickCity"
-                           @change="handleCheckedCitiesChange">
-          <el-checkbox v-for="city in allValue[0].sub_region_list"
-                       :label="city.region.regionName"
-                       :key="city.region.regionName"
-                       style="width:180px">{{city.region.regionName}}</el-checkbox>
-        </el-checkbox-group>
+          <el-checkbox-group v-model="pickCity"
+                             @change="handleCheckedCitiesChange">
+            <el-checkbox v-for="city in item.sub_region_list"
+                         :label="city.region.regionName"
+                         :key="city.region.regionName"
+                         style="width:180px">{{city.region.regionName}}</el-checkbox>
+          </el-checkbox-group>
+        </div>
       </div>
+
       <span slot="footer"
             class="dialog-footer">
         <el-button @click="dialogVisible = false">取 消</el-button>
@@ -211,9 +216,9 @@ export default {
         type: '3',
         itemList: []
       },
-
+      menuKey: 1,
       pickCity: [],
-      isIndeterminate: true,
+      isIndeterminate: false,
       checkAll: false,
       transferTitles: ['全部地区', '已选择地区'],
       tableData: [],
@@ -239,7 +244,7 @@ export default {
         type: [
           { required: false, message: '请选择活动区域', trigger: 'change' }
         ],
-
+        countryList: []
       }
     }
   },
@@ -280,23 +285,51 @@ export default {
     async getAreaList () {
       var res = await getAreaList({})
       this.allValue = res.list
+      this.allValue.forEach(i => {
+        i.isIndeterminate = false
+        i.pickCity = []
+
+      })
       // this.allArea = res.result[0]
     },
     handleCheckAllChange (val) {
-      console.log(val);
-      var pickAll = []
-      this.allValue[0].sub_region_list.forEach(i => {
-        pickAll.push(i.region.regionName)
+      console.log(this.allValue);
+      val.isIndeterminate = !val.isIndeterminate
+
+
+      this.allValue.forEach(i => {
+        if (i.isIndeterminate) {
+          i.sub_region_list.forEach(v => {
+            i.pickCity.push(v.region.regionName)
+          })
+        } else {
+          i.pickCity = []
+
+        }
       })
-      this.pickCity = val ? pickAll : [];
-      this.isIndeterminate = false;
-      console.log(this.pickCity);
+
+      // this.pickCity = val.isIndeterminate ? pickAll : [];
+
+
 
     },
     handleCheckedCitiesChange (value) {
-      let checkedCount = value.length;
-      this.checkAll = checkedCount === this.allValue[0].sub_region_list.length;
-      this.isIndeterminate = checkedCount > 0 && checkedCount < this.allValue[0].sub_region_list.length;
+      console.log(value);
+      // console.log(value);
+      // var subList = []
+      // this.allValue.forEach(c => {
+      //   c.sub_region_list.forEach(i => {
+      //     value.forEach(v => {
+      //       if (i.region.regionName = v) {
+      //         subList = i.sub_region_list
+      //       }
+
+      //     })
+      //   })
+      // })
+      // let checkedCount = value.length;
+      // this.checkAll = checkedCount === value.length;
+      // value.isIndeterminate = checkedCount > 0 && checkedCount < value.length;
 
     },
     handleConfirmArea () {
@@ -304,19 +337,21 @@ export default {
       var area = []
 
       if (this.pickCity.length !== 0) {
-        this.allValue[0].sub_region_list.forEach(i => {
-          this.pickCity.forEach(p => {
-            if (i.region.regionName === p) {
-              var form = {
-                regionId: '',
-                regionName: ''
+        this.allValue.forEach(c => {
+          c.sub_region_list.forEach(i => {
+            this.pickCity.forEach(p => {
+              if (i.region.regionName === p) {
+                var form = {
+                  regionId: '',
+                  regionName: ''
+                }
+                form.regionId = i.region.id
+                form.regionName = i.region.regionName
+                area.push(form)
               }
-              form.regionId = i.region.id
-              form.regionName = i.region.regionName
-              area.push(form)
-            }
-          })
+            })
 
+          })
         })
       }
       // if (this.manyAreaValue.length !== 0) {

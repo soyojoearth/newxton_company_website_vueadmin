@@ -148,15 +148,18 @@
         :data="allValue"
       ></el-transfer> -->
       <!-- <many-area-select :selectedData.sync="manyAreaValue"></many-area-select> -->
-      <div v-if="allValue.length!==0">
+      <div v-for="(item,index) in allValue"
+           :key="index">
+
         <el-checkbox v-model="checkAll"
-                     @change="handleCheckAllChange"
-                     :indeterminate="isIndeterminate"
-                     style="width:180px">{{allValue[0].region.regionName}}</el-checkbox>
+                     disabled
+                     @change="handleCheckAllChange(item)"
+                     :indeterminate="item.isIndeterminate"
+                     style="width:180px">{{item.region.regionName}}</el-checkbox>
 
         <el-checkbox-group v-model="pickCity"
                            @change="handleCheckedCitiesChange">
-          <el-checkbox v-for="city in allValue[0].sub_region_list"
+          <el-checkbox v-for="city in item.sub_region_list"
                        :label="city.region.regionName"
                        :key="city.region.regionName"
                        style="width:180px">{{city.region.regionName}}</el-checkbox>
@@ -283,18 +286,17 @@ export default {
     handleCheckAllChange (val) {
       console.log(val);
       var pickAll = []
-      this.allValue[0].sub_region_list.forEach(i => {
+      val.sub_region_list.forEach(i => {
         pickAll.push(i.region.regionName)
       })
-      this.pickCity = val ? pickAll : [];
-      this.isIndeterminate = false;
-      console.log(this.pickCity);
+      val.isIndeterminate = !val.isIndeterminate
+      this.pickCity = val.isIndeterminate ? [] : pickAll;
 
     },
     handleCheckedCitiesChange (value) {
-      let checkedCount = value.length;
-      this.checkAll = checkedCount === this.allValue[0].sub_region_list.length;
-      this.isIndeterminate = checkedCount > 0 && checkedCount < this.allValue[0].sub_region_list.length;
+      // let checkedCount = value.length;
+      // this.checkAll = checkedCount === this.allValue[0].sub_region_list.length;
+      // this.isIndeterminate = checkedCount > 0 && checkedCount < this.allValue[0].sub_region_list.length;
 
     },
     handleConfirmArea () {
@@ -319,19 +321,21 @@ export default {
       var area = []
 
       if (this.pickCity.length !== 0) {
-        this.allValue[0].sub_region_list.forEach(i => {
-          this.pickCity.forEach(p => {
-            if (i.region.regionName === p) {
-              var form = {
-                regionId: '',
-                regionName: ''
+        this.allValue.forEach(c => {
+          c.sub_region_list.forEach(i => {
+            this.pickCity.forEach(p => {
+              if (i.region.regionName === p) {
+                var form = {
+                  regionId: '',
+                  regionName: ''
+                }
+                form.regionId = i.region.id
+                form.regionName = i.region.regionName
+                area.push(form)
               }
-              form.regionId = i.region.id
-              form.regionName = i.region.regionName
-              area.push(form)
-            }
-          })
+            })
 
+          })
         })
       }
       // var area = []
