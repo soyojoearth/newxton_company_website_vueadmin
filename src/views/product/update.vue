@@ -13,14 +13,19 @@
           </el-col>
         </el-row>
         <el-row>
-          <el-col :span="24">
+          <el-col :span="12">
             <el-form-item label="促销语">
-              <el-input v-model="allDetail.productSubtitle" />
+              <el-input class="input_small"  v-model="allDetail.productSubtitle" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="产品标签">
+              <el-input class="input_small" placeholder="(用逗号隔开)" v-model="allDetail.productTags" />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
-          <el-col :span="24">
+          <el-col :span="12">
             <el-form-item label="产品类别">
               <el-select
                 v-model="allDetail.categoryId"
@@ -33,6 +38,24 @@
                   :value="item.category_id"
                 />
               </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="五星评分">
+              <el-input
+                class="input_small" placeholder="(例如：5、4、3.5)"
+                v-model="allDetail.productRatings"
+              />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="该货品外部链接">
+              <el-input
+                placeholder="（其它网店）"
+                v-model="allDetail.externalUrl"
+              />
             </el-form-item>
           </el-col>
         </el-row>

@@ -15,14 +15,19 @@
           </el-col>
         </el-row>
         <el-row>
-          <el-col :span="24">
+          <el-col :span="12">
             <el-form-item label="促销语">
-              <el-input v-model="NxtStructProduct.productSubtitle" />
+              <el-input class="input_small" v-model="NxtStructProduct.productSubtitle" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="产品标签(用逗号隔开)">
+              <el-input class="input_small" v-model="NxtStructProduct.productTags" />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
-          <el-col :span="24">
+          <el-col :span="12">
             <el-form-item label="产品类别">
               <el-select
                 v-model="NxtStructProduct.categoryId"
@@ -38,6 +43,23 @@
               <router-link to="/product/kind">
                 <el-button>类别管理</el-button>
               </router-link>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="五星评分(例如：5、4、3.5)">
+              <el-input
+                class="input_small"
+                v-model="NxtStructProduct.productRatings"
+              />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="该货品外部链接（其它网店）">
+              <el-input
+                v-model="NxtStructProduct.externalUrl"
+              />
             </el-form-item>
           </el-col>
         </el-row>
@@ -382,6 +404,9 @@ export default {
         brandId: null,
         productName: '',
         productSubtitle: '',
+        productTags: '',
+        productRatings: null,
+        externalUrl: '',
         dealQuantityMin: 1,
         dealQuantityMax: 10,
         freeShipping: false,
