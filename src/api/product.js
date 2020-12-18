@@ -1,9 +1,10 @@
 import request from '@/utils/request'
 import requestForm from '@/utils/requestPic'
-// 获取产品列表
+import requestJSON from '@/utils/requestJSON'
+// 获取产品列表/api/admin/product/list/v2
 export function getProductList (data) {
-  return request({
-    url: '/api/admin/product/list',
+  return requestJSON({
+    url: '/api/admin/product/list/v2',
     method: 'post',
     data
   })
@@ -126,6 +127,22 @@ export function updateProductCategory (data) {
 export function deleteProductCategory (data) {
   return request({
     url: '/api/admin/product_category/delete',
+    method: 'post',
+    data
+  })
+}
+// 产品放入回收站/恢复
+export function set_trash (data) {
+  return requestJSON({
+    url: '/api/admin/product/set_trash',
+    method: 'post',
+    data
+  })
+}
+// 管理后台--产品--更新佣金比率
+export function update_commission_rate (data) {
+  return requestJSON({
+    url: '/api/admin/product/update_commission_rate',
     method: 'post',
     data
   })

@@ -21,8 +21,12 @@ import './utils/error-log' // error log
 import * as filters from './filters' // global filters
 import VueDND from 'awe-dnd'
 import { IEVersion } from '@/utils'
-
+import * as myLoading from '@/utils/loading'
 Vue.use(VueDND)
+import Print1 from 'vue-print-nb'
+Vue.use(Print1)
+
+
 /**
  * If you don't want to use mock-server
  * you want to use MockJs for mock api
@@ -35,11 +39,11 @@ if (process.env.NODE_ENV === 'production') {
   const { mockXHR } = require('../mock')
   mockXHR()
 }
-
+Vue.prototype.$myLoading = { myLoading }
 Vue.use(Element, {
   size: Cookies.get('size') || 'medium' // set element-ui default size
 })
-
+import './styles/loading.css'
 // register global utility filters
 Object.keys(filters).forEach(key => {
   Vue.filter(key, filters[key])

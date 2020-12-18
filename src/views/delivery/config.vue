@@ -1,84 +1,62 @@
 <template>
   <div class="app-container">
     <el-row>
-      <el-button
-        type="primary"
-        @click="handleCreate"
-      >新增运费模板</el-button>
+      <el-button type="primary"
+                 @click="handleCreate">新增运费模板</el-button>
 
     </el-row>
-    <el-card
-      style="margin-top:10px"
-      v-if="heavyListData.length"
-    >
-      <div
-        slot="header"
-        class="clearfix"
-      >
+    <el-card style="margin-top:10px"
+             v-if="heavyListData.length">
+      <div slot="header"
+           class="clearfix">
         <span style="margin-right:50px">{{heavyData.name}}</span>
 
-        <el-button
-          type="text"
-          @click="update_heavy"
-        >修改</el-button>
-        <el-button
-          type="text"
-          @click="deleteFreight(heavyData.id)"
-        >删除</el-button>
+        <el-button type="text"
+                   @click="update_heavy">修改</el-button>
+        <el-button type="text"
+                   @click="deleteFreight(heavyData.id)">删除</el-button>
         <span style="float: right; padding: 3px 0">
           类型: 按重量计费
         </span>
       </div>
-      <el-table
-        ref="multipleTable"
-        :data="heavyListData"
-        tooltip-effect="dark"
-        style="width: 100%"
-        @selection-change="handleSelectionChange_heavy"
-      >
+      <el-table ref="multipleTable"
+                :data="heavyListData"
+                tooltip-effect="dark"
+                style="width: 100%"
+                @selection-change="handleSelectionChange_heavy">
 
-        <el-table-column
-          prop="productName"
-          label="配送区域"
-        >
+        <el-table-column prop="productName"
+                         label="配送区域">
           <template slot-scope="scope">
             {{scope.row.regionList|areaFilters}}
           </template>
         </el-table-column>
-        <el-table-column
-          label="首重量（克）"
-          align="center"
-        >
+        <el-table-column label="首重量（克）"
+                         align="center">
 
           <template slot-scope="scope">
             {{scope.row.billableQuantity}}
           </template>
         </el-table-column>
 
-        <el-table-column
-          label="运费（元）"
-          align="center"
-        >
+        <el-table-column label="运费（元）"
+                         align="center">
           <template slot-scope="scope">
 
             {{scope.row.billablePrice}}
 
           </template>
         </el-table-column>
-        <el-table-column
-          label="续重量（克）"
-          align="center"
-        >
+        <el-table-column label="续重量（克）"
+                         align="center">
           <template slot-scope="scope">
 
             {{scope.row.additionQuantity}}
 
           </template>
         </el-table-column>
-        <el-table-column
-          label="运费（元）"
-          align="center"
-        >
+        <el-table-column label="运费（元）"
+                         align="center">
           <template slot-scope="scope">
 
             {{scope.row.additionPrice}}
@@ -88,77 +66,58 @@
 
       </el-table>
     </el-card>
-    <el-card
-      style="margin-top:10px"
-      v-if="piecesListData.length"
-    >
-      <div
-        slot="header"
-        class="clearfix"
-      >
-        <span style="margin-right:50px">{{piecesData.name}}</span>
-        <el-button
-          type="text"
-          @click="update_pieces"
-        >修改</el-button>
-        <el-button
-          type="text"
-          @click="deleteFreight(piecesData.id)"
-        >删除</el-button>
+    <el-card style="margin-top:10px"
+             v-for="(piecesListData,index) in piecesListData"
+             :key="index">
+      <div slot="header"
+           class="clearfix">
+        <span style="margin-right:50px">{{piecesListData.name}}</span>
+        <el-button type="text"
+                   @click="update_pieces(piecesListData)">修改</el-button>
+        <el-button type="text"
+                   @click="deleteFreight(piecesListData.id)">删除</el-button>
         <span style="float: right; padding: 3px 0">
           类型: 按件数计费
         </span>
       </div>
-      <el-table
-        ref="multipleTable"
-        :data="piecesListData"
-        tooltip-effect="dark"
-        style="width: 100%"
-        @selection-change="handleSelectionChange_pieces"
-      >
+      <el-table ref="multipleTable"
+                :data="piecesListData.itemList"
+                tooltip-effect="dark"
+                style="width: 100%"
+                @selection-change="handleSelectionChange_pieces">
 
-        <el-table-column
-          prop="productName"
-          label="配送区域"
-        >
+        <el-table-column prop="productName"
+                         label="配送区域">
           <template slot-scope="scope">
             {{scope.row.regionList|areaFilters}}
           </template>
         </el-table-column>
-        <el-table-column
-          label="首件数（件）"
-          align="center"
-        >
+        <el-table-column label="首件数（件）"
+                         align="center">
 
           <template slot-scope="scope">
             {{scope.row.billableQuantity}}
           </template>
         </el-table-column>
 
-        <el-table-column
-          label="运费（元）"
-          align="center"
-        >
+        <el-table-column label="运费（元）"
+                         align="center">
           <template slot-scope="scope">
 
             {{scope.row.billablePrice}}
 
           </template>
         </el-table-column>
-        <el-table-column
-          label="续件数（件）"
-          align="center"
-        >
+        <el-table-column label="续件数（件）"
+                         align="center">
           <template slot-scope="scope">
 
             {{scope.row.additionQuantity}}
 
           </template>
         </el-table-column>
-        <el-table-column
-          label="运费（元）"
-          align="center"
-        >
+        <el-table-column label="运费（元）"
+                         align="center">
           <template slot-scope="scope">
 
             {{scope.row.additionPrice}}
@@ -168,77 +127,57 @@
 
       </el-table>
     </el-card>
-    <el-card
-      style="margin-top:10px"
-      v-if="volumeListData.length"
-    >
-      <div
-        slot="header"
-        class="clearfix"
-      >
+    <el-card style="margin-top:10px"
+             v-if="volumeListData.length">
+      <div slot="header"
+           class="clearfix">
         <span style="margin-right:50px">{{volumeData.name}}</span>
-        <el-button
-          type="text"
-          @click="update_volume"
-        >修改</el-button>
-        <el-button
-          type="text"
-          @click="deleteFreight(volumeData.id)"
-        >删除</el-button>
+        <el-button type="text"
+                   @click="update_volume">修改</el-button>
+        <el-button type="text"
+                   @click="deleteFreight(volumeData.id)">删除</el-button>
         <span style="float: right; padding: 3px 0">
           类型: 按体积计费
         </span>
       </div>
-      <el-table
-        ref="multipleTable"
-        :data="volumeListData"
-        tooltip-effect="dark"
-        style="width: 100%"
-        @selection-change="handleSelectionChange_volume"
-      >
+      <el-table ref="multipleTable"
+                :data="volumeListData"
+                tooltip-effect="dark"
+                style="width: 100%"
+                @selection-change="handleSelectionChange_volume">
 
-        <el-table-column
-          prop="productName"
-          label="配送区域"
-        >
+        <el-table-column prop="productName"
+                         label="配送区域">
           <template slot-scope="scope">
             {{scope.row.regionList|areaFilters}}
           </template>
         </el-table-column>
-        <el-table-column
-          label="首体积（立方米）"
-          align="center"
-        >
+        <el-table-column label="首体积（立方米）"
+                         align="center">
 
           <template slot-scope="scope">
             {{scope.row.billableQuantity}}
           </template>
         </el-table-column>
 
-        <el-table-column
-          label="运费（元）"
-          align="center"
-        >
+        <el-table-column label="运费（元）"
+                         align="center">
           <template slot-scope="scope">
 
             {{scope.row.billablePrice}}
 
           </template>
         </el-table-column>
-        <el-table-column
-          label="续体积（立方米）"
-          align="center"
-        >
+        <el-table-column label="续体积（立方米）"
+                         align="center">
           <template slot-scope="scope">
 
             {{scope.row.additionQuantity}}
 
           </template>
         </el-table-column>
-        <el-table-column
-          label="运费（元）"
-          align="center"
-        >
+        <el-table-column label="运费（元）"
+                         align="center">
           <template slot-scope="scope">
 
             {{scope.row.additionPrice}}
@@ -291,22 +230,26 @@ export default {
   methods: {
     async load () {
       var res = await getFreightList({})
-      res.list.forEach(element => {
-        switch (element.type) {
-          case 1:
-            this.heavyListData = element.itemList
-            this.heavyData = element
-            break;
-          case 2:
-            this.volumeListData = element.itemList
-            this.volumeData = element
-            break;
-          case 3:
-            this.piecesListData = element.itemList
-            this.piecesData = element
-            break;
-        }
-      });
+      this.piecesListData = res.list
+
+      // res.list.forEach(element => {
+      // switch (element.type) {
+      //   case 1:
+      //     this.heavyListData = element.itemList
+      //     this.heavyData = element
+      //     break;
+      //   case 2:
+      //     this.volumeListData = element.itemList
+      //     this.volumeData = element
+      //     break;
+      //   case 3:
+      //     this.piecesListData = element.itemList
+      //     this.piecesData = element
+      //     break;
+      // }
+      // this.piecesListData.push(element)
+      // this.piecesData.push(element)
+      // });
     },
 
 
@@ -363,10 +306,10 @@ export default {
         }
       })
     },
-    update_pieces () {
+    update_pieces (data) {
       this.$router.push({
         name: 'UpdateFreight', params: {
-          list: this.piecesData
+          list: data
         }
       })
     },

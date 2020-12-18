@@ -1,190 +1,144 @@
 <template>
   <div class="app-container">
     <el-card style="margin-top:10px">
-      <el-form
-        ref="form"
-        label-position="top"
-        label-width="80px"
-        :model="form"
-        :rules="rules"
-      >
+      <el-form ref="form"
+               label-position="top"
+               label-width="80px"
+               :model="form"
+               :rules="rules">
 
         <el-row>
           <el-col :span="24">
-            <el-form-item
-              label="模板名称"
-              prop="name"
-            >
+            <el-form-item label="模板名称"
+                          prop="name">
               <el-input v-model="form.name" />
             </el-form-item>
           </el-col>
         </el-row>
 
-        <el-row>
+        <el-row hidden>
           <el-col :span="24">
-            <el-form-item
-              label="计费方式"
-              prop="type"
-            >
-              <el-radio-group
-                v-model="form.type"
-                @change="changeType"
-              >
-                <el-radio
-                  class="radio"
-                  label="3"
-                >计件</el-radio>
-                <el-radio
-                  class="radio"
-                  label="1"
-                >重量</el-radio>
-                <el-radio
-                  class="radio"
-                  label="2"
-                >体积</el-radio>
+            <el-form-item label="计费方式"
+                          prop="type">
+              <el-radio-group v-model="form.type"
+                              @change="changeType">
+                <el-radio class="radio"
+                          label="3">计件</el-radio>
+                <el-radio class="radio"
+                          label="1">重量</el-radio>
+                <el-radio class="radio"
+                          label="2">体积</el-radio>
               </el-radio-group>
             </el-form-item>
           </el-col>
         </el-row>
-        <el-table
-          :data="tableData.filter(data => handleAdd || data.name.toLowerCase().includes(handleAdd.toLowerCase()))"
-          style="width: 100%"
-        >
-          <el-table-column
-            prop="code"
-            align="center"
-            label="配送区域"
-          >
+        <el-table :data="tableData.filter(data => handleAdd || data.name.toLowerCase().includes(handleAdd.toLowerCase()))"
+                  style="width: 100%">
+          <el-table-column prop="code"
+                           align="center"
+                           label="配送区域">
             <template slot-scope="scope">
               {{scope.row.regionList|areaFilters}}
             </template>
           </el-table-column>
           <!-- 起步数量 -->
-          <el-table-column
-            prop="billableQuantity"
-            align="center"
-            width="200px"
-            :label="'首'+first"
-          >
+          <el-table-column prop="billableQuantity"
+                           align="center"
+                           width="200px"
+                           :label="'首'+first">
             <template slot-scope="scope">
-              <el-input
-                placeholder="请输入内容"
-                style="width:120px"
-                type="text"
-                onkeyup="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}"
-                onafterpaste="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'0')}else{this.value=this.value.replace(/\D/g,'')}"
-                v-model="scope.row.billableQuantity"
-              ></el-input>
+              <el-input placeholder="请输入内容"
+                        style="width:120px"
+                        type="text"
+                        onkeyup="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}"
+                        onafterpaste="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'0')}else{this.value=this.value.replace(/\D/g,'')}"
+                        v-model="scope.row.billableQuantity"></el-input>
               {{unit}}
             </template>
           </el-table-column>
           <!-- 起步价格 -->
-          <el-table-column
-            align="center"
-            prop="billablePrice"
-            label="运费"
-            width="150px"
-          >
+          <el-table-column align="center"
+                           prop="billablePrice"
+                           label="运费"
+                           width="150px">
             <template slot-scope="scope">
-              <el-input
-                placeholder="请输入内容"
-                type="number"
-                v-model="scope.row.billablePrice"
-              ></el-input>
+              <el-input placeholder="请输入内容"
+                        type="number"
+                        v-model="scope.row.billablePrice"></el-input>
 
             </template>
 
           </el-table-column>
           <!-- 最小续量 -->
-          <el-table-column
-            prop="additionQuantity"
-            align="center"
-            width="200px"
-            :label="'续'+Continued"
-          >
+          <el-table-column prop="additionQuantity"
+                           align="center"
+                           width="200px"
+                           :label="'续'+Continued">
             <template slot-scope="scope">
-              <el-input
-                placeholder="请输入内容"
-                style="width:120px"
-                type="text"
-                onkeyup="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}"
-                onafterpaste="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'0')}else{this.value=this.value.replace(/\D/g,'')}"
-                v-model="scope.row.additionQuantity"
-              ></el-input>
+              <el-input placeholder="请输入内容"
+                        style="width:120px"
+                        type="text"
+                        onkeyup="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}"
+                        onafterpaste="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'0')}else{this.value=this.value.replace(/\D/g,'')}"
+                        v-model="scope.row.additionQuantity"></el-input>
               <span>{{unit}}</span>
 
             </template>
 
           </el-table-column>
           <!-- 最小续价格 -->
-          <el-table-column
-            prop="additionPrice"
-            align="center"
-            width="150px"
-            label="运费"
-          >
+          <el-table-column prop="additionPrice"
+                           align="center"
+                           width="150px"
+                           label="运费">
             <template slot-scope="scope">
-              <el-input
-                placeholder="请输入内容"
-                type="number"
-                v-model="scope.row.additionPrice"
-              ></el-input>
+              <el-input placeholder="请输入内容"
+                        type="number"
+                        v-model="scope.row.additionPrice"></el-input>
 
             </template>
 
           </el-table-column>
 
-          <el-table-column
-            align="center"
-            width="200px"
-            label="操作"
-          >
+          <el-table-column align="center"
+                           width="200px"
+                           label="操作">
 
             <template slot-scope="scope">
-              <el-button
-                size="mini"
-                type="primary"
-                plain
-                @click="handleEdit(scope.$index, scope.row)"
-              >
+              <el-button size="mini"
+                         type="primary"
+                         plain
+                         @click="handleEdit(scope.$index, scope.row)">
                 设置地区
               </el-button>
-              <el-button
-                size="mini"
-                type="danger"
-                plain
-                @click="handleDelete(scope.$index, scope.row)"
-              >
+              <el-button size="mini"
+                         type="danger"
+                         plain
+                         @click="handleDelete(scope.$index, scope.row)">
                 删除
               </el-button>
             </template>
           </el-table-column>
         </el-table>
         <el-form-item>
-          <el-button
-            v-model="handleAdd"
-            size="mini"
-            plain
-            icon="el-icon-plus"
-            @click="handleAdd()"
-          >
+          <el-button v-model="handleAdd"
+                     size="mini"
+                     plain
+                     icon="el-icon-plus"
+                     @click="handleAdd()">
             添加一行自定义区域
           </el-button>
         </el-form-item>
         <el-form-item>
-          <el-button
-            type="primary"
-            @click="handleCreate"
-          >确认提交</el-button>
+          <el-button type="primary"
+                     @click="handleCreate">确认提交</el-button>
 
         </el-form-item>
       </el-form>
     </el-card>
-    <el-dialog
-      width="50%"
-      :visible.sync="dialogVisible"
-    >
-      <el-transfer
+    <el-dialog width="70%"
+               :visible.sync="dialogVisible">
+      <!-- <el-transfer
         :titles="transferTitles"
         :props="{
       key: 'region_id',
@@ -192,16 +146,30 @@
     }"
         v-model="selectValue"
         :data="allValue"
-      ></el-transfer>
-      <span
-        slot="footer"
-        class="dialog-footer"
-      >
+      ></el-transfer> -->
+      <!-- <many-area-select :selectedData.sync="manyAreaValue"></many-area-select> -->
+      <div v-for="(item,index) in allValue"
+           :key="index">
+
+        <el-checkbox v-model="checkAll"
+                     disabled
+                     @change="handleCheckAllChange(item)"
+                     :indeterminate="item.isIndeterminate"
+                     style="width:180px">{{item.region.regionName}}</el-checkbox>
+
+        <el-checkbox-group v-model="pickCity"
+                           @change="handleCheckedCitiesChange">
+          <el-checkbox v-for="city in item.sub_region_list"
+                       :label="city.region.regionName"
+                       :key="city.region.regionName"
+                       style="width:180px">{{city.region.regionName}}</el-checkbox>
+        </el-checkbox-group>
+      </div>
+      <span slot="footer"
+            class="dialog-footer">
         <el-button @click="dialogVisible = false">取 消</el-button>
-        <el-button
-          type="primary"
-          @click="handleConfirmArea"
-        >确 定</el-button>
+        <el-button type="primary"
+                   @click="handleConfirmArea">确 定</el-button>
       </span>
 
     </el-dialog>
@@ -212,9 +180,11 @@
 <script>
 import { getAreaList, createFreight } from '@/api/freight'
 import { mapState } from 'vuex'
-
-
+import manyAreaSelect from '@/components/manyAreaSelect/index'
 export default {
+  components: {
+    manyAreaSelect
+  },
   filters: {
     areaFilters (val) {
       if (val.length === 0) {
@@ -236,6 +206,10 @@ export default {
         type: '',
         itemList: []
       },
+      pickCity: [],
+      isIndeterminate: true,
+      checkAll: false,
+      manyAreaValue: '',
       transferTitles: ['全部地区', '已选择地区'],
       tableData: [],
       pieces: '件数',
@@ -258,7 +232,7 @@ export default {
           { required: true, message: '请输入模板名称', trigger: 'blur' }
         ],
         type: [
-          { required: true, message: '请选择活动区域', trigger: 'change' }
+          { required: false, message: '请选择活动区域', trigger: 'change' }
         ],
 
       }
@@ -270,7 +244,7 @@ export default {
     var list = this.$route.params.list
     this.form.id = list.id
     this.form.name = list.name
-    this.form.type = list.type.toString()
+    // this.form.type = list.type.toString()
     this.tableData = list.itemList
     console.log(list);
   },
@@ -306,31 +280,101 @@ export default {
     },
     async getAreaList () {
       var res = await getAreaList({})
-      this.allValue = res.list_simple
-      this.allArea = res.list_simple
+      this.allValue = res.list
+      // this.allArea = res.result[0]
+    },
+    handleCheckAllChange (val) {
+      console.log(val);
+      var pickAll = []
+      val.sub_region_list.forEach(i => {
+        pickAll.push(i.region.regionName)
+      })
+      val.isIndeterminate = !val.isIndeterminate
+      this.pickCity = val.isIndeterminate ? [] : pickAll;
+
+    },
+    handleCheckedCitiesChange (value) {
+      // let checkedCount = value.length;
+      // this.checkAll = checkedCount === this.allValue[0].sub_region_list.length;
+      // this.isIndeterminate = checkedCount > 0 && checkedCount < this.allValue[0].sub_region_list.length;
+
     },
     handleConfirmArea () {
 
-      var arr = []
-      this.selectValue.forEach(item => {
-        this.allValue.forEach(i => {
-          if (i.region_id === item) {
-            var form = {
+      // var arr = []
+      // this.selectValue.forEach(item => {
+      //   this.allValue.forEach(i => {
+      //     if (i.region_id === item) {
+      //       var form = {
 
-              regionId: '',
-              regionName: ''
-            }
-            form.regionId = i.region_id
-            form.regionName = i.region_name
-            arr.push(form)
-          }
+      //         regionId: '',
+      //         regionName: ''
+      //       }
+      //       form.regionId = i.region_id
+      //       form.regionName = i.region_name
+      //       arr.push(form)
+      //     }
+      //   })
+
+      // })
+
+      var area = []
+
+      if (this.pickCity.length !== 0) {
+        this.allValue.forEach(c => {
+          c.sub_region_list.forEach(i => {
+            this.pickCity.forEach(p => {
+              if (i.region.regionName === p) {
+                var form = {
+                  regionId: '',
+                  regionName: ''
+                }
+                form.regionId = i.region.id
+                form.regionName = i.region.regionName
+                area.push(form)
+              }
+            })
+
+          })
         })
+      }
+      // var area = []
+      // if (this.manyAreaValue.length !== 0) {
+      //   for (let index = 0; index < this.manyAreaValue.length; index++) {
+      //     const element = this.manyAreaValue[index];
+      //     var a = element.regionId.split("-")
+      //     var b = element.regionName.split("-")
+      //     if (a[2] != 0) {
+      //       var form = {
+      //         regionId: '',
+      //         regionName: ''
+      //       }
+      //       form.regionId = a[2]
+      //       form.regionName = b[2]
+      //       area.push(form)
 
-      })
-      this.currentRow.regionList = arr
+      //     } else {
+
+      //       this.allArea.child.forEach(e => {
+      //         if (e.regionId == a[1]) {
+      //           // console.log( this.manyAreaValue);
+      //           area = area.concat(e.child)
+      //           // this.manyAreaValue=this.manyAreaValue.concat( e.child)
+      //           return
+      //         }
+      //       })
+      //     }
+
+      //   }
+      // }
+      this.currentRow.regionList = area
+      // this.currentRow.selectRegionList = this.manyAreaValue
+
       this.tableData.splice(this.currentIndex, 1, this.currentRow)
-      this.selectValue = []
-      this.allValue = this.allArea
+      this.pickCity = []
+
+      // this.selectValue = []
+      // this.allValue = this.allArea
       this.dialogVisible = false
     },
     handleAdd () {
@@ -339,12 +383,20 @@ export default {
         billablePrice: 0,
         additionQuantity: 0,
         additionPrice: 0,
-        regionList: []
+        regionList: [],
+        selectRegionList: []
       }
       this.tableData.push(row)
     },
     // 编辑
     handleEdit (index, row) {
+      console.log(row);
+      this.pickCity = []
+      row.regionList.forEach(i => {
+        this.pickCity.push(i.regionName)
+      })
+      // this.manyAreaValue = row.selectRegionList
+
       this.currentIndex = index
       this.currentRow = row
       this.dialogVisible = true

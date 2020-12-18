@@ -17,7 +17,7 @@ service.interceptors.request.use(
       config.headers['token'] = getToken()
       config.headers['user_id'] = getUserId()
     }
-    console.log(config)
+    // console.log(config)
     return config
   },
   error => {

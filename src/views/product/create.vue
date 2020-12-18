@@ -6,79 +6,110 @@
         label-width="80px"
         :model="formLabelAlign"
       >
-        
-              <el-row>
-        <el-col :span="24">
-        <el-form-item label="标题" >
-          <el-input v-model="NxtStructProduct.productName" />
-        </el-form-item>
-        </el-col>
-      </el-row>
-      <el-row>
-        <el-col :span="24">
-        <el-form-item label="促销语">
-          <el-input v-model="NxtStructProduct.productSubtitle" />
-        </el-form-item>
-        </el-col>
-      </el-row>
-      <el-row>
-        <el-col :span="24">
-        <el-form-item label="产品类别">
-          <el-select
-            v-model="NxtStructProduct.categoryId"
-            placeholder="请选择"
-          >
-            <el-option
-              v-for="item in category_list"
-              :key="item.category_id"
-              :label="item.category_name_display"
-              :value="item.category_id"
-            />
-          </el-select>
-          <router-link to="/product/kind">
-            <el-button>类别管理</el-button>
-          </router-link>
-        </el-form-item>
-        </el-col>
-      </el-row>
+
         <el-row>
-            <el-col :span="12">
-                <el-form-item label="货号">
-                  <el-input class="input_small" v-model="NxtStructProduct.itemNo" />
-                </el-form-item>
-            </el-col>
-            <el-col :span="12">
-                <el-form-item label="品牌">
-                  <el-select
-                    v-model="NxtStructProduct.brandId"
-                    placeholder="请选择"
-                  >
-                    <el-option
-                      v-for="item in brand_list"
-                      :key="item.id"
-                      :label="item.brandName"
-                      :value="item.id"
-                    />
-                  </el-select>
-                  <router-link to="/product/kind">
-                    <el-button>品牌管理</el-button>
-                  </router-link>
-                </el-form-item>
-            </el-col>
+          <el-col :span="24">
+            <el-form-item label="标题">
+              <el-input v-model="NxtStructProduct.productName" />
+            </el-form-item>
+          </el-col>
         </el-row>
-        
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="促销语">
+              <el-input class="input_small" v-model="NxtStructProduct.productSubtitle" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="产品标签(用逗号隔开)">
+              <el-input class="input_small" v-model="NxtStructProduct.productTags" />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="产品类别">
+              <el-select
+                v-model="NxtStructProduct.categoryId"
+                placeholder="请选择"
+              >
+                <el-option
+                  v-for="item in category_list"
+                  :key="item.category_id"
+                  :label="item.category_name_display"
+                  :value="item.category_id"
+                />
+              </el-select>
+              <router-link to="/product/kind">
+                <el-button>类别管理</el-button>
+              </router-link>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="五星评分(例如：5、4、3.5)">
+              <el-input
+                class="input_small"
+                v-model="NxtStructProduct.productRatings"
+              />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="该货品外部链接（其它网店）">
+              <el-input
+                v-model="NxtStructProduct.externalUrl"
+              />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="货号">
+              <el-input
+                class="input_small"
+                v-model="NxtStructProduct.itemNo"
+              />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="品牌">
+              <el-select
+                v-model="NxtStructProduct.brandId"
+                placeholder="请选择"
+              >
+                <el-option
+                  v-for="item in brand_list"
+                  :key="item.id"
+                  :label="item.brandName"
+                  :value="item.id"
+                />
+              </el-select>
+              <router-link to="/product/kind">
+                <el-button>品牌管理</el-button>
+              </router-link>
+            </el-form-item>
+          </el-col>
+        </el-row>
+
         <el-row>
           <el-col :span="12">
 
             <el-form-item label="最低起购">
-              <el-input class="input_small" v-model="NxtStructProduct.dealQuantityMin" />
+              <el-input
+                class="input_small"
+                v-model="NxtStructProduct.dealQuantityMin"
+              />
             </el-form-item>
 
           </el-col>
 
           <el-col :span="12">
             <el-form-item label="单次最多购买">
-              <el-input class="input_small" v-model="NxtStructProduct.dealQuantityMax" />
+              <el-input
+                class="input_small"
+                v-model="NxtStructProduct.dealQuantityMax"
+              />
             </el-form-item>
           </el-col>
         </el-row>
@@ -108,8 +139,14 @@
           <el-col :span="24">
             <el-form-item label="产品规格">
               <el-radio-group v-model="NxtStructProduct.withSku">
-                <el-radio class="radio" :label="false">单一规格</el-radio>
-                <el-radio class="radio" :label="true">多规格</el-radio>
+                <el-radio
+                  class="radio"
+                  :label="false"
+                >单一规格</el-radio>
+                <el-radio
+                  class="radio"
+                  :label="true"
+                >多规格</el-radio>
               </el-radio-group>
             </el-form-item>
           </el-col>
@@ -119,100 +156,105 @@
           <el-col :span="12">
 
             <el-form-item label="价格">
-              <el-input v-model="NxtStructProduct.price" class="input_small" />
+              <el-input
+                v-model="NxtStructProduct.price"
+                class="input_small"
+              />
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="折扣" >
+            <el-form-item label="折扣">
               <el-input
-                class="input_small" v-model="NxtStructProduct.priceDiscount"
+                class="input_small"
+                v-model="NxtStructProduct.priceDiscount"
               />
             </el-form-item>
-        </el-col>
+          </el-col>
         </el-row>
         <el-row v-if="NxtStructProduct.withSku==false">
           <el-col :span="12">
             <el-form-item label="总库存">
-              <el-input class="input_small" v-model="NxtStructProduct.inventoryQuantity" />
+              <el-input
+                class="input_small"
+                v-model="NxtStructProduct.inventoryQuantity"
+              />
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            
+
           </el-col>
         </el-row>
 
         <el-row v-if="NxtStructProduct.withSku==true">
           <el-col :span="24">
 
-        <el-form-item label="产品规格">
-          <el-card shadow="never">
+            <el-form-item label="产品规格">
+              <el-card shadow="never">
 
-            <el-card shadow="never" >
-              <el-form-item label="规格名称">
-                <el-tag
-                  :key="index"
-                  v-for="(tag,index) in attributeNameTags"
-                  closable
-                  :disable-transitions="false"
-                  @close="handleAttributeNameClose(tag)"
-                >
-                  {{tag.valueName}}
-                </el-tag>
-                <el-input
-                  class="input-new-tag"
-                  v-model="AttributeNameinputValue"
-                  ref="saveAttributeNameTagInput"
-                  size="small"
-                  @keyup.enter.native="handleInputConfirm"
-                  @blur="handleInputConfirm"
-                >
-                </el-input>
-                <el-button
-                  class="button-new-tag"
-                  size="small"
-                  @click="showAttributeNameInput"
-                >添加规格</el-button>
-                <span class="tips"> &nbsp;&nbsp;请填写规格名，如：颜色、容量、尺码等………（最多可以添加2种）</span>
-              </el-form-item>
-            </el-card>
-            <el-row>&nbsp;</el-row>
-            <el-card shadow="never" >
-            <el-form-item
-              
-              :key="index"
-              v-for="(item,index) in NxtStructProduct.skuList"
-              :label="item.skuKeyName"
-            >
-              <el-tag
-                :key="index"
-                v-for="(skuValue,index) in item.skuValueList"
-                closable
-                :disable-transitions="false"
-                @close="handleColorClose(item.skuKeyName,skuValue)"
-              >
-                {{skuValue.skuValueName}}
-              </el-tag>
-              <el-input
-                class="input-new-tag"
-                ref="saveColorTagInput"
-                v-model="item.skuValueNameNew"
-                size="small"
-              >
-              </el-input>
-              <el-button
-                class="button-new-tag"
-                size="small"
-                @click="handleConfirm(item.skuKeyName,item)"
-              >增加</el-button>
+                <el-card shadow="never">
+                  <el-form-item label="规格名称">
+                    <el-tag
+                      :key="index"
+                      v-for="(tag,index) in attributeNameTags"
+                      closable
+                      :disable-transitions="false"
+                      @close="handleAttributeNameClose(tag)"
+                    >
+                      {{tag.valueName}}
+                    </el-tag>
+                    <el-input
+                      class="input-new-tag"
+                      v-model="AttributeNameinputValue"
+                      ref="saveAttributeNameTagInput"
+                      size="small"
+                      @keyup.enter.native="handleInputConfirm"
+                      @blur="handleInputConfirm"
+                    >
+                    </el-input>
+                    <el-button
+                      class="button-new-tag"
+                      size="small"
+                      @click="showAttributeNameInput"
+                    >添加规格</el-button>
+                    <span class="tips"> &nbsp;&nbsp;请填写规格名，如：颜色、容量、尺码等………（最多可以添加2种）</span>
+                  </el-form-item>
+                </el-card>
+                <el-row>&nbsp;</el-row>
+                <el-card shadow="never">
+                  <el-form-item
+                    :key="index"
+                    v-for="(item,index) in NxtStructProduct.skuList"
+                    :label="item.skuKeyName"
+                  >
+                    <el-tag
+                      :key="index"
+                      v-for="(skuValue,index) in item.skuValueList"
+                      closable
+                      :disable-transitions="false"
+                      @close="handleColorClose(item.skuKeyName,skuValue)"
+                    >
+                      {{skuValue.skuValueName}}
+                    </el-tag>
+                    <el-input
+                      class="input-new-tag"
+                      ref="saveColorTagInput"
+                      v-model="item.skuValueNameNew"
+                      size="small"
+                    >
+                    </el-input>
+                    <el-button
+                      class="button-new-tag"
+                      size="small"
+                      @click="handleConfirm(item.skuKeyName,item)"
+                    >增加</el-button>
 
+                  </el-form-item>
+                </el-card>
+
+              </el-card>
             </el-form-item>
-            </el-card>
 
-            
-          </el-card>
-        </el-form-item>
-
-        </el-col>
+          </el-col>
         </el-row>
 
         <el-form-item v-if="NxtStructProduct.withSku==true">
@@ -322,19 +364,13 @@
         </el-form-item>
 
         <el-form-item>
-          
+
           推荐
-          <el-switch
-              v-model="NxtStructProduct.isRecommend"
-            />
+          <el-switch v-model="NxtStructProduct.isRecommend" />
           热卖
-          <el-switch
-              v-model="NxtStructProduct.isHot"
-            />
+          <el-switch v-model="NxtStructProduct.isHot" />
           新品
-          <el-switch
-              v-model="NxtStructProduct.isNew"
-            />
+          <el-switch v-model="NxtStructProduct.isNew" />
         </el-form-item>
 
         <el-form-item>
@@ -344,9 +380,7 @@
           >发布</el-button>
           &nbsp;&nbsp;&nbsp;&nbsp;
           立即上架
-          <el-switch
-              v-model="NxtStructProduct.isSelling"
-            />
+          <el-switch v-model="NxtStructProduct.isSelling" />
         </el-form-item>
       </el-form>
     </el-card>
@@ -364,51 +398,54 @@ export default {
   components: { Tinymce, draggable },
   data () {
     return {
-      NxtStructProduct : {
-        id:null,
-        categoryId:null,
-        brandId:null,
-        productName:'',
-        productSubtitle:'',
-        dealQuantityMin:1,
-        dealQuantityMax:10,
-        freeShipping:false,
-        deliveryConfigId:null,
-        itemNo:'',
-        withSku:false,
-        price:0,
-        priceDiscount:1,
-        inventoryQuantity:100,
-        productDescription:'',
-        isRecommend:false,
-        isHot:false,
-        isNew:true,
-        isSelling:true,
-        isTrash:false,
+      NxtStructProduct: {
+        id: null,
+        categoryId: null,
+        brandId: null,
+        productName: '',
+        productSubtitle: '',
+        productTags: '',
+        productRatings: null,
+        externalUrl: '',
+        dealQuantityMin: 1,
+        dealQuantityMax: 10,
+        freeShipping: false,
+        deliveryConfigId: null,
+        itemNo: '',
+        withSku: false,
+        price: 0,
+        priceDiscount: 1,
+        inventoryQuantity: 100,
+        productDescription: '',
+        isRecommend: false,
+        isHot: false,
+        isNew: true,
+        isSelling: true,
+        isTrash: false,
         skuList: [],
         skuValuePriceEtcList: [],
         pictureList: [],
       },
-      NxtStructProductSku:{
-        skuId:null,
-        skuKeyName:null,
-        skuValueList:[]
+      NxtStructProductSku: {
+        skuId: null,
+        skuKeyName: null,
+        skuValueList: []
       },
-      NxtStructProductSkuValue:{
-        id:null,
-        skuId:null,
-        skuValueName:null,
+      NxtStructProductSkuValue: {
+        id: null,
+        skuId: null,
+        skuValueName: null,
       },
-      NxtStructProductSkuValuePriceEtc:{
-        skuValueName1:null,
-        skuValueName2:null,
-        skuValueInventoryQuantity:100,
-        skuValuePrice:0,
-        skuValuePriceDiscount:1,
+      NxtStructProductSkuValuePriceEtc: {
+        skuValueName1: null,
+        skuValueName2: null,
+        skuValueInventoryQuantity: 100,
+        skuValuePrice: 0,
+        skuValuePriceDiscount: 1,
       },
-      NxtStructProductPicture:{
-        id:null,
-        url:null,
+      NxtStructProductPicture: {
+        id: null,
+        url: null,
       },
 
       checked: false,
@@ -492,22 +529,51 @@ export default {
 
       var than = this;
 
-      for(var i=than.NxtStructProduct.skuValuePriceEtcList.length-1;i>=0;i--){
-          var itemPriceEtc = than.NxtStructProduct.skuValuePriceEtcList[i];
-          if(itemPriceEtc.skuValueName1 == skuValueItem.skuValueName || itemPriceEtc.skuValueName2 == skuValueItem.skuValueName){
-            than.NxtStructProduct.skuValuePriceEtcList.splice(i, 1) 
-          }
-      }
-
-      this.NxtStructProduct.skuList.forEach(element => {
+      var num = -1;
+      this.NxtStructProduct.skuList.forEach((element,index) => {
         if (element.skuKeyName === skuKeyName) {
+          num = index;
           element.skuValueList.splice(element.skuValueList.indexOf(skuValueItem), 1);
-          if(element.skuValueList.length == 0){
-            this.NxtStructProduct.skuList.splice(this.NxtStructProduct.skuList.indexOf(element), 1) 
+          if (element.skuValueList.length == 0) {
+            this.NxtStructProduct.skuList.splice(this.NxtStructProduct.skuList.indexOf(element), 1)
           }
           return
         }
       });
+
+
+      
+      for (var i = than.NxtStructProduct.skuValuePriceEtcList.length - 1; i >= 0; i--) {
+
+        var itemPriceEtc = than.NxtStructProduct.skuValuePriceEtcList[i];
+
+        if(num == 0){
+              if (itemPriceEtc.skuValueName1 == skuValueItem.skuValueName) {
+                if(than.NxtStructProduct.skuList.length == 1){
+                  //不删
+                  than.NxtStructProduct.skuValuePriceEtcList[i]["skuValueName1"] = null;
+                }
+                else{
+                  //删
+                  than.NxtStructProduct.skuValuePriceEtcList.splice(i, 1)
+                }
+              }
+          }
+          if(num == 1){
+            if (itemPriceEtc.skuValueName2 == skuValueItem.skuValueName) {
+              if(than.NxtStructProduct.skuList.length == 1){
+                //不删
+                than.NxtStructProduct.skuValuePriceEtcList[i]["skuValueName2"] = null;
+              }
+              else{
+                //删
+                than.NxtStructProduct.skuValuePriceEtcList.splice(i, 1)
+              }
+            }
+          }
+
+      }
+
 
     },
 
@@ -528,10 +594,10 @@ export default {
         than.NxtStructProduct.skuList.forEach(element => {
           num++;
           if (element.skuKeyName === skuKeyName) {
-      
-            element.skuValueList.push({ 'skuValueName': skuItem.skuValueNameNew})
 
-            if(than.NxtStructProduct.skuList.length == 1){
+            element.skuValueList.push({ 'skuValueName': skuItem.skuValueNameNew })
+
+            if (than.NxtStructProduct.skuList.length == 1) {
               var itemSkuValuePriceEtc = JSON.parse(JSON.stringify(than.NxtStructProductSkuValuePriceEtc))
               itemSkuValuePriceEtc.skuValueName1 = skuItem.skuValueNameNew
               than.NxtStructProduct.skuValuePriceEtcList.push(itemSkuValuePriceEtc)
@@ -539,33 +605,33 @@ export default {
             element.skuValueName = null
             return
           }
-          else{
-              element.skuValueList.forEach(skuValue => {
-                  var skuValueName1 = skuItem.skuValueNameNew;
-                  var skuValueName2 = skuValue.skuValueName;
-                  if(num == 1){
-                    [skuValueName1,skuValueName2] = [skuValueName2,skuValueName1];
-                  }
-                  var itemSkuValuePriceEtc = JSON.parse(JSON.stringify(than.NxtStructProductSkuValuePriceEtc))
-                  itemSkuValuePriceEtc.skuValueName1 = skuValueName1
-                  itemSkuValuePriceEtc.skuValueName2 = skuValueName2
-                  than.NxtStructProduct.skuValuePriceEtcList.push(itemSkuValuePriceEtc)
-              });
-              for(var i=than.NxtStructProduct.skuValuePriceEtcList.length-1;i>=0;i--){
-                  var itemPriceEtc = than.NxtStructProduct.skuValuePriceEtcList[i];
-                  if(itemPriceEtc.skuValueName1 == null || itemPriceEtc.skuValueName2 == null){
-                    than.NxtStructProduct.skuValuePriceEtcList.splice(i, 1) 
-                  }
+          else {
+            element.skuValueList.forEach(skuValue => {
+              var skuValueName1 = skuItem.skuValueNameNew;
+              var skuValueName2 = skuValue.skuValueName;
+              if (num == 1) {
+                [skuValueName1, skuValueName2] = [skuValueName2, skuValueName1];
               }
+              var itemSkuValuePriceEtc = JSON.parse(JSON.stringify(than.NxtStructProductSkuValuePriceEtc))
+              itemSkuValuePriceEtc.skuValueName1 = skuValueName1
+              itemSkuValuePriceEtc.skuValueName2 = skuValueName2
+              than.NxtStructProduct.skuValuePriceEtcList.push(itemSkuValuePriceEtc)
+            });
+            for (var i = than.NxtStructProduct.skuValuePriceEtcList.length - 1; i >= 0; i--) {
+              var itemPriceEtc = than.NxtStructProduct.skuValuePriceEtcList[i];
+              if (itemPriceEtc.skuValueName1 == null || itemPriceEtc.skuValueName2 == null) {
+                than.NxtStructProduct.skuValuePriceEtcList.splice(i, 1)
+              }
+            }
           }
         });
-        
+
       }
     },
 
     handleInputConfirm () {
       let skuKeyName = this.AttributeNameinputValue;
-      if(this.NxtStructProduct.skuList.length >= 2){
+      if (this.NxtStructProduct.skuList.length >= 2) {
         return
       }
       if (skuKeyName) {
@@ -578,12 +644,17 @@ export default {
     },
     //
     handleCreate () {
+      this.$myLoading.myLoading.loading()
+      const then = this
       this.$store.dispatch('product/createProduct', this.NxtStructProduct).then(res => {
+        then.$myLoading.myLoading.closeLoading()
         this.$message({
           message: '创建成功！',
           type: 'success'
         })
-        this.$router.replace({ path: '/product/product' })
+        if (res.status === 0) {
+          this.$router.replace({ path: '/product/product' })
+        }
       })
     },
     async handleUploadHttpRequest (param) {
@@ -770,7 +841,7 @@ export default {
     width: 80%;
   }
   .tips {
-    font-size:14px;
+    font-size: 14px;
     color: #8c939d;
   }
 }
