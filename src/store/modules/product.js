@@ -1,6 +1,6 @@
 import {
   getProductList, updateProduct, swapProduct, deleteProduct, getProductDetail, getProductPictureList, createProduct, createProductCategory, deleteProductCategory, updateProductCategory, getProductCategoryList,
-  changeRecommend, changeIsHot, changeIsNew, changeIsSelling
+  changeRecommend, changeIsHot, changeIsNew, changeIsSelling,createFromOther
 } from '@/api/product'
 import Vue from 'vue'
 const state = {
@@ -10,7 +10,9 @@ const state = {
   Detail: '',
   PicList: [],
   allDetail: [],
-  pageCount: 0
+  pageCount: 0,
+  createFromOther: Number,
+  createMessage: {}
 }
 
 const mutations = {
@@ -41,7 +43,14 @@ const mutations = {
     temps = state.ListData[actionIndex]
     Vue.set(state.ListData, actionIndex, state.ListData[index])
     Vue.set(state.ListData, index, temps)
+  },
+  CREATE_FROM_OTHER: (state, data) => {
+    state.createFromOther = data
+  },
+  CREATE_FROM_MESSAGE: (state, data) => {
+    state.createMessage = data
   }
+
 }
 
 const actions = {
@@ -248,6 +257,17 @@ const actions = {
         .catch(err => {
           reject(err)
         })
+    })
+  },
+  createFromOther({ commit }, data) {
+    return new Promise((resolve, reject) => {
+      createFromOther(data).then(res => {
+        commit('CREATE_FROM_OTHER', res.status)
+        commit('CREATE_FROM_MESSAGE', res.message)
+        resolve()
+      }).catch(err => {
+        reject(err)
+      })
     })
   }
 }
