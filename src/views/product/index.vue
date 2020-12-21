@@ -210,7 +210,7 @@
         <el-form-item label="链接" prop="externalUrl">
           <el-input v-model="thirdPartyParam.externalUrl" style="width: 350px" placeholder="支持Shopify、Amazon、淘宝、天猫、京东、1688、并且不断扩展中。。。" />
         </el-form-item>
-        <el-form-item label="产品类型" prop="categoryId">
+        <el-form-item label="产品类别" prop="categoryId">
           <el-select v-model="thirdPartyParam.categoryId" placeholder="--请选择--">
             <el-option v-for="item in $store.state.product.CategoryListData" :key="item.category_id" :label="item.category_name_display" :value="item.category_id" />
           </el-select>
@@ -245,7 +245,7 @@ export default {
     }
     const categoryIdValidation = (rule, value, callback) => {
       if (value == null || value.length === 0) {
-        callback(new Error('产品类型不能为空'))
+        callback(new Error('产品类别不能为空'))
       } else {
         callback()
       }
@@ -475,11 +475,12 @@ export default {
     },
 
     thirdParty() {
-      this.thirdPartyParam = {}
-      this.resetForm('thirdPartyRef')
+      // this.thirdPartyParam = {}
+      // this.resetForm('thirdPartyRef')
       this.thirdPartyDialog = true
     },
     saveThirdParty() {
+      var than = this;
       this.$refs.thirdPartyRef.validate(valid => {
         if (valid) {
           this.thirdPartyDialog = false
