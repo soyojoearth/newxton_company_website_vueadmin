@@ -234,7 +234,6 @@ import { Message } from 'element-ui'
 import { mapState } from 'vuex'
 import { set_trash, update_commission_rate } from '@/api/product'
 
-import { Loading } from 'element-ui';
 export default {
   data () {
     const externalUrlValidation = (rule, value, callback) => {
