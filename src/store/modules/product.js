@@ -1,6 +1,6 @@
 import {
   getProductList, updateProduct, swapProduct, deleteProduct, getProductDetail, getProductPictureList, createProduct, createProductCategory, deleteProductCategory, updateProductCategory, getProductCategoryList,
-  changeRecommend, changeIsHot, changeIsNew, changeIsSelling,createFromOther
+  changeRecommend, changeIsHot, changeIsNew, changeIsSelling, createFromOther
 } from '@/api/product'
 import Vue from 'vue'
 const state = {
@@ -11,8 +11,8 @@ const state = {
   PicList: [],
   allDetail: [],
   pageCount: 0,
-  createFromOther: Number,
-  createMessage: {}
+  createFromOtherStatus: Number,
+  createFromResult: {}
 }
 
 const mutations = {
@@ -44,11 +44,11 @@ const mutations = {
     Vue.set(state.ListData, actionIndex, state.ListData[index])
     Vue.set(state.ListData, index, temps)
   },
-  CREATE_FROM_OTHER: (state, data) => {
-    state.createFromOther = data
+  CREATE_FROM_OTHER_STATUS: (state, data) => {
+    state.createFromOtherStatus = data
   },
-  CREATE_FROM_MESSAGE: (state, data) => {
-    state.createMessage = data
+  CREATE_FROM_RESULT: (state, data) => {
+    state.createFromResult = data
   }
 
 }
@@ -260,12 +260,15 @@ const actions = {
     })
   },
   createFromOther({ commit }, data) {
+    Vue.prototype.$myLoading.myLoading.loading()
     return new Promise((resolve, reject) => {
       createFromOther(data).then(res => {
-        commit('CREATE_FROM_OTHER', res.status)
-        commit('CREATE_FROM_MESSAGE', res.message)
+        commit('CREATE_FROM_OTHER_STATUS', res.status)
+        commit('CREATE_FROM_RESULT', res.result)
+        Vue.prototype.$myLoading.myLoading.closeLoading()
         resolve()
       }).catch(err => {
+        Vue.prototype.$myLoading.myLoading.closeLoading()
         reject(err)
       })
     })

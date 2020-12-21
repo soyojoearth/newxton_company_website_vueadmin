@@ -212,7 +212,7 @@
         </el-form-item>
         <el-form-item label="产品类型" prop="categoryId">
           <el-select v-model="thirdPartyParam.categoryId" placeholder="--请选择--">
-            <el-option v-for="item in $store.state.product.CategoryListData" :key="item.category_id" :label="item.category_name" :value="item.category_id" />
+            <el-option v-for="item in $store.state.product.CategoryListData" :key="item.category_id" :label="item.category_name_display" :value="item.category_id" />
           </el-select>
         </el-form-item>
         <el-form-item label="运费模板" prop="deliveryConfigId">
@@ -233,6 +233,8 @@
 import { Message } from 'element-ui'
 import { mapState } from 'vuex'
 import { set_trash, update_commission_rate } from '@/api/product'
+
+import { Loading } from 'element-ui';
 export default {
   data () {
     const externalUrlValidation = (rule, value, callback) => {
@@ -319,14 +321,8 @@ export default {
   created () {
 
     this.load()
-    this.$store.dispatch('product/getCategory').then(() => {
-      console.log('产品分类')
-      console.log(this.$store.state.product.CategoryListData)
-    })
-    this.$store.dispatch('delivery/getDeliveryConfigList').then(() => {
-      console.log('运费模板')
-      console.log(this.$store.state.delivery.deliveryConfigList)
-    })
+    this.$store.dispatch('product/getCategory')
+    this.$store.dispatch('delivery/getDeliveryConfigList')
   },
   watch: {
     // 'currentValue': {
@@ -347,7 +343,7 @@ export default {
       // this.$myLoading.myLoading.loading()
       this.$store.commit('product/SET_LIST_NUMBER', 1)
       this.$store.dispatch('product/getList', this.newParams)
-      this.$myLoading.myLoading.closeLoading()
+      // this.$myLoading.myLoading.closeLoading()
     },
     change () {
       this.$myLoading.myLoading.loading()
@@ -487,25 +483,27 @@ export default {
     saveThirdParty() {
       this.$refs.thirdPartyRef.validate(valid => {
         if (valid) {
-          this.$store.dispatch('product/createFromOther', this.thirdPartyParam).then(() => {
-            const status = this.$store.state.product.createFromOther
-            if (status != null && status === 0) {
-              this.$message({
-                type: 'success',
-                message: '操作成功'
-              })
-              this.thirdPartyDialog = false
-              const createMessage = this.$store.state.product.createMessage
-              if (createMessage != null) {
-                this.$store.dispatch('/product/update/' + createMessage.id)
+          this.thirdPartyDialog = false
+          setTimeout(() => {
+            this.$store.dispatch('product/createFromOther', this.thirdPartyParam).then(() => {
+              const status = this.$store.state.product.createFromOtherStatus
+              if (status != null && status === 0) {
+                this.$message({
+                  type: 'success',
+                  message: '操作成功'
+                })
+                const createFromResult = this.$store.state.product.createFromResult
+                if (createFromResult != null) {
+                  this.$router.push({ name: 'UpdateProduct', params: { id: createFromResult.id }})
+                }
+              } else {
+                this.$message({
+                  type: 'error',
+                  message: '操作失败'
+                })
               }
-            } else {
-              this.$message({
-                type: 'error',
-                message: '操作失败'
-              })
-            }
-          })
+            })
+          }, 100)
         }
       })
     },
