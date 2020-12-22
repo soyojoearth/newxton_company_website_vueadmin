@@ -1,8 +1,8 @@
 <template>
   <div class="app-container">
     <el-row>
-      <el-button type="primary"
-                 @click="handleCreate">添加商品</el-button>
+      <el-button type="primary" @click="handleCreate">添加商品</el-button>
+      <el-button type="primary" @click="thirdParty">从第三方平台抓取产品</el-button>
       <div style="float:right">
         <el-select v-model="params.categoryId"
                    placeholder="请选择">
@@ -203,6 +203,29 @@
                    @click="handlePage(1)">下一页</el-button>
       </el-col>
     </el-row>
+
+
+    <el-dialog title="从第三方平台抓取" :visible.sync="thirdPartyDialog" :close-on-click-modal="false" :show-close="false" :close-on-press-escape="false" width="600px" left>
+      <el-form ref="thirdPartyRef" :model="thirdPartyParam" :rules="thirdPartyParamRules" label-width="140px">
+        <el-form-item label="链接" prop="externalUrl">
+          <el-input v-model="thirdPartyParam.externalUrl" style="width: 350px" placeholder="支持Shopify、Amazon、淘宝、天猫、京东、1688、并且不断扩展中。。。" />
+        </el-form-item>
+        <el-form-item label="产品类别" prop="categoryId">
+          <el-select v-model="thirdPartyParam.categoryId" placeholder="--请选择--">
+            <el-option v-for="item in $store.state.product.CategoryListData" :key="item.category_id" :label="item.category_name_display" :value="item.category_id" />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="运费模板" prop="deliveryConfigId">
+          <el-select v-model="thirdPartyParam.deliveryConfigId" placeholder="--请选择--">
+            <el-option v-for="item in $store.state.delivery.deliveryConfigList" :key="item.id" :label="item.name" :value="item.id" />
+          </el-select>
+        </el-form-item>
+      </el-form>
+      <div style="text-align: center">
+        <el-button @click="thirdPartyDialog = false">取 消</el-button>
+        <el-button type="primary" @click="saveThirdParty">抓取并创建</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -210,8 +233,30 @@
 import { Message } from 'element-ui'
 import { mapState } from 'vuex'
 import { set_trash, update_commission_rate } from '@/api/product'
+
 export default {
   data () {
+    const externalUrlValidation = (rule, value, callback) => {
+      if (value == null || value.length === 0) {
+        callback(new Error('链接不能为空'))
+      } else {
+        callback()
+      }
+    }
+    const categoryIdValidation = (rule, value, callback) => {
+      if (value == null || value.length === 0) {
+        callback(new Error('产品类别不能为空'))
+      } else {
+        callback()
+      }
+    }
+    const deliveryConfigIdValidation = (rule, value, callback) => {
+      if (value == null || value.length === 0) {
+        callback(new Error('运费模板不能为空'))
+      } else {
+        callback()
+      }
+    }
     return {
       multipleSelection: [],
       options: [{
@@ -249,6 +294,14 @@ export default {
         isTrash: false,
         offset: 0,
         limit: 20
+      },
+
+      thirdPartyDialog: false,
+      thirdPartyParam: {},
+      thirdPartyParamRules: {
+        externalUrl: [{ required: true, trigger: 'blur', validator: externalUrlValidation }],
+        categoryId: [{ required: true, trigger: 'change', validator: categoryIdValidation }],
+        deliveryConfigId: [{ required: true, trigger: 'change', validator: deliveryConfigIdValidation }]
       }
     }
   },
@@ -268,7 +321,7 @@ export default {
 
     this.load()
     this.$store.dispatch('product/getCategory')
-
+    this.$store.dispatch('delivery/getDeliveryConfigList')
   },
   watch: {
     // 'currentValue': {
@@ -289,7 +342,7 @@ export default {
       // this.$myLoading.myLoading.loading()
       this.$store.commit('product/SET_LIST_NUMBER', 1)
       this.$store.dispatch('product/getList', this.newParams)
-      this.$myLoading.myLoading.closeLoading()
+      // this.$myLoading.myLoading.closeLoading()
     },
     change () {
       this.$myLoading.myLoading.loading()
@@ -419,6 +472,46 @@ export default {
     },
     changeIsSelling (index, row) {
       this.$store.dispatch('product/changeIsSelling', { id: row.id, isSelling: row.isSelling })
+    },
+
+    thirdParty() {
+      // this.thirdPartyParam = {}
+      // this.resetForm('thirdPartyRef')
+      this.thirdPartyDialog = true
+    },
+    saveThirdParty() {
+      var than = this;
+      this.$refs.thirdPartyRef.validate(valid => {
+        if (valid) {
+          this.thirdPartyDialog = false
+          setTimeout(() => {
+            this.$store.dispatch('product/createFromOther', this.thirdPartyParam).then(() => {
+              const status = this.$store.state.product.createFromOtherStatus
+              if (status != null && status === 0) {
+                this.$message({
+                  type: 'success',
+                  message: '操作成功'
+                })
+                const createFromResult = this.$store.state.product.createFromResult
+                if (createFromResult != null) {
+                  this.$router.push({ name: 'UpdateProduct', params: { id: createFromResult.id }})
+                }
+              } else {
+                this.$message({
+                  type: 'error',
+                  message: '操作失败'
+                })
+              }
+            })
+          }, 100)
+        }
+      })
+    },
+    // 重置表单
+    resetForm(formName) {
+      if (this.$refs[formName] != null) {
+        this.$refs[formName].resetFields()
+      }
     }
   }
 }

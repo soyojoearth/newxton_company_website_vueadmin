@@ -78,7 +78,7 @@ export default {
             message: '修改成功！',
             type: 'success'
           })
-          this.$router.replace({ path: '/set/page' })
+          this.$router.replace({ path: '/content/pages' })
         }
       })
     },

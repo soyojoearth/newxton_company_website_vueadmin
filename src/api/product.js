@@ -147,3 +147,12 @@ export function update_commission_rate (data) {
     data
   })
 }
+
+// 从第三方抓取商品并创建
+export function createFromOther(data) {
+  return requestJSON({
+    url: '/api/admin/product/create_from_other',
+    method: 'post',
+    data
+  })
+}

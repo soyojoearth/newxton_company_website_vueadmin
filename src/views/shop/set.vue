@@ -23,7 +23,7 @@
         </el-form-item>
         <el-form-item label="满多少包邮">
           <el-input v-model="freeShippingAmount" class="from-input" type="text" rows="6" />
-          <span>(0表示不免运费)</span>
+          <span>(0等于全场包邮)</span>
         </el-form-item>
         <el-form-item label="发货后多少天自动收货">
           <el-select v-model="automaticConfirmationOfReceiptTime" placeholder="请选择">
