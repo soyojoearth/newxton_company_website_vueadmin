@@ -2,6 +2,7 @@ import Cookies from 'js-cookie'
 
 const TokenKey = 'token'
 const UserId = 'user-id'
+const GuestToken = 'shopping_cart_token'
 
 export function getToken() {
   return Cookies.get(TokenKey)
@@ -25,4 +26,8 @@ export function setUserId(id) {
 
 export function removeUserId() {
   return Cookies.remove(UserId)
+}
+
+export function removeGuestToken() {
+  return Cookies.remove(GuestToken)
 }
