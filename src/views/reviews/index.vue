@@ -103,8 +103,8 @@
           <template slot-scope="scope">
             <el-switch
               v-model="scope.row.hidden"
-              :active-value="true"
-              :inactive-value="false"
+              :active-value="false"
+              :inactive-value="true"
               @change="changeIsShow(scope.$index, scope.row)"
             />
           </template>
