@@ -45,18 +45,18 @@ export const constantRoutes = [
         name: 'WebSet',
         meta: { title: '系统设置', affix: false }
       },
-      {
-        path: 'pic',
-        component: () => import('@/views/set/pic'),
-        name: 'pic',
-        meta: { title: '图片存储配置', affix: false }
-      },
-      {
-        path: 'oss',
-        component: () => import('@/views/set/oss'),
-        name: 'OssSet',
-        meta: { title: '图片搬家', affix: false }
-      },
+      // {
+      //   path: 'pic',
+      //   component: () => import('@/views/set/pic'),
+      //   name: 'pic',
+      //   meta: { title: '图片存储配置', affix: false }
+      // },
+      // {
+      //   path: 'oss',
+      //   component: () => import('@/views/set/oss'),
+      //   name: 'OssSet',
+      //   meta: { title: '图片搬家', affix: false }
+      // },
     ]
   },
   {
