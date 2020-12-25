@@ -13,13 +13,8 @@
           </el-col>
         </el-row>
         <el-row>
-          <el-col :span="24">
-            <p>版本：v0.1.0</p>
-          </el-col>
-        </el-row>
-        <el-row>
           <el-col :span="12">
-            <p>授权协议：Apache (可商用）</p>
+            <p>版本：v0.3</p>
           </el-col>
           <el-col :span="12" style="text-align: right;"><el-button type="primary" round size="medium"><a target="_blank" href="https://github.com/soyojoearth/nxtframework">查看最新版本</a></el-button></el-col>
         </el-row>

@@ -48,7 +48,7 @@
 
         <div style="position:relative">
           <div class="tips">
-            <span>NxtFramework v0.1.0</span>
+            <span>@copyright NxtFramework</span>
           </div>
         </div>
       </el-form>
