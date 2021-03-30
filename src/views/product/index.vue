@@ -75,16 +75,16 @@
                 @selection-change="handleSelectionChange">
         <el-table-column type="selection" />
         <el-table-column prop="productName"
-                         label="货品信息"
-                         width="200">
+                         label="货品信息">
 
           <template slot-scope="scope">
             <div style="display:flex;align-items: center;">
-
+              <div style="padding:5px;">
               <el-image style="width: 50px; height: 50px;"
                         :src="scope.row.pic_url+'?imageView2/1/w/50/h/50/q/75'">
               </el-image>
-              <div style="padding:5px">
+              </div>
+              <div style="padding:5px;">
                 {{ scope.row.productName }}
                 </br>
                 货号：{{ scope.row.itemNo }}
@@ -98,19 +98,23 @@
         </el-table-column>
         <el-table-column prop="priceMarket"
                          label="原价"
+                         width="80"
                          show-overflow-tooltip />
         <el-table-column prop="priceSelling"
                          label="现价"
+                         width="80"
                          show-overflow-tooltip />
         <el-table-column prop="inventoryQuantity"
                          label="库存"
+                         width="50"
                          show-overflow-tooltip />
         <el-table-column prop="salsCount"
                          label="销量"
+                         width="50"
                          show-overflow-tooltip />
         <el-table-column prop="salsCount"
                          label="佣金比例(%)"
-                         width="200">
+                         width="120">
           <template slot-scope="scope">
 
             <el-input-number class="inputClass"
@@ -129,7 +133,7 @@
                          width="180"
                          show-overflow-tooltip />
         <el-table-column label="标签"
-                         width="200">
+                         width="180">
           <template slot-scope="scope">
             上架
             <el-switch v-model="scope.row.isSelling"
@@ -169,7 +173,7 @@
 
         <el-table-column label="操作"
                          align="right"
-                         width="200">
+                         width="100">
           <template slot-scope="scope">
             <el-button size="mini"
                        type="text"
