@@ -105,11 +105,11 @@
                          show-overflow-tooltip />
         <el-table-column prop="inventoryQuantity"
                          label="库存"
-                         width="50"
+                         width="80"
                          show-overflow-tooltip />
         <el-table-column prop="salsCount"
                          label="销量"
-                         width="50"
+                         width="80"
                          show-overflow-tooltip />
         <el-table-column prop="datelineUpdatedReadable"
                          label="上次修改时间"
